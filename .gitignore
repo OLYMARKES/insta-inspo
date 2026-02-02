@@ -1,0 +1,27 @@
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+
+# Virtual environments
+.venv/
+venv/
+ENV/
+env/
+
+# Editors
+.vscode/
+.idea/
+
+# Logs
+*.log
+
+# GitHub 100MB limit workaround (store compressed instead)
+ARCHIVE/raw/dataset_instagram-api-scraper_2025-12-21_10-39-30-561.json
+
