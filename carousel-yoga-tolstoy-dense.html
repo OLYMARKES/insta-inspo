@@ -1,0 +1,1921 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Йога-практика в стиле позднего Толстого · dense</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,500&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=EB+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&family=Source+Serif+4:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<style>
+:root {
+  --cream:        #ede4d0;
+  --cream-soft:   #f3ecdb;
+  --cream-dim:    #e2d8c0;
+  --ink:          #1c1612;
+  --ink-soft:     #3a2d22;
+  --ink-mute:     #6b5a48;
+  --burgundy:     #9b2c2c;
+  --burgundy-dk:  #7a2020;
+  --burgundy-tint:#e9c8b8;
+  --swatch-red-bg:    #e8b9a8;
+  --swatch-red-dk:    #a83f2a;
+  --swatch-green-bg:  #c5d3b3;
+  --swatch-green-dk:  #4f6a3a;
+  --font-display: 'Spectral', 'Lora', Georgia, serif;
+  --font-body:    'Lora', 'Spectral', Georgia, serif;
+  --font-ui:      'Inter', sans-serif;
+  --font-mono:    'JetBrains Mono', monospace;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { height: 100%; }
+body { background:#1a1a1a; font-family: var(--font-ui); color:#bbb; overflow: hidden; }
+
+/* ─── TOP TOOLBAR ─── */
+.toolbar {
+  background:#0e0e0e; border-bottom:1px solid rgba(255,255,255,0.06);
+  padding:12px 22px; display:flex; gap:16px; align-items:center; flex-wrap: wrap;
+  position: sticky; top: 0; z-index: 50;
+}
+.tb-group { display:flex; gap:6px; align-items:center; }
+.tb-label {
+  font-size:9px; font-weight:600; letter-spacing:2.5px;
+  text-transform:uppercase; opacity:0.4; margin-right:4px;
+}
+.tb-btn {
+  font-family: var(--font-ui);
+  font-size:10px; font-weight:500; padding:6px 12px;
+  border:1px solid rgba(255,255,255,0.12); border-radius:100px;
+  background:transparent; color:rgba(255,255,255,0.45); cursor:pointer;
+  transition: all 0.15s; white-space:nowrap;
+}
+.tb-btn.active, .tb-btn:hover {
+  background: rgba(255,255,255,0.08); color:#fff; border-color:rgba(255,255,255,0.3);
+}
+.tb-btn.danger {
+  border-color: rgba(220,80,80,0.3); color: rgba(220,140,140,0.7);
+}
+.tb-btn.danger:hover { background: rgba(220,80,80,0.12); color: #ffb0b0; }
+.tb-btn.export {
+  border-color: rgba(155,44,44,0.45); background: rgba(155,44,44,0.12); color:#d8736a;
+}
+.tb-btn.export:hover { background: rgba(155,44,44,0.22); color:#fff; }
+.tb-divider { width:1px; height:18px; background:rgba(255,255,255,0.08); margin:0 4px; }
+
+/* ─── LAYOUT: preview + side panel ─── */
+.workspace {
+  display: grid;
+  grid-template-columns: 1fr 380px;
+  height: calc(100vh - 50px);
+}
+.preview-area {
+  display: flex; flex-direction: column; align-items: center;
+  padding: 24px 20px;
+  overflow-y: auto;
+  background: linear-gradient(180deg, #1a1a1a 0%, #151515 100%);
+}
+.editor-panel {
+  background:#0d0d0d; border-left:1px solid rgba(255,255,255,0.06);
+  overflow-y: auto;
+  padding: 20px 18px 32px;
+  color:#aaa;
+}
+
+/* ─── CARD ─── */
+.card-frame {
+  display:flex; justify-content:center; overflow:hidden;
+  margin-bottom: 16px;
+}
+.card {
+  width:1080px; height:1350px; position:relative; overflow:hidden;
+  background: var(--cream); color: var(--ink);
+  font-family: var(--font-body);
+  padding:88px 78px 112px;
+  display:flex; flex-direction:column;
+  flex-shrink:0; transform-origin: top center;
+}
+
+.card .wm {
+  position:absolute; bottom:44px; left:78px;
+  font-family: var(--font-mono);
+  font-size:18px; letter-spacing:0.5px;
+  color: var(--ink-mute); opacity:0.7;
+}
+.card .pager { position:absolute; bottom:50px; right:78px; display:flex; gap:8px; align-items:center; }
+.card .pager .pd {
+  width:7px; height:7px; border-radius:50%;
+  background: var(--ink); opacity:0.18;
+}
+.card .pager .pd.cur { opacity:0.85; }
+
+/* ─── LAYOUTS ─── */
+.layout-cover { justify-content:center; }
+.layout-body  { justify-content:flex-start; padding-top:108px; }
+.layout-quote { justify-content:center; }
+.layout-cta   { justify-content:flex-start; padding-top:108px; }
+
+/* vertical alignment overrides */
+.card.v-top    { justify-content:flex-start; padding-top:108px; }
+.card.v-center { justify-content:center; padding-top:88px; }
+.card.v-bottom { justify-content:flex-end; padding-bottom:160px; }
+
+/* horizontal alignment */
+.card.a-left   { align-items:flex-start; text-align:left; }
+.card.a-center { align-items:center; text-align:center; }
+.card.a-center .b-h2,
+.card.a-center .b-p,
+.card.a-center .b-lead,
+.card.a-center .b-callout,
+.card.a-center .b-cta-q,
+.card.a-center .b-cta-sub,
+.card.a-center .b-cover-h1,
+.card.a-center .b-cover-sub,
+.card.a-center .b-quote-text { margin-left:auto; margin-right:auto; }
+.card.a-center .b-callout { border-left:none; border-top:3px solid var(--burgundy); padding:18px 0 0 0; }
+.card.a-center .b-bullet { justify-content:center; }
+.card.a-center .b-rule { margin-left:auto; margin-right:auto; }
+
+/* font pair: applied to .card */
+.card.font-spectral { --font-display: 'Spectral', 'Lora', Georgia, serif; --font-body: 'Lora', 'Spectral', Georgia, serif; }
+.card.font-cormorant { --font-display: 'Cormorant Garamond', 'EB Garamond', Georgia, serif; --font-body: 'EB Garamond', 'Cormorant Garamond', Georgia, serif; }
+.card.font-playfair { --font-display: 'Playfair Display', 'Source Serif 4', Georgia, serif; --font-body: 'Source Serif 4', 'Playfair Display', Georgia, serif; }
+/* Cormorant и Playfair требуют чуть меньшего letter-spacing для display */
+.card.font-cormorant .b-cover-h1 { letter-spacing:-2px; font-weight:700; }
+.card.font-playfair .b-cover-h1  { letter-spacing:-1px; font-weight:800; }
+
+/* ─── BLOCKS ─── */
+.b-top-stripe {
+  width: calc(38px * var(--scale, 1));
+  height: calc(4px * var(--scale, 1));
+  background: var(--burgundy);
+  margin-bottom: calc(18px * var(--scale, 1));
+}
+.b-tag {
+  font-family: var(--font-ui);
+  font-size: calc(12px * var(--scale, 1));
+  font-weight:600; letter-spacing:3.5px; text-transform:uppercase;
+  color: var(--ink-mute);
+  margin-bottom: calc(36px * var(--scale, 1));
+}
+.b-tag[data-size="S"]  { font-size: calc(10px * var(--scale, 1)); }
+.b-tag[data-size="L"]  { font-size: calc(14px * var(--scale, 1)); }
+.b-tag[data-size="XL"] { font-size: calc(16px * var(--scale, 1)); }
+
+.b-cover-h1 {
+  font-family: var(--font-display);
+  font-weight:800; font-size: calc(104px * var(--scale, 1));
+  line-height:1.0; letter-spacing:-1.5px;
+  color: var(--burgundy);
+  margin-bottom: calc(36px * var(--scale, 1));
+  max-width:900px;
+}
+.b-cover-h1[data-size="S"]  { font-size: calc(84px * var(--scale, 1)); }
+.b-cover-h1[data-size="L"]  { font-size: calc(124px * var(--scale, 1)); }
+.b-cover-h1[data-size="XL"] { font-size: calc(140px * var(--scale, 1)); }
+
+.b-rule {
+  width:220px; height:2px; background: var(--burgundy);
+  margin-bottom: calc(28px * var(--scale, 1));
+}
+
+.b-cover-sub {
+  font-family: var(--font-body);
+  font-size: calc(28px * var(--scale, 1));
+  line-height:1.45;
+  color: var(--ink-soft); font-weight:400; max-width:780px;
+  margin-bottom: calc(20px * var(--scale, 1));
+}
+.b-cover-sub[data-size="S"]  { font-size: calc(24px * var(--scale, 1)); }
+.b-cover-sub[data-size="L"]  { font-size: calc(32px * var(--scale, 1)); }
+.b-cover-sub[data-size="XL"] { font-size: calc(36px * var(--scale, 1)); }
+
+.b-h2 {
+  font-family: var(--font-display);
+  font-weight:700; font-size: calc(54px * var(--scale, 1));
+  line-height:1.12; letter-spacing:-0.5px;
+  color: var(--ink);
+  margin-bottom: calc(30px * var(--scale, 1));
+  max-width:900px;
+}
+.b-h2[data-size="S"]  { font-size: calc(42px * var(--scale, 1)); }
+.b-h2[data-size="L"]  { font-size: calc(64px * var(--scale, 1)); }
+.b-h2[data-size="XL"] { font-size: calc(74px * var(--scale, 1)); }
+
+.b-p {
+  font-family: var(--font-body);
+  font-size: calc(26px * var(--scale, 1));
+  line-height:1.55;
+  color: var(--ink-soft); font-weight:400; max-width:900px;
+  margin-bottom: calc(20px * var(--scale, 1));
+}
+.b-p[data-size="S"]  { font-size: calc(22px * var(--scale, 1)); }
+.b-p[data-size="L"]  { font-size: calc(30px * var(--scale, 1)); }
+.b-p[data-size="XL"] { font-size: calc(34px * var(--scale, 1)); }
+
+.b-lead {
+  font-family: var(--font-body);
+  font-size: calc(30px * var(--scale, 1));
+  line-height:1.5; color: var(--ink); font-weight:500;
+  max-width:900px; margin-bottom: calc(20px * var(--scale, 1));
+}
+.b-lead[data-size="S"]  { font-size: calc(26px * var(--scale, 1)); }
+.b-lead[data-size="L"]  { font-size: calc(34px * var(--scale, 1)); }
+.b-lead[data-size="XL"] { font-size: calc(38px * var(--scale, 1)); }
+
+.b-bullet {
+  display:flex; gap: calc(18px * var(--scale, 1)); align-items:baseline;
+  font-family: var(--font-body);
+  font-size: calc(26px * var(--scale, 1));
+  line-height:1.5;
+  color: var(--ink-soft); margin-bottom: calc(14px * var(--scale, 1));
+  max-width:900px;
+}
+.b-bullet::before {
+  content:'—'; color: var(--burgundy); font-weight:700; flex-shrink:0;
+}
+.b-bullet[data-size="S"]  { font-size: calc(22px * var(--scale, 1)); }
+.b-bullet[data-size="L"]  { font-size: calc(30px * var(--scale, 1)); }
+.b-bullet[data-size="XL"] { font-size: calc(34px * var(--scale, 1)); }
+
+.b-callout {
+  border-left: 3px solid var(--burgundy);
+  padding: 6px 0 6px 22px;
+  margin-top: calc(18px * var(--scale, 1));
+  margin-bottom: calc(18px * var(--scale, 1));
+  font-family: var(--font-body);
+  font-size: calc(26px * var(--scale, 1));
+  line-height:1.5;
+  color: var(--ink); font-weight:500;
+  max-width:900px;
+}
+.b-callout[data-size="S"]  { font-size: calc(22px * var(--scale, 1)); }
+.b-callout[data-size="L"]  { font-size: calc(30px * var(--scale, 1)); }
+.b-callout[data-size="XL"] { font-size: calc(34px * var(--scale, 1)); }
+
+.b-dark-quote {
+  background: var(--ink); color: var(--cream);
+  padding: 26px 32px; border-radius:6px;
+  font-family: var(--font-display);
+  font-style:italic; font-weight:500;
+  font-size: calc(26px * var(--scale, 1));
+  line-height:1.45;
+  margin-top: calc(18px * var(--scale, 1));
+  margin-bottom: calc(18px * var(--scale, 1));
+}
+.b-dark-quote[data-size="S"]  { font-size: calc(22px * var(--scale, 1)); }
+.b-dark-quote[data-size="L"]  { font-size: calc(30px * var(--scale, 1)); }
+.b-dark-quote[data-size="XL"] { font-size: calc(34px * var(--scale, 1)); }
+.b-dark-quote .src {
+  font-style:normal; font-family: var(--font-ui);
+  font-size:13px; font-weight:600; letter-spacing:2.5px; text-transform:uppercase;
+  color: var(--burgundy-tint);
+  display:block; margin-top:14px; opacity:0.85;
+}
+
+.b-eng-stack { margin: 8px 0 24px; }
+.b-eng-stack .eng {
+  font-family: var(--font-display);
+  font-style:italic; font-weight:500;
+  font-size: calc(46px * var(--scale, 1));
+  line-height:1.25;
+  color: var(--ink); margin-bottom: calc(12px * var(--scale, 1));
+}
+.b-eng-stack[data-size="S"] .eng  { font-size: calc(38px * var(--scale, 1)); }
+.b-eng-stack[data-size="L"] .eng  { font-size: calc(54px * var(--scale, 1)); }
+.b-eng-stack[data-size="XL"] .eng { font-size: calc(62px * var(--scale, 1)); }
+
+.b-cmp-row {
+  display:grid; grid-template-columns:1fr 1fr; gap:20px;
+  margin: calc(14px * var(--scale, 1)) 0 calc(20px * var(--scale, 1));
+}
+.b-cmp-box {
+  border-radius:8px; padding:24px 26px;
+  font-family: var(--font-body);
+}
+.b-cmp-box.red   { background: var(--swatch-red-bg);   color:#4a1a10; }
+.b-cmp-box.green { background: var(--swatch-green-bg); color:#2c3a20; }
+.b-cmp-box .cmp-head {
+  font-family: var(--font-ui);
+  font-size: calc(13px * var(--scale, 1));
+  font-weight:700; letter-spacing:3.5px; text-transform:uppercase;
+  display:flex; align-items:center; gap:10px;
+  margin-bottom:18px; padding-bottom:14px;
+  border-bottom:1px solid currentColor; opacity:0.85;
+}
+.b-cmp-box .cmp-head .dot { width:11px; height:11px; border-radius:3px; }
+.b-cmp-box.red .cmp-head .dot   { background: var(--swatch-red-dk); }
+.b-cmp-box.green .cmp-head .dot { background: var(--swatch-green-dk); }
+.b-cmp-box .pair {
+  font-size: calc(19px * var(--scale, 1));
+  line-height:1.4;
+  margin-bottom:10px;
+  font-family: var(--font-body);
+}
+.b-cmp-box .pair:last-child { margin-bottom:0; }
+.b-cmp-box.red .pair  { font-style:italic; opacity:0.85; }
+.b-cmp-box.green .pair { font-weight:500; }
+
+.b-qmark {
+  font-family: var(--font-display);
+  font-weight:700; font-size: calc(180px * var(--scale, 1));
+  line-height:0.5;
+  color: var(--burgundy); opacity:0.55;
+  margin-bottom: calc(30px * var(--scale, 1));
+}
+
+.b-quote-text {
+  font-family: var(--font-display);
+  font-weight:500; font-size: calc(46px * var(--scale, 1));
+  line-height:1.32;
+  color: var(--ink); margin-bottom: calc(38px * var(--scale, 1));
+  max-width:900px;
+}
+.b-quote-text[data-size="S"]  { font-size: calc(38px * var(--scale, 1)); }
+.b-quote-text[data-size="L"]  { font-size: calc(54px * var(--scale, 1)); }
+.b-quote-text[data-size="XL"] { font-size: calc(62px * var(--scale, 1)); }
+
+.b-qsrc {
+  font-family: var(--font-ui);
+  font-size: calc(14px * var(--scale, 1));
+  font-weight:600; letter-spacing:3px; text-transform:uppercase;
+  color: var(--ink-mute);
+}
+
+.b-cta-q {
+  font-family: var(--font-display);
+  font-weight:700; font-size: calc(48px * var(--scale, 1));
+  line-height:1.2;
+  color: var(--ink);
+  margin-bottom: calc(24px * var(--scale, 1));
+  max-width:900px;
+}
+.b-cta-q[data-size="S"]  { font-size: calc(40px * var(--scale, 1)); }
+.b-cta-q[data-size="L"]  { font-size: calc(56px * var(--scale, 1)); }
+.b-cta-q[data-size="XL"] { font-size: calc(64px * var(--scale, 1)); }
+
+.b-cta-sub {
+  font-family: var(--font-body);
+  font-size: calc(25px * var(--scale, 1));
+  line-height:1.5;
+  color: var(--ink-soft);
+  max-width:900px; margin-bottom: calc(32px * var(--scale, 1));
+}
+
+.b-tg-pre {
+  font-family: var(--font-body);
+  font-size: calc(23px * var(--scale, 1));
+  color: var(--ink-mute);
+  margin-bottom: calc(14px * var(--scale, 1));
+}
+
+.b-cta-handle {
+  font-family: var(--font-display);
+  font-weight:800; font-size: calc(88px * var(--scale, 1));
+  letter-spacing:-1.5px;
+  color: var(--burgundy); line-height:1;
+  margin-bottom: calc(22px * var(--scale, 1));
+}
+.b-cta-handle[data-size="S"]  { font-size: calc(72px * var(--scale, 1)); }
+.b-cta-handle[data-size="L"]  { font-size: calc(104px * var(--scale, 1)); }
+.b-cta-handle[data-size="XL"] { font-size: calc(120px * var(--scale, 1)); }
+
+.b-cta-tail {
+  font-family: var(--font-body);
+  font-size: calc(23px * var(--scale, 1));
+  line-height:1.5; color: var(--ink-soft); max-width:780px;
+}
+
+/* ─── INLINE СЕМАНТИЧЕСКИЕ ВЫДЕЛЕНИЯ ─── */
+/* Применяются внутри html-блоков. Привязаны к смыслу, не к виду. */
+.card .accent { color: var(--burgundy); font-weight: 700; }                                    /* ключевое слово */
+.card .hl     { background: rgba(155,44,44,0.18); padding: 0 0.2em; border-radius: 2px; }      /* маркер */
+.card .under  { background-image: linear-gradient(transparent 80%, rgba(155,44,44,0.4) 80%); padding-bottom:2px; }  /* подчёркивание */
+.card .strike { text-decoration: line-through; text-decoration-color: var(--burgundy); text-decoration-thickness: 2px; opacity: 0.7; }
+.card .dim    { color: var(--ink-mute); }                                                       /* приглушённое */
+.card .small  { font-size: 0.78em; }                                                            /* меньше окружения */
+.card .caps   { text-transform: uppercase; letter-spacing: 0.15em; font-size: 0.85em; font-weight: 600; }
+.card .num    { font-family: var(--font-mono); font-weight: 500; font-feature-settings: "tnum"; } /* табличные цифры */
+
+/* ─── TABLE BLOCK (произвольная таблица) ─── */
+.b-table {
+  margin: calc(14px * var(--scale, 1)) 0 calc(20px * var(--scale, 1));
+  border-top: 1px solid var(--ink);
+  border-bottom: 1px solid var(--ink);
+  font-family: var(--font-body);
+}
+.b-table[data-size="S"]  { font-size: calc(18px * var(--scale, 1)); }
+.b-table                 { font-size: calc(22px * var(--scale, 1)); }
+.b-table[data-size="L"]  { font-size: calc(26px * var(--scale, 1)); }
+.b-table[data-size="XL"] { font-size: calc(30px * var(--scale, 1)); }
+.b-table .trow {
+  display: grid;
+  border-bottom: 1px solid rgba(28,22,18,0.18);
+  padding: 14px 0;
+}
+.b-table .trow:last-child { border-bottom: none; }
+.b-table .trow.thead {
+  font-family: var(--font-ui);
+  font-size: 0.55em; font-weight: 700;
+  letter-spacing: 3.5px; text-transform: uppercase;
+  color: var(--ink-mute);
+  padding: 10px 0;
+  border-bottom: 1px solid var(--ink);
+}
+.b-table .tcell {
+  padding: 0 18px 0 0;
+  line-height: 1.4;
+  color: var(--ink-soft);
+}
+.b-table .tcell:last-child { padding-right: 0; }
+.b-table .tcell:first-child { font-weight: 500; color: var(--ink); }
+
+/* ─── EDITABLE STATE ─── */
+[contenteditable="true"] { outline: none; cursor: text; }
+[contenteditable="true"]:focus {
+  background: rgba(155,44,44,0.05);
+  box-shadow: 0 0 0 1px rgba(155,44,44,0.25);
+  border-radius: 4px;
+}
+[contenteditable="true"]:hover:not(:focus) {
+  background: rgba(155,44,44,0.025);
+  border-radius: 4px;
+}
+
+/* ─── FLOATING INLINE-FORMAT TOOLBAR ─── */
+.fmt-toolbar {
+  position: fixed; z-index: 100;
+  display: none;
+  background: #0d0d0d; color: #fff;
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 6px;
+  padding: 4px;
+  gap: 2px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.6);
+  font-family: var(--font-ui);
+}
+.fmt-toolbar.show { display: flex; }
+.fmt-toolbar button {
+  background: transparent;
+  border: none;
+  color: rgba(255,255,255,0.65);
+  font-family: var(--font-ui);
+  font-size: 11px; font-weight: 600;
+  padding: 4px 8px;
+  border-radius: 3px;
+  cursor: pointer;
+  letter-spacing: 0.5px;
+  transition: all 0.12s;
+  min-width: 24px;
+}
+.fmt-toolbar button:hover {
+  background: rgba(155,44,44,0.25); color: #fff;
+}
+.fmt-toolbar button.clear { color: rgba(255,255,255,0.4); font-weight: 400; }
+.fmt-toolbar .sep { width:1px; background: rgba(255,255,255,0.1); margin: 2px 2px; }
+
+/* ─── EDITOR PANEL ─── */
+.ep-section { margin-bottom: 22px; }
+.ep-h {
+  font-size:10px; font-weight:700; letter-spacing:2.5px; text-transform:uppercase;
+  color: rgba(255,255,255,0.5); margin-bottom:10px;
+}
+.ep-current-slide {
+  display:flex; justify-content:space-between; align-items:center;
+  padding-bottom:10px; border-bottom:1px solid rgba(255,255,255,0.07);
+  margin-bottom:14px;
+}
+.ep-current-slide .label {
+  font-family: var(--font-mono); font-size:13px;
+  color:#fff; font-weight:500;
+}
+.ep-current-slide .total {
+  font-family: var(--font-mono); font-size:11px;
+  color:rgba(255,255,255,0.4);
+}
+
+.ep-row { display:flex; gap:6px; flex-wrap:wrap; margin-bottom:8px; }
+.ep-chip {
+  font-family: var(--font-ui);
+  font-size:10px; font-weight:500; padding:5px 10px;
+  border:1px solid rgba(255,255,255,0.12); border-radius:100px;
+  background:transparent; color:rgba(255,255,255,0.55); cursor:pointer;
+  transition: all 0.15s; white-space:nowrap;
+}
+.ep-chip.active, .ep-chip:hover {
+  background: rgba(155,44,44,0.18); color:#fff; border-color: rgba(155,44,44,0.6);
+}
+.ep-chip.add  { color: rgba(255,255,255,0.4); border-style: dashed; }
+.ep-chip.add:hover { color:#fff; border-style: solid; }
+.ep-chip.del-variant {
+  border-color: rgba(220,80,80,0.3); color: rgba(220,140,140,0.7);
+}
+.ep-chip.del-variant:hover { background: rgba(220,80,80,0.15); color:#ffb0b0; }
+
+.ep-block-list { display:flex; flex-direction:column; gap:4px; }
+.ep-block-item {
+  display:grid; grid-template-columns: 1fr auto auto auto auto auto;
+  gap:5px; align-items:center;
+  padding:7px 8px;
+  background: rgba(255,255,255,0.03);
+  border:1px solid rgba(255,255,255,0.04);
+  border-radius:5px;
+  cursor: default;
+}
+.ep-block-item:hover { background: rgba(255,255,255,0.06); }
+.ep-block-item.active {
+  background: rgba(155,44,44,0.18);
+  border-color: rgba(155,44,44,0.5);
+}
+.ep-block-item .name {
+  font-family: var(--font-mono); font-size:10px;
+  color:#fff; font-weight:500;
+  text-overflow: ellipsis; overflow: hidden; white-space: nowrap;
+  min-width: 0;
+}
+.ep-block-item .preview {
+  font-family: var(--font-ui); font-size:9px;
+  color: rgba(255,255,255,0.45);
+  margin-top:1px;
+  text-overflow: ellipsis; overflow: hidden; white-space: nowrap;
+  display:block;
+}
+.ep-block-item .name-wrap { min-width: 0; }
+.ep-block-item .ic-btn {
+  font-size: 11px; width:22px; height:22px;
+  border-radius:4px; border: 1px solid rgba(255,255,255,0.08);
+  background:transparent; color: rgba(255,255,255,0.55);
+  cursor:pointer; display:flex; align-items:center; justify-content:center;
+}
+.ep-block-item .ic-btn:hover { background: rgba(255,255,255,0.08); color:#fff; }
+.ep-block-item .ic-btn.del:hover { background: rgba(220,80,80,0.2); color: #ffb0b0; }
+.ep-block-item .ic-btn.size-select {
+  font-family: var(--font-mono); font-size: 9px; font-weight:500;
+  padding: 0 5px; min-width:24px; width:auto;
+  appearance: none; -webkit-appearance: none; cursor: pointer;
+  text-align: center;
+}
+
+.ep-add-grid {
+  display:grid; grid-template-columns: 1fr 1fr; gap:5px;
+}
+.ep-add-grid .add-btn {
+  font-family: var(--font-ui); font-size:10px; font-weight:500;
+  padding:7px 8px; text-align:left;
+  border:1px dashed rgba(255,255,255,0.12); border-radius:5px;
+  background:transparent; color:rgba(255,255,255,0.55); cursor:pointer;
+  transition: all 0.15s;
+}
+.ep-add-grid .add-btn:hover {
+  background: rgba(155,44,44,0.12); color:#fff;
+  border-color: rgba(155,44,44,0.4); border-style:solid;
+}
+.ep-add-grid .add-btn .cap {
+  display:block; font-size:8.5px; font-weight:400; opacity:0.6;
+  margin-top:1px; letter-spacing:0.5px;
+}
+
+/* ─── NAV (под превью) ─── */
+.nav-bar { display:flex; align-items:center; gap:14px; margin-top:8px; }
+.dots-nav { display:flex; gap:6px; flex-wrap:wrap; max-width:600px; justify-content:center; }
+.dot { width:8px; height:8px; border-radius:50%; background:rgba(255,255,255,0.18); cursor:pointer; transition:all 0.15s; }
+.dot.active { background:#fff; transform:scale(1.4); }
+.nav-btn {
+  width:36px; height:36px; border-radius:50%;
+  border:1px solid rgba(255,255,255,0.12); background:transparent;
+  color:rgba(255,255,255,0.5); cursor:pointer; transition:all 0.15s;
+  display:flex; align-items:center; justify-content:center; font-family:system-ui;
+}
+.nav-btn:hover { background: rgba(255,255,255,0.06); color:#fff; }
+.slide-counter { font-size:10px; opacity:0.4; letter-spacing:2px; margin-top:6px; font-family: var(--font-mono); }
+.export-status { font-size:10px; opacity:0.6; margin-top:4px; font-family: var(--font-mono); letter-spacing:0.5px; min-height:16px; }
+</style>
+</head>
+<body>
+
+<div class="toolbar">
+  <div class="tb-group">
+    <span class="tb-label">формат</span>
+    <button class="tb-btn active" data-ratio="4:5" onclick="setRatio('4:5')">4:5</button>
+    <button class="tb-btn" data-ratio="1:1" onclick="setRatio('1:1')">1:1</button>
+    <button class="tb-btn" data-ratio="3:4" onclick="setRatio('3:4')">3:4</button>
+    <button class="tb-btn" data-ratio="9:16" onclick="setRatio('9:16')">9:16</button>
+  </div>
+  <div class="tb-divider"></div>
+  <div class="tb-group">
+    <span class="tb-label">фон</span>
+    <button class="tb-btn active" data-bg="cream" onclick="setBg('cream')">cream</button>
+    <button class="tb-btn" data-bg="cream-soft" onclick="setBg('cream-soft')">soft</button>
+    <button class="tb-btn" data-bg="cream-dim" onclick="setBg('cream-dim')">dim</button>
+  </div>
+  <div class="tb-divider"></div>
+  <div class="tb-group">
+    <span class="tb-label">шрифт</span>
+    <button class="tb-btn active" data-font="spectral" onclick="setFont('spectral')">spectral · lora</button>
+    <button class="tb-btn" data-font="cormorant" onclick="setFont('cormorant')">cormorant</button>
+    <button class="tb-btn" data-font="playfair" onclick="setFont('playfair')">playfair</button>
+  </div>
+  <div class="tb-divider"></div>
+  <div class="tb-group">
+    <span class="tb-label">слайды</span>
+    <button class="tb-btn" onclick="addSlide('body')">+ слайд</button>
+    <button class="tb-btn" onclick="duplicateSlide()">дублировать</button>
+    <button class="tb-btn danger" onclick="deleteSlide()">удалить</button>
+  </div>
+  <div class="tb-divider"></div>
+  <div class="tb-group">
+    <button class="tb-btn export" id="exportBtn" onclick="exportAll()">скачать все PNG</button>
+    <button class="tb-btn export" onclick="exportOne()">скачать этот</button>
+  </div>
+  <div class="tb-divider"></div>
+  <div class="tb-group">
+    <span class="tb-label">режим</span>
+    <button class="tb-btn active" id="modeVisualBtn" onclick="setMode('visual')">визуал</button>
+    <button class="tb-btn" id="modeTextBtn" onclick="setMode('text')">текст</button>
+  </div>
+  <div class="tb-divider"></div>
+  <div class="tb-group">
+    <button class="tb-btn danger" onclick="resetState()">сбросить</button>
+  </div>
+</div>
+
+<div class="workspace">
+  <div class="preview-area">
+    <div class="card-frame">
+      <div class="card" id="card">
+        <div id="slideContent"></div>
+        <div class="wm">@olymarkes</div>
+        <div class="pager" id="pager"></div>
+      </div>
+    </div>
+    <div class="nav-bar">
+      <button class="nav-btn" onclick="prev()">&larr;</button>
+      <div class="dots-nav" id="dots"></div>
+      <button class="nav-btn" onclick="next()">&rarr;</button>
+    </div>
+    <div class="slide-counter" id="slideCounter"></div>
+    <div class="export-status" id="exportStatus"></div>
+  </div>
+
+  <div class="editor-panel" id="editorPanel">
+    <!-- rendered by renderEditor() -->
+  </div>
+</div>
+
+<!-- text mode -->
+<div class="text-mode" id="textMode" style="display:none">
+  <div class="tm-toolbar">
+    <div class="tm-help">
+      <span><b># текст</b> — заголовок обложки</span>
+      <span><b>## текст</b> — новый слайд (h2)</span>
+      <span><b>--- текст ---</b> — tag</span>
+      <span><b>-- текст</b> — lead</span>
+      <span><b>&gt; текст</b> — callout</span>
+      <span><b>&gt;&gt; текст</b> — dark-quote</span>
+      <span><b>- текст</b> — буллет</span>
+      <span><b>* текст *</b> — eng-stack строка</span>
+      <span><b>@handle</b> — cta-handle</span>
+      <span><b>=== / разделитель</b> — новый слайд</span>
+    </div>
+    <div>
+      <button class="tb-btn export" onclick="parseTextToSlides()">пересобрать слайды</button>
+      <button class="tb-btn" onclick="setMode('visual')">в визуал</button>
+    </div>
+  </div>
+  <textarea id="textInput" class="tm-input" placeholder="вставь сюда текст карусели...
+
+# Заголовок обложки
+--- суббота · бали · унитаз ---
+Подзаголовок обложки идёт обычным абзацем.
+
+## Заголовок второго слайда
+--- 02 · наживка ---
+Я была на йоге, где можно орать, плакать, танцевать.
+-- 3 часа.
+> И это была лучшая практика. Но кое-что не отпускало →
+
+## Третий слайд
+--- 03 · что будет ---
+Сейчас расскажу:
+- как мы попали на легендарного Байрона
+- почему what i truly want не работает
+- какие вопросы задаёт йога Толстым
+> Плюс история про унитаз, без неё никак.
+
+## Слайд 5
+--- 05 · утро ---
+Борьба двух LLM-гигантов с унитазом за 10 000 $.
+Проснулась в 6. Поняла, что усугублять не хочу.
+>> В туалетной битве победил OpenAI. -- бали · апрель
+
+## CTA
+--- 15 · cta ---
+я в восторге, как получилось.
+но честно — большинство людей разъебёт.
+а вы какие выбрали бы — калифорнийские или наши?
+@markesdaily
+"></textarea>
+</div>
+
+<style>
+.text-mode {
+  position: fixed; top: 50px; left: 0; right: 0; bottom: 0;
+  background: #0e0e0e; z-index: 40;
+  display: flex; flex-direction: column;
+  padding: 18px 24px;
+}
+.tm-toolbar {
+  display: flex; gap: 14px; align-items: flex-start; justify-content: space-between;
+  margin-bottom: 12px; padding-bottom: 12px;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+.tm-help {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px 16px;
+  font-family: var(--font-ui); font-size: 11px; color: rgba(255,255,255,0.5);
+  flex: 1; max-width: 720px;
+}
+.tm-help b { color: #d8736a; font-family: var(--font-mono); font-weight: 500; padding-right: 6px; }
+.tm-input {
+  flex: 1; width: 100%;
+  background: #0a0a0a; color: #d0d0d0;
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 6px;
+  padding: 18px 20px;
+  font-family: var(--font-mono);
+  font-size: 13px; line-height: 1.7;
+  resize: none; outline: none;
+  caret-color: #d8736a;
+}
+.tm-input:focus { border-color: rgba(155,44,44,0.4); }
+</style>
+
+<!-- floating inline-format toolbar -->
+<div class="fmt-toolbar" id="fmtToolbar">
+  <button onclick="wrapSelection('accent')" title="ключевое слово (бордо)"><b style="color:#d8736a">A</b></button>
+  <button onclick="wrapSelection('hl')" title="маркер"><span style="background:rgba(216,115,106,0.4);padding:0 2px">H</span></button>
+  <button onclick="wrapSelection('under')" title="подчёркивание"><span style="background-image:linear-gradient(transparent 80%, rgba(216,115,106,0.6) 80%);padding-bottom:1px">U</span></button>
+  <button onclick="wrapSelection('strike')" title="зачёркивание"><span style="text-decoration:line-through">S</span></button>
+  <div class="sep"></div>
+  <button onclick="wrapSelection('dim')" title="приглушённое"><span style="opacity:0.55">d</span></button>
+  <button onclick="wrapSelection('caps')" title="капсом"><span style="font-size:9px;letter-spacing:1.5px">C</span></button>
+  <button onclick="wrapSelection('num')" title="моно (для цифр)"><span style="font-family:monospace;font-size:11px">1</span></button>
+  <div class="sep"></div>
+  <button class="clear" onclick="clearSelectionFormat()" title="убрать всё">×</button>
+</div>
+
+<script>
+/* ════════════════════════════════════════════════════════
+   STATE
+   ════════════════════════════════════════════════════════ */
+const STORAGE_KEY = 'carousel:' + (location.pathname.split('/').pop().replace('.html','') || 'default');
+
+const DEFAULT_SLIDES = [
+  {
+    "layout": "cover",
+    "sizeScale": 0.85,
+    "blocks": [
+      { "type": "top-stripe" },
+      { "type": "tag", "text": "yoga barn · бали · унитаз за 10к $" },
+      { "type": "cover-h1", "html": "Йога-практика<br>в&nbsp;стиле позднего<br>Толстого" },
+      { "type": "rule" },
+      { "type": "cover-sub", "html": "Как русская душа сломала калифорнийский empowerment-вокабуляр, и&nbsp;что из&nbsp;этого вышло.<br><br>Плюс битва Claude vs GPT за&nbsp;унитаз в&nbsp;10к$ — без&nbsp;этого никуда." }
+    ]
+  },
+  {
+    "layout": "body",
+    "sizeScale": 0.85,
+    "blocks": [
+      { "type": "tag", "text": "02 · хук" },
+      { "type": "h2", "size": "S", "html": "Я&nbsp;была на&nbsp;йоге, где можно было орать, плакать, танцевать, лежать всю практику или писать в&nbsp;блокнот вместо асан." },
+      { "type": "lead", "text": "3 часа. И это была лучшая практика в моей жизни." },
+      { "type": "p", "html": "Но кое-что в&nbsp;ней меня царапнуло так, что я&nbsp;потом полдня не&nbsp;могла отпустить." },
+      { "type": "p", "html": "Вопросы, которые задаёт тичер во&nbsp;время практики, звучали правильно. Но&nbsp;не&nbsp;ложились. Как будто переведены с&nbsp;другого языка не&nbsp;только лингвистически, но&nbsp;и&nbsp;онтологически." },
+      { "type": "callout", "html": "И&nbsp;вот про это весь пост.<br>→ листай" }
+    ]
+  },
+  {
+    "layout": "body",
+    "sizeScale": 0.85,
+    "blocks": [
+      { "type": "tag", "text": "03 · что внутри" },
+      { "type": "h2", "text": "Расскажу:" },
+      { "type": "bullet", "html": "как мы&nbsp;с&nbsp;Димой попали на&nbsp;легендарного Байрона в&nbsp;Yoga Barn" },
+      { "type": "bullet", "html": "что произошло, когда я&nbsp;начала делать наоборот — лежать, когда говорят стоять" },
+      { "type": "bullet", "html": "почему «what i truly want» на&nbsp;русском ухе звучит как пластиковая ложка" },
+      { "type": "bullet", "html": "какие вопросы задаёт йога-практика, если её переписать языком Толстого, Достоевского и&nbsp;Мамардашвили" },
+      { "type": "callout", "html": "Короче, философско-телесный лонгрид с&nbsp;унитазом в&nbsp;начале. Погнали." }
+    ]
+  },
+  {
+    "layout": "body",
+    "sizeScale": 0.85,
+    "blocks": [
+      { "type": "tag", "text": "04 · завязка" },
+      { "type": "h2", "size": "S", "text": "Суббота. Диджитал детокс. Романтик-викенд. Вилла в джунглях." },
+      { "type": "p", "html": "Мы с&nbsp;Димой готовились прожить пару гедонистических дней." },
+      { "type": "p", "html": "Я&nbsp;вообще люблю, как в&nbsp;субботу текут мысли и&nbsp;креативная энергия — субботы у&nbsp;меня самые продуктивные именно потому, что ничего не&nbsp;надо." },
+      { "type": "callout", "html": "Всё начиналось идеально.<br><br>Ровно до&nbsp;момента, когда самый дорогой предмет на&nbsp;вилле решил, что с&nbsp;него хватит." }
+    ]
+  },
+  {
+    "layout": "body",
+    "sizeScale": 0.85,
+    "blocks": [
+      { "type": "tag", "text": "05 · унитаз за 10к $" },
+      { "type": "h2", "size": "S", "html": "Утро субботы началось с&nbsp;битвы двух LLM-гигантов с&nbsp;унитазом стоимостью 10&nbsp;000$." },
+      { "type": "p", "html": "Проснулась в&nbsp;6. Поняла, что эта штука внезапно перестала смывать и&nbsp;подавать электронные признаки жизни. Усугублять не&nbsp;хотелось — пришлось будить Диму." },
+      { "type": "p", "html": "<b class=\"accent\">Claude:</b> поможет только сервис, ждать в&nbsp;Убуде неделю.<br><b class=\"accent\">GPT:</b> в&nbsp;этой модели есть не&nbsp;только розетка, но&nbsp;и&nbsp;кнопка soft power, которая может оживить унитаз." },
+      { "type": "dark-quote", "text": "GPT нашёл кнопку. Унитаз ожил. В туалетной битве победил OpenAI.", "src": "но пост вообще-то о другом" }
+    ]
+  },
+  {
+    "layout": "body",
+    "sizeScale": 0.85,
+    "blocks": [
+      { "type": "tag", "text": "06 · как мы попали на Байрона" },
+      { "type": "h2", "size": "S", "text": "Мы попали на офигенную практику в Yoga Barn." },
+      { "type": "p", "html": "Пришли сначала на&nbsp;занятие Лоренса (помните, мы&nbsp;с&nbsp;ним в&nbsp;секте делали тренировки про муравьёв?) — оно было прекрасно." },
+      { "type": "p", "html": "Там встретили Игоря Корейца, и&nbsp;он говорит: «— а&nbsp;вы идёте на&nbsp;Байрона? Сразу после Лоренса. Практика легендарная»." },
+      { "type": "p", "html": "И&nbsp;мы пошли. Я&nbsp;переживала, что 3&nbsp;часа асан — это не&nbsp;совсем то, что моё тело хочет после уже одной практики." },
+      { "type": "callout", "text": "Переживание оказалось напрасным." }
+    ]
+  },
+  {
+    "layout": "body",
+    "sizeScale": 0.85,
+    "blocks": [
+      { "type": "tag", "text": "07 · формат" },
+      { "type": "h2", "size": "S", "text": "Формат, от которого взрывается мозг." },
+      { "type": "dark-quote", "text": "Это такая йога, где вы не должны следовать последовательности. Вы можете делать что угодно: лежать, танцевать, орать, плакать, всю практику писать в блокноте.", "src": "byron · yoga barn" },
+      { "type": "p", "html": "Это полный разрыв шаблона того, что вообще считается йогой." },
+      { "type": "p", "html": "Обычно тичер — фигура авторитета: ты&nbsp;следуешь форме, форма ведёт тебя к&nbsp;состоянию." },
+      { "type": "callout", "html": "Тут наоборот: форма — это предложение, а&nbsp;не&nbsp;предписание. Твоё внутреннее движение важнее того, что показывает тичер." }
+    ]
+  },
+  {
+    "layout": "body",
+    "sizeScale": 0.85,
+    "blocks": [
+      { "type": "tag", "text": "08 · что делала я" },
+      { "type": "h2", "size": "S", "html": "Мы с&nbsp;Димой танцевали CI, делали акро-йогу, я&nbsp;плакала, обнимала подушку, ржала и&nbsp;дэнсила на&nbsp;улице у&nbsp;зала." },
+      { "type": "p", "html": "Практика была именно тем, что нужно." },
+      { "type": "p", "html": "Особенно понравилось выгуливать самую свою бунтарскую часть — делать вообще противоположное:" },
+      { "type": "lead", "html": "когда говорят стоять — я&nbsp;лежу.<br>когда говорят лежать — я&nbsp;стою." },
+      { "type": "p", "html": "Столько в&nbsp;этом было свободы. Я&nbsp;подумала, что хочу пройти тичерз и&nbsp;научиться этому методу." },
+      { "type": "callout", "html": "Там ещё всю практику идёт «промтинг» — коучинговые вопросы, на&nbsp;которые можно отвечать письменно или даже выкрикивать вслух." }
+    ]
+  },
+  {
+    "layout": "body",
+    "blocks": [
+      { "type": "tag", "text": "09 · но" },
+      { "type": "h2", "text": "Потом мы с Димой обсуждали практику, и я сказала:" },
+      { "type": "dark-quote", "text": "Единственное, что мне не кликало — это вопросы.", "src": "слишком как будто для западного ума" },
+      { "type": "callout", "html": "Русский человек так не&nbsp;мыслит.<br><br>И&nbsp;вот тут начинается главное." }
+    ]
+  },
+  {
+    "layout": "body",
+    "sizeScale": 0.85,
+    "blocks": [
+      { "type": "tag", "text": "10 · почему язык не работает" },
+      { "type": "h2", "size": "S", "text": "Американский empowerment-вокабуляр на русском ухе звучит как пластиковая ложка." },
+      { "type": "eng-stack", "items": ["«what i truly want»", "«what i’m grateful for»", "«what i’m letting go of»"] },
+      { "type": "p", "html": "Это работает в&nbsp;Калифорнии — там культура построена на&nbsp;self-actualization и&nbsp;individual fulfillment, на&nbsp;честном опознавании своих желаний и&nbsp;их реализации." },
+      { "type": "callout", "html": "Но&nbsp;на&nbsp;русской / постсоветской психике это скользит. Слишком плоско. Слишком потребительски. Слишком про «я&nbsp;хочу хочу хочу»." },
+      { "type": "p", "text": "Это не про язык. Это про две разные онтологии человека." }
+    ]
+  },
+  {
+    "layout": "body",
+    "sizeScale": 0.85,
+    "blocks": [
+      { "type": "tag", "text": "11 · две онтологии" },
+      { "type": "h2", "size": "S", "text": "Американские промпты построены на пресуппозиции протестантской либеральной субъектности." },
+      { "type": "p", "html": "Есть автономный индивид. У&nbsp;него есть желания. Его задача — честно их&nbsp;опознать и&nbsp;реализовать." },
+      { "type": "p", "html": "Весь горизонт — внутри собственной жизни. В&nbsp;координатах личного счастья, личной аутентичности, личной свободы." },
+      { "type": "p", "html": "Русская смысловая традиция — от&nbsp;Достоевского, Толстого, Бердяева, Флоренского до&nbsp;Семёна Франка и&nbsp;Мамардашвили — стоит на&nbsp;противоположной аксиоме:" },
+      { "type": "callout", "html": "Субъект не&nbsp;автономен.<br><br>Он реализуется только через выход за&nbsp;пределы себя — через другого, служение, истину, бога, дело." },
+      { "type": "p", "size": "S", "html": "Вопрос «чего я&nbsp;хочу» в&nbsp;этой парадигме — вопрос ребёнка или потребителя. Не&nbsp;взрослого. Взрослый спрашивает другое." }
+    ]
+  },
+  {
+    "layout": "body",
+    "sizeScale": 0.85,
+    "blocks": [
+      { "type": "tag", "text": "12 · важная оговорка" },
+      { "type": "h2", "size": "S", "text": "Но это не призыв вернуться в православное самоуничижение и страдать." },
+      { "type": "p", "html": "Толстой поздний велик именно тем, что он&nbsp;не&nbsp;звал жертвовать." },
+      { "type": "p", "html": "Он звал освободиться от&nbsp;ложного — от&nbsp;собственности, от&nbsp;насилия, от&nbsp;фальшивой церковности — чтобы освободить место для подлинной жизни." },
+      { "type": "lead", "html": "Это не&nbsp;аскеза против радости.<br>Это аскеза против шума." },
+      { "type": "callout", "html": "Чтобы услышать.<br><br>В&nbsp;этом регистре и&nbsp;нужно переписать вопросы практики — не&nbsp;утяжелить их, а&nbsp;очистить." }
+    ]
+  },
+  {
+    "layout": "body",
+    "sizeScale": 0.85,
+    "blocks": [
+      { "type": "tag", "text": "13 · сдвиг словаря" },
+      { "type": "h2", "size": "S", "text": "Почувствуй разницу." },
+      {
+        "type": "cmp-row",
+        "red": {
+          "head": "калифорнийское",
+          "pairs": ["what i truly want", "what’s holding me back", "what i’m grateful for", "what i’m letting go of", "what i consciously choose", "what scares me"]
+        },
+        "green": {
+          "head": "русское интегральное",
+          "pairs": ["чему я не могу не служить", "где я живу не по совести", "кому я должен и не отдал", "от какой лжи я освобождаюсь", "на чём я готов стоять до конца", "чего я боюсь больше смерти"]
+        }
+      },
+      { "type": "p", "size": "S", "html": "Американский вопрос ставит тебя в&nbsp;центр и&nbsp;спрашивает про твоё состояние.<br>Русский ставит тебя в&nbsp;отношение — к&nbsp;делу, к&nbsp;другому, к&nbsp;истине, к&nbsp;смерти — и&nbsp;спрашивает: <b class=\"accent\">где ты стоишь</b>." }
+    ]
+  },
+  {
+    "layout": "body",
+    "sizeScale": 0.85,
+    "blocks": [
+      { "type": "tag", "text": "14 · два вектора" },
+      { "type": "h2", "size": "S", "html": "У&nbsp;Байрона все вопросы — первого лица единственного числа: what i want, what i need, what i feel." },
+      { "type": "p", "html": "Это конструирует субъекта-потребителя своих состояний." },
+      { "type": "lead", "html": "Если хочешь интегральный русский регистр — добавь два вектора, которых в&nbsp;калифорнийском wellness нет." },
+      { "type": "p", "html": "<b class=\"accent\">Вектор времени.</b> Не&nbsp;только «что я&nbsp;сейчас», но&nbsp;«что я&nbsp;оставлю». За&nbsp;что мне будет стыдно на&nbsp;смертном одре, если я&nbsp;этого не&nbsp;сделаю." },
+      { "type": "p", "html": "<b class=\"accent\">Вектор другого.</b> Не&nbsp;только «что я&nbsp;чувствую», но&nbsp;«кто рядом со&nbsp;мной», «перед кем я&nbsp;отвечаю», «кому моя жизнь нужна, кроме меня самого»." },
+      { "type": "callout", "text": "Без этого вектора любая практика вырождается в самолюбование." }
+    ]
+  },
+  {
+    "layout": "body",
+    "sizeScale": 0.85,
+    "blocks": [
+      { "type": "tag", "text": "15 · про вес" },
+      { "type": "h2", "size": "S", "html": "Если переписать класс Байрона в&nbsp;этом регистре — йога и&nbsp;breathwork остаются как телесная база." },
+      { "type": "p", "html": "Тело везде тело. Но&nbsp;смысловой слой разворачивается:" },
+      { "type": "lead", "html": "из «найди свой кайф»<br>в&nbsp;«найди свой долг и&nbsp;свою цену»." },
+      { "type": "p", "html": "И&nbsp;это не&nbsp;про тяжесть. Не&nbsp;про жертву. Это про <b class=\"accent\">вес</b>." },
+      { "type": "dark-quote", "text": "Американская практика делает тебя лёгким. Русская интегральная — делает тебя весомым.", "src": "оба состояния нужны" },
+      { "type": "callout", "html": "Психика после 30 уже не&nbsp;ищет себя.<br>Она ищет — за&nbsp;что стоять." }
+    ]
+  },
+  {
+    "layout": "cta",
+    "sizeScale": 0.85,
+    "blocks": [
+      { "type": "top-stripe" },
+      { "type": "tag", "text": "16 · cta" },
+      { "type": "cta-q", "text": "я в восторге, как получилось." },
+      { "type": "cta-sub", "html": "но честно — большинство людей на&nbsp;практике от&nbsp;таких вопросов разъебёт. и&nbsp;лучше что-то попроще.<br><br><b class=\"accent\">а вы какие выбрали бы — калифорнийские или наши?</b><br>пишите в комментах 👇" },
+      { "type": "tg-pre", "text": "полный текст ответа Claude и два аудио-эпизода подкаста — у меня в телеге:" },
+      { "type": "cta-handle", "text": "@markesdaily" },
+      { "type": "cta-tail", "text": "там же разбираю всё, что не влезает в карусель." }
+    ]
+  }
+]
+;
+
+let state = loadState() || {
+  slides: structuredClone(DEFAULT_SLIDES),
+  currentSlide: 0,
+  bg: 'cream',
+  ratio: '4:5',
+};
+
+let cardW = 1080, cardH = 1350;
+const ratios = {
+  '4:5':  { w: 1080, h: 1350 },
+  '1:1':  { w: 1080, h: 1080 },
+  '3:4':  { w: 1080, h: 1440 },
+  '9:16': { w: 1080, h: 1920 },
+};
+
+function loadState() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return null;
+    const s = JSON.parse(raw);
+    if (!s.slides || !Array.isArray(s.slides)) return null;
+    return s;
+  } catch(e) { return null; }
+}
+
+function saveState() {
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch(e) {}
+}
+
+function resetState() {
+  if (!confirm('Сбросить все правки и вернуть исходные слайды?')) return;
+  localStorage.removeItem(STORAGE_KEY);
+  location.reload();
+}
+
+/* ════════════════════════════════════════════════════════
+   BLOCK META — типы, дефолты, имена для редактора
+   ════════════════════════════════════════════════════════ */
+const BLOCK_META = {
+  'top-stripe':  { name: 'stripe',     editable: false, layouts: ['cover','body','quote','cta'] },
+  'tag':         { name: 'tag',        editable: true,  default: 'тэг', layouts: ['cover','body','quote','cta'] },
+  'cover-h1':    { name: 'cover-h1',   editable: true,  default: 'Заголовок', layouts: ['cover'] },
+  'rule':        { name: 'rule',       editable: false, layouts: ['cover'] },
+  'cover-sub':   { name: 'cover-sub',  editable: true,  default: 'Подзаголовок', layouts: ['cover'] },
+  'h2':          { name: 'h2',         editable: true,  default: 'Заголовок слайда', layouts: ['body','cta'] },
+  'p':           { name: 'p',          editable: true,  default: 'Параграф текста.', layouts: ['body','cta','quote'] },
+  'lead':        { name: 'lead',       editable: true,  default: 'Выделенный параграф.', layouts: ['body','cta'] },
+  'bullet':      { name: 'bullet',     editable: true,  default: 'буллет', layouts: ['body','cta'] },
+  'callout':     { name: 'callout',    editable: true,  default: 'Ключевое утверждение слайда.', layouts: ['body','cta'] },
+  'dark-quote':  { name: 'dark-quote', editable: true,  default: 'Цитата.', extra: { src: 'источник' }, layouts: ['body','cta'] },
+  'eng-stack':   { name: 'eng-stack',  editable: true,  default: ['«first»','«second»','«third»'], layouts: ['body'] },
+  'cmp-row':     { name: 'cmp-row',    editable: true,  default: { red: { head: 'было', pairs: ['А','Б','В'] }, green: { head: 'стало', pairs: ['А\'','Б\'','В\''] } }, layouts: ['body'] },
+  'table':       { name: 'table',      editable: true,  default: { headers: ['колонка 1','колонка 2'], rows: [['ячейка','ячейка'],['ячейка','ячейка']] }, layouts: ['body'] },
+  'qmark':       { name: 'qmark',      editable: false, layouts: ['quote'] },
+  'quote-text':  { name: 'quote-text', editable: true,  default: 'Текст цитаты.', layouts: ['quote'] },
+  'qsrc':        { name: 'qsrc',       editable: true,  default: 'источник', layouts: ['quote'] },
+  'cta-q':       { name: 'cta-q',      editable: true,  default: 'Вопрос аудитории?', layouts: ['cta','body'] },
+  'cta-sub':     { name: 'cta-sub',    editable: true,  default: 'Подзаголовок CTA.', layouts: ['cta','body'] },
+  'tg-pre':      { name: 'tg-pre',     editable: true,  default: 'в телеграме:', layouts: ['cta','body'] },
+  'cta-handle':  { name: 'cta-handle', editable: true,  default: '@markesdaily', layouts: ['cta','body'] },
+  'cta-tail':    { name: 'cta-tail',   editable: true,  default: 'хвост после хэндла.', layouts: ['cta','body'] },
+};
+
+const BLOCK_ORDER_FOR_ADD = [
+  'tag','h2','p','lead','bullet','callout','dark-quote','eng-stack','cmp-row','table',
+  'cta-q','cta-sub','tg-pre','cta-handle','cta-tail',
+  'top-stripe','rule','cover-h1','cover-sub','quote-text','qmark','qsrc',
+];
+
+/* ════════════════════════════════════════════════════════
+   RENDER — слайд из JSON
+   ════════════════════════════════════════════════════════ */
+function renderBlock(block, slideIdx, blockIdx) {
+  const t = block.type;
+  const size = block.size || 'M';
+  const sizeAttr = size !== 'M' ? ` data-size="${size}"` : '';
+  const cePath = `data-slide="${slideIdx}" data-block="${blockIdx}"`;
+
+  switch(t) {
+    case 'top-stripe': return `<div class="b-top-stripe" ${cePath}></div>`;
+    case 'rule':       return `<div class="b-rule" ${cePath}></div>`;
+    case 'qmark':      return `<div class="b-qmark" ${cePath}>«</div>`;
+
+    case 'tag':
+    case 'cover-h1':
+    case 'cover-sub':
+    case 'h2':
+    case 'p':
+    case 'lead':
+    case 'callout':
+    case 'eng-stack':  // see below
+    case 'quote-text':
+    case 'qsrc':
+    case 'cta-q':
+    case 'cta-sub':
+    case 'tg-pre':
+    case 'cta-handle':
+    case 'cta-tail':
+    case 'bullet':
+      // simple text/html block
+      if (t === 'eng-stack') {
+        const items = Array.isArray(block.items) ? block.items : (block.html || block.text || '').split('\n');
+        return `<div class="b-eng-stack"${sizeAttr} ${cePath}>${
+          items.map((s,i) => `<div class="eng" contenteditable="true" data-slide="${slideIdx}" data-block="${blockIdx}" data-engidx="${i}">${s}</div>`).join('')
+        }</div>`;
+      }
+      const inner = block.html || escapeHtml(block.text || '');
+      return `<div class="b-${t}"${sizeAttr} contenteditable="true" ${cePath}>${inner}</div>`;
+
+    case 'dark-quote':
+      const dqInner = block.html || escapeHtml(block.text || '');
+      const dqSrc = escapeHtml(block.src || '');
+      return `<div class="b-dark-quote"${sizeAttr} ${cePath}>
+        <span contenteditable="true" data-slide="${slideIdx}" data-block="${blockIdx}" data-field="text">${dqInner}</span>
+        <span class="src" contenteditable="true" data-slide="${slideIdx}" data-block="${blockIdx}" data-field="src">${dqSrc}</span>
+      </div>`;
+
+    case 'cmp-row':
+      const r = block.red || { head:'было', pairs:[] };
+      const g = block.green || { head:'стало', pairs:[] };
+      const renderPairs = (arr, ce) => arr.map((p, i) =>
+        `<div class="pair" contenteditable="true" data-slide="${slideIdx}" data-block="${blockIdx}" data-cmp="${ce}" data-pidx="${i}">${escapeHtml(p)}</div>`
+      ).join('');
+      return `<div class="b-cmp-row"${sizeAttr} ${cePath}>
+        <div class="b-cmp-box red">
+          <div class="cmp-head"><span class="dot"></span><span contenteditable="true" data-slide="${slideIdx}" data-block="${blockIdx}" data-cmp="red" data-field="head">${escapeHtml(r.head)}</span></div>
+          ${renderPairs(r.pairs || [], 'red')}
+        </div>
+        <div class="b-cmp-box green">
+          <div class="cmp-head"><span class="dot"></span><span contenteditable="true" data-slide="${slideIdx}" data-block="${blockIdx}" data-cmp="green" data-field="head">${escapeHtml(g.head)}</span></div>
+          ${renderPairs(g.pairs || [], 'green')}
+        </div>
+      </div>`;
+
+    case 'table': {
+      const headers = Array.isArray(block.headers) ? block.headers : ['col 1','col 2'];
+      const rows = Array.isArray(block.rows) ? block.rows : [];
+      const cols = headers.length;
+      const gridStyle = `grid-template-columns: repeat(${cols}, 1fr);`;
+      const headHtml = headers.map((h, ci) =>
+        `<div class="tcell" contenteditable="true" data-slide="${slideIdx}" data-block="${blockIdx}" data-tbl="head" data-cidx="${ci}">${escapeHtml(h)}</div>`
+      ).join('');
+      const rowsHtml = rows.map((row, ri) => {
+        const cells = (row || []).map((c, ci) =>
+          `<div class="tcell" contenteditable="true" data-slide="${slideIdx}" data-block="${blockIdx}" data-tbl="cell" data-ridx="${ri}" data-cidx="${ci}">${block.cellHtml ? c : escapeHtml(c)}</div>`
+        ).join('');
+        return `<div class="trow" style="${gridStyle}">${cells}</div>`;
+      }).join('');
+      return `<div class="b-table"${sizeAttr} ${cePath}>
+        <div class="trow thead" style="${gridStyle}">${headHtml}</div>
+        ${rowsHtml}
+      </div>`;
+    }
+
+    default:
+      return `<div style="color:red">Unknown block: ${t}</div>`;
+  }
+}
+
+function escapeHtml(s) {
+  return String(s).replace(/[<>&"']/g, c => ({'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+function activeBlocks(slide) {
+  const av = slide.activeVariant || 0;
+  if (av === 0 || !Array.isArray(slide.variants) || !slide.variants[av-1]) return slide.blocks;
+  return slide.variants[av-1].blocks;
+}
+
+function renderSlide() {
+  const slide = state.slides[state.currentSlide];
+  const card = document.getElementById('card');
+  const sc = document.getElementById('slideContent');
+  const layout = slide.layout || 'body';
+  const valign = slide.valign ? ' v-' + slide.valign : '';
+  const halign = slide.halign ? ' a-' + slide.halign : ' a-left';
+  const fontCls = ' font-' + (state.font || 'spectral');
+  card.className = 'card layout-' + layout + valign + halign + fontCls;
+  card.style.setProperty('--scale', slide.sizeScale || 1);
+  const blocks = activeBlocks(slide);
+  sc.innerHTML = blocks.map((b, i) => renderBlock(b, state.currentSlide, i)).join('');
+  attachEditableListeners();
+
+  document.getElementById('dots').innerHTML = state.slides.map((_, i) =>
+    `<div class="dot${i === state.currentSlide ? ' active' : ''}" onclick="goTo(${i})"></div>`
+  ).join('');
+  document.getElementById('pager').innerHTML = state.slides.map((_, i) =>
+    `<div class="pd${i === state.currentSlide ? ' cur' : ''}"></div>`
+  ).join('');
+  document.getElementById('slideCounter').textContent = `${state.currentSlide + 1} / ${state.slides.length}`;
+}
+
+function attachEditableListeners() {
+  document.querySelectorAll('[contenteditable="true"]').forEach(el => {
+    el.addEventListener('blur', onEditableBlur);
+    el.addEventListener('keydown', e => {
+      if (e.key === 'Enter' && !e.shiftKey && el.dataset.field !== 'src' && el.dataset.cmp !== 'red' && el.dataset.cmp !== 'green') {
+        // allow shift+enter for line breaks; plain enter blurs
+        if (el.classList && (el.classList.contains('eng') || el.classList.contains('pair'))) {
+          // for stacks/pairs let enter create new item — handled below
+          return;
+        }
+      }
+    });
+  });
+}
+
+function onEditableBlur(e) {
+  const el = e.currentTarget;
+  const slideIdx = +el.dataset.slide;
+  const blockIdx = +el.dataset.block;
+  const block = activeBlocks(state.slides[slideIdx])[blockIdx];
+  if (!block) return;
+  const html = el.innerHTML.trim();
+
+  if (el.dataset.field === 'src') {
+    block.src = el.textContent.trim();
+  } else if (el.dataset.field === 'text') {
+    block.html = html;
+    delete block.text;
+  } else if (el.dataset.cmp === 'red' || el.dataset.cmp === 'green') {
+    if (el.dataset.field === 'head') {
+      if (!block[el.dataset.cmp]) block[el.dataset.cmp] = { head: '', pairs: [] };
+      block[el.dataset.cmp].head = el.textContent.trim();
+    } else if (el.dataset.pidx !== undefined) {
+      if (!block[el.dataset.cmp]) block[el.dataset.cmp] = { head: '', pairs: [] };
+      block[el.dataset.cmp].pairs[+el.dataset.pidx] = el.textContent.trim();
+    }
+  } else if (el.dataset.engidx !== undefined) {
+    if (!Array.isArray(block.items)) {
+      block.items = (block.html || block.text || '').split('\n');
+      delete block.html; delete block.text;
+    }
+    block.items[+el.dataset.engidx] = el.textContent.trim();
+  } else if (el.dataset.tbl === 'head') {
+    if (!Array.isArray(block.headers)) block.headers = [];
+    block.headers[+el.dataset.cidx] = el.textContent.trim();
+  } else if (el.dataset.tbl === 'cell') {
+    if (!Array.isArray(block.rows)) block.rows = [];
+    const ri = +el.dataset.ridx, ci = +el.dataset.cidx;
+    if (!block.rows[ri]) block.rows[ri] = [];
+    // сохраняем html, чтобы inline-выделения работали в ячейках
+    block.rows[ri][ci] = html;
+    block.cellHtml = true;
+  } else {
+    block.html = html;
+    delete block.text;
+  }
+  saveState();
+  renderEditor();
+}
+
+/* ════════════════════════════════════════════════════════
+   EDITOR PANEL
+   ════════════════════════════════════════════════════════ */
+function renderEditor() {
+  const slide = state.slides[state.currentSlide];
+  const ep = document.getElementById('editorPanel');
+
+  const layoutChips = ['cover','body','quote','cta'].map(l =>
+    `<button class="ep-chip${slide.layout === l ? ' active' : ''}" onclick="setLayout('${l}')">${l}</button>`
+  ).join('');
+
+  const sizeScaleChips = [['XS', 0.85],['S', 1],['M', 1.15],['L', 1.3]].map(([label, val]) => {
+    const active = (slide.sizeScale || 1) === val;
+    return `<button class="ep-chip${active ? ' active' : ''}" onclick="setSlideScale(${val})">${label}</button>`;
+  }).join('');
+
+  const halignChips = ['left','center'].map(v => {
+    const active = (slide.halign || 'left') === v;
+    return `<button class="ep-chip${active ? ' active' : ''}" onclick="setHalign('${v}')">${v}</button>`;
+  }).join('');
+  const valignChips = ['top','center','bottom'].map(v => {
+    const active = (slide.valign || (slide.layout === 'cover' || slide.layout === 'quote' ? 'center' : 'top')) === v;
+    return `<button class="ep-chip${active ? ' active' : ''}" onclick="setValign('${v}')">${v}</button>`;
+  }).join('');
+
+  // variants chips
+  const av = slide.activeVariant || 0;
+  const variantsCount = (slide.variants?.length || 0) + 1;
+  const variantChips = Array.from({length: variantsCount}, (_, i) => {
+    const label = String.fromCharCode(65 + i);
+    return `<button class="ep-chip${av === i ? ' active' : ''}" onclick="setVariant(${i})">${label}</button>`;
+  }).join('') +
+    `<button class="ep-chip add" onclick="addVariant()" title="скопировать текущий как новый вариант">+</button>` +
+    (av > 0 ? `<button class="ep-chip del-variant" onclick="deleteVariant()" title="удалить активный вариант">×</button>` : '');
+
+  const currentBlocks = activeBlocks(slide);
+  const blockList = currentBlocks.map((b, i) => {
+    const meta = BLOCK_META[b.type] || { name: b.type };
+    const previewText = (b.text || b.html || (Array.isArray(b.items) ? b.items.join(' / ') : '') || (b.red ? `${b.red.head} ↔ ${b.green?.head}` : '')).replace(/<[^>]+>/g,'').slice(0, 40);
+    const sizeOptions = ['S','M','L','XL'].map(s => `<option value="${s}"${(b.size || 'M')===s?' selected':''}>${s}</option>`).join('');
+    return `
+      <div class="ep-block-item" data-bidx="${i}">
+        <div class="name-wrap">
+          <div class="name">${meta.name}</div>
+          <span class="preview">${escapeHtml(previewText) || '—'}</span>
+        </div>
+        <select class="ic-btn size-select" onchange="setBlockSize(${i}, this.value)" title="размер">${sizeOptions}</select>
+        <button class="ic-btn" onclick="moveBlock(${i}, -1)" title="вверх">↑</button>
+        <button class="ic-btn" onclick="moveBlock(${i}, 1)" title="вниз">↓</button>
+        <button class="ic-btn del" onclick="deleteBlock(${i})" title="удалить">×</button>
+      </div>`;
+  }).join('');
+
+  const addButtons = BLOCK_ORDER_FOR_ADD
+    .filter(t => {
+      const meta = BLOCK_META[t];
+      return !meta.layouts || meta.layouts.includes(slide.layout || 'body');
+    })
+    .map(t => {
+      const meta = BLOCK_META[t];
+      return `<button class="add-btn" onclick="addBlock('${t}')">+ ${meta.name}<span class="cap">${typeDescription(t)}</span></button>`;
+    }).join('');
+
+  ep.innerHTML = `
+    <div class="ep-current-slide">
+      <span class="label">Слайд ${state.currentSlide + 1}</span>
+      <span class="total">из ${state.slides.length}</span>
+    </div>
+
+    <div class="ep-section">
+      <div class="ep-h">варианты текста</div>
+      <div class="ep-row">${variantChips}</div>
+    </div>
+
+    <div class="ep-section">
+      <div class="ep-h">layout</div>
+      <div class="ep-row">${layoutChips}</div>
+    </div>
+
+    <div class="ep-section">
+      <div class="ep-h">размер слайда</div>
+      <div class="ep-row">${sizeScaleChips}</div>
+    </div>
+
+    <div class="ep-section">
+      <div class="ep-h">размещение текста</div>
+      <div class="ep-row">${halignChips}</div>
+      <div class="ep-row" style="margin-top:6px">${valignChips}</div>
+    </div>
+
+    <div class="ep-section">
+      <div class="ep-h">блоки (${currentBlocks.length})</div>
+      <div class="ep-block-list">${blockList || '<div style="opacity:0.4;font-size:11px;padding:8px 4px">пусто — добавь блок ниже</div>'}</div>
+    </div>
+
+    <div class="ep-section">
+      <div class="ep-h">добавить блок</div>
+      <div class="ep-add-grid">${addButtons}</div>
+    </div>
+  `;
+}
+
+function typeDescription(t) {
+  const d = {
+    'top-stripe':'бордовая черта 38×4',
+    'tag':'tracking caps серый',
+    'cover-h1':'бордо 104px',
+    'rule':'линия 220×2',
+    'cover-sub':'подзаголовок Lora',
+    'h2':'Spectral 54px',
+    'p':'Lora 26',
+    'lead':'выделенный параграф',
+    'bullet':'— буллет',
+    'callout':'бордовая черта слева',
+    'dark-quote':'тёмная плашка',
+    'eng-stack':'Spectral italic стек',
+    'cmp-row':'red ↔ green',
+    'table':'свободная таблица N×M',
+    'qmark':'« 180px',
+    'quote-text':'Spectral 46',
+    'qsrc':'caps подпись',
+    'cta-q':'CTA-вопрос',
+    'cta-sub':'CTA-подзаголовок',
+    'tg-pre':'"в телеге:"',
+    'cta-handle':'@hand 88px бордо',
+    'cta-tail':'хвост после хэндла',
+  };
+  return d[t] || '';
+}
+
+/* ════════════════════════════════════════════════════════
+   EDITOR ACTIONS
+   ════════════════════════════════════════════════════════ */
+function setLayout(l) {
+  state.slides[state.currentSlide].layout = l;
+  saveState(); renderSlide(); renderEditor();
+}
+function setSlideScale(v) {
+  state.slides[state.currentSlide].sizeScale = v;
+  saveState(); renderSlide(); renderEditor();
+}
+function setHalign(v) {
+  state.slides[state.currentSlide].halign = v;
+  saveState(); renderSlide(); renderEditor();
+}
+function setValign(v) {
+  state.slides[state.currentSlide].valign = v;
+  saveState(); renderSlide(); renderEditor();
+}
+function setBlockSize(i, s) {
+  activeBlocks(state.slides[state.currentSlide])[i].size = s;
+  saveState(); renderSlide(); renderEditor();
+}
+function moveBlock(i, dir) {
+  const blocks = activeBlocks(state.slides[state.currentSlide]);
+  const j = i + dir;
+  if (j < 0 || j >= blocks.length) return;
+  [blocks[i], blocks[j]] = [blocks[j], blocks[i]];
+  saveState(); renderSlide(); renderEditor();
+}
+function deleteBlock(i) {
+  activeBlocks(state.slides[state.currentSlide]).splice(i, 1);
+  saveState(); renderSlide(); renderEditor();
+}
+function addBlock(type) {
+  const meta = BLOCK_META[type];
+  const block = { type };
+  if (meta.editable) {
+    if (type === 'eng-stack' && Array.isArray(meta.default)) {
+      block.items = [...meta.default];
+    } else if (type === 'cmp-row' && typeof meta.default === 'object') {
+      block.red = { ...meta.default.red, pairs: [...meta.default.red.pairs] };
+      block.green = { ...meta.default.green, pairs: [...meta.default.green.pairs] };
+    } else if (type === 'table' && typeof meta.default === 'object') {
+      block.headers = [...meta.default.headers];
+      block.rows = meta.default.rows.map(r => [...r]);
+    } else if (type === 'dark-quote') {
+      block.text = meta.default;
+      block.src = meta.extra?.src || '';
+    } else {
+      block.text = meta.default;
+    }
+  }
+  activeBlocks(state.slides[state.currentSlide]).push(block);
+  saveState(); renderSlide(); renderEditor();
+}
+
+/* ─── VARIANTS ─── */
+function setVariant(idx) {
+  state.slides[state.currentSlide].activeVariant = idx;
+  saveState(); renderSlide(); renderEditor();
+}
+function addVariant() {
+  const slide = state.slides[state.currentSlide];
+  if (!Array.isArray(slide.variants)) slide.variants = [];
+  slide.variants.push({ blocks: structuredClone(activeBlocks(slide)) });
+  slide.activeVariant = slide.variants.length;
+  saveState(); renderSlide(); renderEditor();
+}
+function deleteVariant() {
+  const slide = state.slides[state.currentSlide];
+  const av = slide.activeVariant || 0;
+  if (av === 0) return;
+  if (!confirm(`Удалить вариант ${String.fromCharCode(64 + av + 1)}?`)) return;
+  slide.variants.splice(av - 1, 1);
+  slide.activeVariant = Math.min(av, slide.variants.length);
+  if (slide.variants.length === 0) delete slide.variants;
+  saveState(); renderSlide(); renderEditor();
+}
+
+/* ─── FONT PAIR ─── */
+function setFont(name) {
+  state.font = name;
+  document.querySelectorAll('[data-font]').forEach(b => b.classList.toggle('active', b.dataset.font === name));
+  saveState(); renderSlide();
+}
+
+/* ─── MODE TOGGLE: visual ↔ text ─── */
+function setMode(m) {
+  state.mode = m;
+  const ws = document.querySelector('.workspace');
+  const tm = document.getElementById('textMode');
+  const vBtn = document.getElementById('modeVisualBtn');
+  const tBtn = document.getElementById('modeTextBtn');
+  if (m === 'text') {
+    ws.style.display = 'none';
+    tm.style.display = 'flex';
+    vBtn.classList.remove('active');
+    tBtn.classList.add('active');
+    // sync textarea с текущими slides → marker text
+    const ti = document.getElementById('textInput');
+    if (state.rawText) {
+      ti.value = state.rawText;
+    } else {
+      ti.value = slidesToText(state.slides);
+    }
+  } else {
+    ws.style.display = 'grid';
+    tm.style.display = 'none';
+    vBtn.classList.add('active');
+    tBtn.classList.remove('active');
+  }
+  saveState();
+}
+
+function initTextMode() {
+  if (state.mode === 'text') setMode('text');
+}
+
+/* ─── PARSER: text → slides JSON ─── */
+function parseTextToSlides() {
+  const ti = document.getElementById('textInput');
+  const raw = ti.value;
+  state.rawText = raw;
+  const slides = textToSlides(raw);
+  if (!slides.length) {
+    alert('Не нашлось слайдов. Используй ## для нового слайда или === как разделитель.');
+    return;
+  }
+  state.slides = slides;
+  state.currentSlide = 0;
+  saveState();
+  setMode('visual');
+  renderSlide();
+  renderEditor();
+}
+
+function textToSlides(raw) {
+  // Делим на блоки слайдов: разделитель — `## ` в начале строки или `===` строкой целиком,
+  // или `# ` (только если это первый слайд — cover-h1).
+  const lines = raw.replace(/\r\n/g, '\n').split('\n');
+  const slideTexts = [];
+  let cur = [];
+  let firstSlideHasCover = false;
+
+  const flush = () => {
+    if (cur.length) { slideTexts.push(cur.join('\n')); cur = []; }
+  };
+
+  for (let i = 0; i < lines.length; i++) {
+    const ln = lines[i];
+    const tr = ln.trim();
+    if (/^={3,}\s*$/.test(tr)) { flush(); continue; }
+    if (/^##\s+/.test(tr)) { flush(); cur.push(ln); continue; }
+    if (/^#\s+/.test(tr) && slideTexts.length === 0 && !firstSlideHasCover) {
+      // cover (первый слайд): # ... — h1
+      flush(); cur.push(ln); firstSlideHasCover = true; continue;
+    }
+    cur.push(ln);
+  }
+  flush();
+
+  return slideTexts.map((t, idx) => parseSlideBlock(t, idx === 0)).filter(s => s && s.blocks.length);
+}
+
+function parseSlideBlock(text, isFirst) {
+  const lines = text.split('\n').map(l => l.trimEnd());
+  const blocks = [];
+  let layout = isFirst ? 'cover' : 'body';
+  let coverH1Done = false;
+  let buf = [];
+
+  const flushP = () => {
+    if (!buf.length) return;
+    const joined = buf.join(' ').trim();
+    if (joined) {
+      // если содержит инлайн-разметку — конвертируем
+      blocks.push({ type: 'p', html: inlineFormat(joined) });
+    }
+    buf = [];
+  };
+
+  for (let i = 0; i < lines.length; i++) {
+    const raw = lines[i];
+    const ln = raw.trim();
+    if (!ln) { flushP(); continue; }
+
+    // # cover-h1 — только в первом слайде
+    if (/^#\s+/.test(ln) && isFirst && !coverH1Done) {
+      flushP();
+      blocks.push({ type: 'top-stripe' });
+      blocks.push({ type: 'cover-h1', html: inlineFormat(ln.replace(/^#\s+/, '')) });
+      blocks.push({ type: 'rule' });
+      coverH1Done = true; layout = 'cover';
+      continue;
+    }
+    // ## h2 — заголовок слайда
+    if (/^##\s+/.test(ln)) {
+      flushP();
+      blocks.push({ type: 'h2', html: inlineFormat(ln.replace(/^##\s+/, '')) });
+      continue;
+    }
+    // --- tag ---
+    let m = ln.match(/^---\s+(.+?)\s+---$/);
+    if (m) { flushP(); blocks.push({ type: 'tag', text: m[1] }); continue; }
+    // -- lead
+    if (/^--\s+/.test(ln)) { flushP(); blocks.push({ type: 'lead', html: inlineFormat(ln.replace(/^--\s+/, '')) }); continue; }
+    // >> dark-quote
+    if (/^>>\s+/.test(ln)) {
+      flushP();
+      let body = ln.replace(/^>>\s+/, '');
+      let src = '';
+      const sm = body.match(/^(.*?)\s+--\s+(.+)$/);
+      if (sm) { body = sm[1]; src = sm[2]; }
+      blocks.push({ type: 'dark-quote', html: inlineFormat(body), src });
+      continue;
+    }
+    // > callout
+    if (/^>\s+/.test(ln)) { flushP(); blocks.push({ type: 'callout', html: inlineFormat(ln.replace(/^>\s+/, '')) }); continue; }
+    // - bullet
+    if (/^[-—]\s+/.test(ln)) { flushP(); blocks.push({ type: 'bullet', html: inlineFormat(ln.replace(/^[-—]\s+/, '')) }); continue; }
+    // * eng-stack строка (соберём в один блок eng-stack если идёт подряд)
+    if (/^\*\s+(.+)\s+\*$/.test(ln)) {
+      flushP();
+      const stackItems = [];
+      while (i < lines.length && /^\*\s+(.+)\s+\*$/.test(lines[i].trim())) {
+        stackItems.push(lines[i].trim().replace(/^\*\s+/, '').replace(/\s+\*$/, ''));
+        i++;
+      }
+      i--;
+      blocks.push({ type: 'eng-stack', items: stackItems });
+      continue;
+    }
+    // @handle → cta
+    if (/^@\w+/.test(ln)) {
+      flushP();
+      // если сверху уже есть параграф — он становится cta-q или tg-pre
+      // простая эвристика: предыдущий блок без типа h2 → cta-sub, иначе tg-pre
+      blocks.push({ type: 'cta-handle', text: ln });
+      layout = 'cta';
+      continue;
+    }
+    // обычный текст → буферим параграф
+    buf.push(ln);
+  }
+  flushP();
+
+  // эвристика: если в слайде есть cover-h1 — layout=cover, последний параграф → cover-sub
+  if (coverH1Done) {
+    layout = 'cover';
+    // ищем первый p после rule — конвертируем в cover-sub
+    const ruleIdx = blocks.findIndex(b => b.type === 'rule');
+    if (ruleIdx !== -1 && blocks[ruleIdx+1]?.type === 'p') {
+      blocks[ruleIdx+1] = { type: 'cover-sub', html: blocks[ruleIdx+1].html };
+    }
+  }
+
+  // эвристика: если есть cta-handle — layout=cta. Параграф непосредственно перед handle → tg-pre.
+  // Параграф между h2 и tg-pre → cta-sub. h2 → cta-q.
+  const hi = blocks.findIndex(b => b.type === 'cta-handle');
+  if (hi !== -1) {
+    layout = 'cta';
+    if (blocks[hi-1]?.type === 'p') blocks[hi-1] = { type: 'tg-pre', html: blocks[hi-1].html };
+    // h2 → cta-q
+    blocks.forEach((b, i) => { if (b.type === 'h2') blocks[i] = { type: 'cta-q', html: b.html }; });
+  }
+
+  return { layout, blocks };
+}
+
+function inlineFormat(s) {
+  // **слово** → accent, ==слово== → hl, ~~слово~~ → strike, __слово__ → under, %слово% → dim
+  let out = String(s);
+  // экранируем сначала?
+  out = out.replace(/\*\*(.+?)\*\*/g, '<b class="accent">$1</b>');
+  out = out.replace(/==(.+?)==/g, '<span class="hl">$1</span>');
+  out = out.replace(/~~(.+?)~~/g, '<span class="strike">$1</span>');
+  out = out.replace(/__(.+?)__/g, '<span class="under">$1</span>');
+  out = out.replace(/%([^%\n]+?)%/g, '<span class="dim">$1</span>');
+  return out;
+}
+
+function slidesToText(slides) {
+  return slides.map((s, idx) => {
+    const lines = [];
+    const blocks = activeBlocks(s);
+    blocks.forEach(b => {
+      const txt = b.html ? stripHtml(b.html) : (b.text || '');
+      switch (b.type) {
+        case 'top-stripe': case 'rule': case 'qmark': break;
+        case 'cover-h1': lines.push('# ' + txt); break;
+        case 'cover-sub': lines.push(txt); break;
+        case 'h2': case 'cta-q': lines.push('## ' + txt); break;
+        case 'tag': lines.push('--- ' + txt + ' ---'); break;
+        case 'lead': lines.push('-- ' + txt); break;
+        case 'callout': lines.push('> ' + txt); break;
+        case 'dark-quote': lines.push('>> ' + txt + (b.src ? ' -- ' + b.src : '')); break;
+        case 'bullet': lines.push('- ' + txt); break;
+        case 'eng-stack':
+          (b.items || []).forEach(it => lines.push('* ' + it + ' *'));
+          break;
+        case 'cta-handle': lines.push(txt); break;
+        case 'tg-pre': case 'cta-sub': case 'cta-tail': lines.push(txt); break;
+        default: lines.push(txt);
+      }
+    });
+    return lines.join('\n');
+  }).join('\n\n=== \n\n');
+}
+
+function stripHtml(html) {
+  const tmp = document.createElement('div');
+  tmp.innerHTML = html;
+  // оставляем разметку маркерами
+  tmp.querySelectorAll('b.accent').forEach(el => el.replaceWith('**' + el.textContent + '**'));
+  tmp.querySelectorAll('.hl').forEach(el => el.replaceWith('==' + el.textContent + '=='));
+  tmp.querySelectorAll('.strike').forEach(el => el.replaceWith('~~' + el.textContent + '~~'));
+  tmp.querySelectorAll('.under').forEach(el => el.replaceWith('__' + el.textContent + '__'));
+  tmp.querySelectorAll('.dim').forEach(el => el.replaceWith('%' + el.textContent + '%'));
+  tmp.querySelectorAll('br').forEach(el => el.replaceWith('\n'));
+  return tmp.textContent.replace(/&nbsp;/g, ' ').trim();
+}
+
+/* ─── INLINE FORMAT (floating toolbar) ─── */
+let savedSelection = null;
+function saveSelection() {
+  const sel = window.getSelection();
+  if (sel.rangeCount > 0) savedSelection = sel.getRangeAt(0).cloneRange();
+}
+function restoreSelection() {
+  if (!savedSelection) return;
+  const sel = window.getSelection();
+  sel.removeAllRanges();
+  sel.addRange(savedSelection);
+}
+function wrapSelection(cls) {
+  restoreSelection();
+  const sel = window.getSelection();
+  if (!sel.rangeCount || sel.isCollapsed) return;
+  const range = sel.getRangeAt(0);
+  // если уже обёрнуто в этот класс — снимаем
+  const parent = range.commonAncestorContainer.parentElement;
+  if (parent && parent.tagName === 'SPAN' && parent.classList.contains(cls)) {
+    const t = document.createTextNode(parent.textContent);
+    parent.replaceWith(t);
+  } else {
+    const span = document.createElement('span');
+    span.className = cls;
+    try { range.surroundContents(span); }
+    catch(e) {
+      // multi-element — fallback через extract
+      const frag = range.extractContents();
+      span.appendChild(frag);
+      range.insertNode(span);
+    }
+  }
+  // синхронизируем изменения с state
+  const ce = (parent || range.startContainer.parentElement).closest('[contenteditable="true"]');
+  if (ce) ce.dispatchEvent(new Event('blur'));
+  hideFmtToolbar();
+}
+function clearSelectionFormat() {
+  restoreSelection();
+  const sel = window.getSelection();
+  if (!sel.rangeCount) return;
+  const range = sel.getRangeAt(0);
+  const text = range.toString();
+  range.deleteContents();
+  range.insertNode(document.createTextNode(text));
+  const ce = range.startContainer.parentElement?.closest('[contenteditable="true"]');
+  if (ce) ce.dispatchEvent(new Event('blur'));
+  hideFmtToolbar();
+}
+function showFmtToolbar() {
+  const sel = window.getSelection();
+  if (!sel.rangeCount || sel.isCollapsed) { hideFmtToolbar(); return; }
+  const ce = sel.anchorNode?.parentElement?.closest('[contenteditable="true"]');
+  if (!ce) { hideFmtToolbar(); return; }
+  const rect = sel.getRangeAt(0).getBoundingClientRect();
+  if (rect.width < 1 && rect.height < 1) { hideFmtToolbar(); return; }
+  const tb = document.getElementById('fmtToolbar');
+  tb.classList.add('show');
+  const tbRect = tb.getBoundingClientRect();
+  const top = Math.max(8, rect.top - tbRect.height - 8);
+  const left = Math.max(8, Math.min(window.innerWidth - tbRect.width - 8, rect.left + rect.width/2 - tbRect.width/2));
+  tb.style.top = top + 'px';
+  tb.style.left = left + 'px';
+  saveSelection();
+}
+function hideFmtToolbar() {
+  document.getElementById('fmtToolbar').classList.remove('show');
+}
+
+/* ════════════════════════════════════════════════════════
+   SLIDE ACTIONS
+   ════════════════════════════════════════════════════════ */
+function addSlide(layout) {
+  state.slides.splice(state.currentSlide + 1, 0, {
+    layout: layout || 'body',
+    blocks: [
+      { type: 'tag', text: 'новый слайд' },
+      { type: 'h2', text: 'Заголовок' },
+    ],
+  });
+  state.currentSlide++;
+  saveState(); renderSlide(); renderEditor();
+}
+function duplicateSlide() {
+  const copy = structuredClone(state.slides[state.currentSlide]);
+  state.slides.splice(state.currentSlide + 1, 0, copy);
+  state.currentSlide++;
+  saveState(); renderSlide(); renderEditor();
+}
+function deleteSlide() {
+  if (state.slides.length <= 1) { alert('Нельзя удалить единственный слайд'); return; }
+  if (!confirm(`Удалить слайд ${state.currentSlide + 1}?`)) return;
+  state.slides.splice(state.currentSlide, 1);
+  if (state.currentSlide >= state.slides.length) state.currentSlide = state.slides.length - 1;
+  saveState(); renderSlide(); renderEditor();
+}
+
+/* ════════════════════════════════════════════════════════
+   NAV
+   ════════════════════════════════════════════════════════ */
+function next() {
+  state.currentSlide = (state.currentSlide + 1) % state.slides.length;
+  saveState(); renderSlide(); renderEditor();
+}
+function prev() {
+  state.currentSlide = (state.currentSlide - 1 + state.slides.length) % state.slides.length;
+  saveState(); renderSlide(); renderEditor();
+}
+function goTo(i) {
+  state.currentSlide = i;
+  saveState(); renderSlide(); renderEditor();
+}
+
+/* ════════════════════════════════════════════════════════
+   FORMAT / BG
+   ════════════════════════════════════════════════════════ */
+function setRatio(key) {
+  state.ratio = key;
+  const r = ratios[key];
+  cardW = r.w; cardH = r.h;
+  const card = document.getElementById('card');
+  card.style.width = cardW + 'px';
+  card.style.height = cardH + 'px';
+  document.querySelectorAll('[data-ratio]').forEach(b => b.classList.toggle('active', b.dataset.ratio === key));
+  saveState();
+  scaleCard();
+}
+function setBg(name) {
+  state.bg = name;
+  const map = { 'cream':'#ede4d0', 'cream-soft':'#f3ecdb', 'cream-dim':'#e2d8c0' };
+  document.documentElement.style.setProperty('--cream', map[name]);
+  document.querySelectorAll('[data-bg]').forEach(b => b.classList.toggle('active', b.dataset.bg === name));
+  saveState();
+}
+
+function scaleCard() {
+  const card = document.getElementById('card');
+  const area = document.querySelector('.preview-area');
+  const maxW = area.clientWidth - 40;
+  const maxH = area.clientHeight - 140;
+  const s = Math.min(maxW / cardW, maxH / cardH, 0.65);
+  card.style.transform = `scale(${s})`;
+  document.querySelector('.card-frame').style.height = Math.ceil(cardH * s) + 'px';
+  document.querySelector('.card-frame').style.width = Math.ceil(cardW * s) + 'px';
+}
+
+/* ════════════════════════════════════════════════════════
+   EXPORT
+   ════════════════════════════════════════════════════════ */
+async function exportOne() {
+  const status = document.getElementById('exportStatus');
+  status.textContent = 'рендерю...';
+  const card = document.getElementById('card');
+  const orig = card.style.transform;
+  card.style.transform = 'scale(1)';
+  await new Promise(r => setTimeout(r, 100));
+  try {
+    const canvas = await html2canvas(card, { width: cardW, height: cardH, scale: 1, useCORS: true, backgroundColor: null });
+    card.style.transform = orig;
+    const link = document.createElement('a');
+    link.download = `slide_${String(state.currentSlide + 1).padStart(2,'0')}.png`;
+    link.href = canvas.toDataURL('image/png');
+    link.click();
+    status.textContent = 'готово!';
+  } catch(e) {
+    card.style.transform = orig;
+    status.textContent = 'ошибка: ' + e.message;
+  }
+  setTimeout(() => status.textContent = '', 3000);
+}
+
+async function exportAll() {
+  const btn = document.getElementById('exportBtn');
+  const status = document.getElementById('exportStatus');
+  btn.style.opacity = '0.4';
+  const card = document.getElementById('card');
+  const origT = card.style.transform;
+  const origS = state.currentSlide;
+  for (let i = 0; i < state.slides.length; i++) {
+    status.textContent = `слайд ${i + 1} из ${state.slides.length}...`;
+    state.currentSlide = i; renderSlide();
+    card.style.transform = 'scale(1)';
+    await new Promise(r => setTimeout(r, 200));
+    try {
+      const canvas = await html2canvas(card, { width: cardW, height: cardH, scale: 1, useCORS: true, backgroundColor: null });
+      const link = document.createElement('a');
+      link.download = `slide_${String(i + 1).padStart(2,'0')}.png`;
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+      await new Promise(r => setTimeout(r, 300));
+    } catch(e) {}
+  }
+  state.currentSlide = origS; renderSlide(); renderEditor();
+  card.style.transform = origT; scaleCard();
+  btn.style.opacity = '1';
+  status.textContent = `все ${state.slides.length} слайдов скачаны!`;
+  setTimeout(() => status.textContent = '', 4000);
+}
+
+/* ════════════════════════════════════════════════════════
+   INIT
+   ════════════════════════════════════════════════════════ */
+(function init() {
+  if (!state.font) state.font = 'spectral';
+  setBg(state.bg);
+  setFont(state.font);
+  setRatio(state.ratio);
+  renderSlide();
+  renderEditor();
+  scaleCard();
+  window.addEventListener('resize', scaleCard);
+  document.addEventListener('keydown', e => {
+    if (e.target.isContentEditable) return;
+    if (e.key === 'ArrowRight') next();
+    if (e.key === 'ArrowLeft') prev();
+  });
+
+  // floating selection toolbar
+  let fmtTimer;
+  document.addEventListener('selectionchange', () => {
+    clearTimeout(fmtTimer);
+    fmtTimer = setTimeout(() => {
+      const sel = window.getSelection();
+      if (sel.rangeCount === 0 || sel.isCollapsed) { hideFmtToolbar(); return; }
+      const ce = sel.anchorNode?.parentElement?.closest?.('[contenteditable="true"]');
+      if (!ce || !document.getElementById('card').contains(ce)) { hideFmtToolbar(); return; }
+      showFmtToolbar();
+    }, 80);
+  });
+  document.addEventListener('mousedown', e => {
+    if (e.target.closest('.fmt-toolbar')) { e.preventDefault(); /* keep selection */ }
+  });
+
+  // text mode init
+  initTextMode();
+})();
+</script>
+</body>
+</html>
