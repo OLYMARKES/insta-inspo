@@ -28,6 +28,7 @@ def classify(item):
     username = item.get("username", "")
     is_author = username == "olymarkes"
     pain_words = ["вес", "спин", "бол", "после род", "родов", "стресс", "устал", "устала", "развал", "рпп", "депресс", "не вывожу", "не могу", "финанс", "денег", "ипотек", "развод", "миграц", "переезд", "выгор", "живот", "отек"]
+    finance_words = ["финанс", "денег", "деньги", "ипотек", "счет", "счёт", "не тяну", "не могу позволить", "не могу себе позволить", "нет возможности", "не в бюджете", "бесплатн", "дорого"]
     loyal_words = ["секта", "sekta", "буткемп", "буткэмп", "курс", "сезонк", "давно с", "проходила", "проходил", "лагер", "куратор", "волонтер"]
     promise_words = ["обещ", "готова", "готов", "дойду", "не соль", "отчет", "отчёт", "каждый день"]
     goal_words = ["хочу", "мечта", "цель", "форма", "тело", "спорт", "трен", "энерг", "сила", "привыч"]
@@ -35,6 +36,8 @@ def classify(item):
     tags = []
     if any(w in lower for w in pain_words):
         tags.append("боль")
+    if any(w in lower for w in finance_words):
+        tags.append("финансы")
     if any(w in lower for w in promise_words):
         tags.append("обещание")
     if any(w in lower for w in loyal_words):
@@ -46,6 +49,7 @@ def classify(item):
 
     score = min(length / 55, 8.0)
     score += 3.0 if "боль" in tags else 0
+    score += 2.0 if "финансы" in tags else 0
     score += 2.5 if "лояльный" in tags else 0
     score += 1.5 if "обещание" in tags else 0
     score += 1.0 if "цель" in tags else 0
