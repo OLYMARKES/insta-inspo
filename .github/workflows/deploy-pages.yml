@@ -22,14 +22,12 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: gh-pages
+          path: pages-src
       - uses: actions/configure-pages@v5
-      - name: Build static site
-        run: |
-          mkdir -p _site
-          cp contest_analysis.html _site/contest_analysis.html
-          printf '%s\n' '<!doctype html><meta http-equiv="refresh" content="0; url=contest_analysis.html"><a href="contest_analysis.html">Open contest analysis</a>' > _site/index.html
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: _site
+          path: pages-src
       - id: deployment
         uses: actions/deploy-pages@v4
