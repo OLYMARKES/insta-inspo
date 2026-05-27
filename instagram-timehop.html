@@ -1,0 +1,1290 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Instagram Timehop</title>
+<style>
+:root {
+  --app-bg: #fafafa;
+  --surface: #ffffff;
+  --hover: #f5f5f5;
+  --ink: #000000;
+  --text: #262626;
+  --muted: #737373;
+  --soft: #8e8e8e;
+  --line: #dbdbdb;
+  --line-soft: #efefef;
+  --blue: #0095f6;
+  --blue-hover: #1877f2;
+  --danger: #ed4956;
+  --gradient: linear-gradient(45deg, #f58529, #dd2a7b 45%, #8134af 72%, #515bd4);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--app-bg);
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-size: 14px;
+}
+
+button,
+input,
+select {
+  font: inherit;
+}
+
+button {
+  min-height: 40px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--ink);
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+button.secondary {
+  background: var(--surface);
+  color: var(--text);
+}
+
+button.icon {
+  width: 42px;
+  padding: 0;
+  display: inline-grid;
+  place-items: center;
+}
+
+button:hover,
+a:hover {
+  opacity: 0.78;
+}
+
+a {
+  color: inherit;
+}
+
+.app {
+  width: min(1200px, 100%);
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 244px minmax(0, 630px) 320px;
+  gap: 24px;
+  align-items: start;
+  padding: 0 24px 56px 0;
+}
+
+.topbar {
+  position: sticky;
+  top: 0;
+  grid-column: 1;
+  grid-row: 1 / span 4;
+  min-height: 100vh;
+  padding: 30px 12px 20px;
+  border-right: 1px solid var(--line);
+  background: var(--surface);
+  display: grid;
+  align-content: start;
+  gap: 30px;
+}
+
+.brand {
+  display: grid;
+  gap: 7px;
+  min-width: 0;
+  padding: 0 12px;
+}
+
+.brand h1 {
+  margin: 0;
+  font-size: 25px;
+  line-height: 1;
+  font-weight: 800;
+  letter-spacing: 0;
+}
+
+.brand span {
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.3;
+}
+
+.tabs {
+  display: grid;
+  gap: 6px;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+}
+
+.tab {
+  min-height: 48px;
+  padding: 0 12px;
+  background: transparent;
+  color: var(--text);
+  border-color: transparent;
+  justify-content: start;
+  text-align: left;
+  font-size: 16px;
+}
+
+.tab.active {
+  background: var(--hover);
+  color: var(--ink);
+  font-weight: 800;
+}
+
+.tab::before {
+  content: "";
+  width: 24px;
+  height: 24px;
+  margin-right: 12px;
+  border: 2px solid currentColor;
+  border-radius: 7px;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.tab[data-view="timehop"]::before {
+  border-radius: 50%;
+  background: var(--gradient);
+  border: 0;
+}
+
+.tab[data-view="calendar"]::before {
+  border-radius: 5px;
+}
+
+.tab[data-view="search"]::before {
+  border-radius: 50%;
+  box-shadow: 8px 8px 0 -6px currentColor;
+}
+
+.stats,
+.view,
+.loading {
+  grid-column: 2 / 4;
+}
+
+.dashboard {
+  display: grid;
+  grid-template-columns: minmax(0, 630px) 320px;
+  gap: 24px;
+  align-items: start;
+}
+
+.section {
+  min-width: 0;
+}
+
+.toolbar {
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  gap: 8px;
+  align-items: end;
+  margin: 24px 0 12px;
+  padding: 12px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+}
+
+.control {
+  display: grid;
+  gap: 6px;
+}
+
+.control label {
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+input,
+select {
+  width: 100%;
+  min-height: 40px;
+  padding: 0 12px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+  color: var(--text);
+}
+
+input:focus,
+select:focus {
+  outline: 1px solid var(--blue);
+  border-color: var(--blue);
+}
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0;
+  margin: 24px 0 0;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+  overflow: hidden;
+}
+
+.stat {
+  padding: 14px 16px;
+  border-left: 1px solid var(--line-soft);
+  background: var(--surface);
+}
+
+.stat:first-child {
+  border-left: 0;
+}
+
+.stat strong {
+  display: block;
+  font-size: 22px;
+  line-height: 1.1;
+  font-weight: 800;
+}
+
+.stat span {
+  display: block;
+  margin-top: 4px;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.view {
+  display: none;
+}
+
+.view.active {
+  display: block;
+}
+
+.post-list {
+  display: grid;
+  gap: 14px;
+}
+
+.post-card {
+  display: grid;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+}
+
+.post-card.compact {
+  grid-template-columns: 82px minmax(0, 1fr);
+  min-height: 112px;
+}
+
+.post-card.no-preview:not(.compact) .media {
+  aspect-ratio: auto;
+  min-height: 88px;
+}
+
+.post-header {
+  display: grid;
+  grid-template-columns: 40px minmax(0, 1fr) auto;
+  gap: 10px;
+  align-items: center;
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--line-soft);
+}
+
+.avatar {
+  width: 36px;
+  height: 36px;
+  padding: 2px;
+  border-radius: 50%;
+  background: var(--gradient);
+}
+
+.avatar::after {
+  content: "";
+  display: block;
+  width: 100%;
+  height: 100%;
+  border: 2px solid var(--surface);
+  border-radius: inherit;
+  background: #111;
+}
+
+.post-identity {
+  min-width: 0;
+  display: grid;
+  gap: 2px;
+}
+
+.post-identity strong {
+  color: var(--text);
+  font-size: 14px;
+  line-height: 1.15;
+}
+
+.post-identity span,
+.post-metrics {
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.2;
+}
+
+.post-metrics {
+  white-space: nowrap;
+  text-align: right;
+}
+
+.media {
+  position: relative;
+  aspect-ratio: 1 / 1;
+  background: #efefef;
+  overflow: hidden;
+}
+
+.compact .media {
+  aspect-ratio: auto;
+  min-height: 100%;
+}
+
+.media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.post-card.no-preview .media::after {
+  content: "превью недоступно";
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  color: var(--muted);
+  font-weight: 700;
+  font-size: 12px;
+  text-align: center;
+}
+
+.post-card.compact.no-preview .media::after {
+  content: "превью\A недоступно";
+  white-space: pre;
+}
+
+.post-body {
+  min-width: 0;
+  padding: 12px;
+  display: grid;
+  align-content: start;
+  gap: 8px;
+}
+
+.meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.pill {
+  display: inline-flex;
+  align-items: center;
+  min-height: 22px;
+  padding: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--muted);
+}
+
+.pill.red {
+  color: var(--muted);
+}
+
+.caption {
+  max-height: 116px;
+  overflow: hidden;
+  color: var(--text);
+  font-size: 14px;
+  line-height: 1.42;
+  white-space: pre-wrap;
+}
+
+.expanded .caption {
+  max-height: none;
+}
+
+.post-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+}
+
+.post-actions a,
+.post-actions button {
+  min-height: 24px;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: var(--blue);
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.rail {
+  display: grid;
+  gap: 14px;
+  position: sticky;
+  top: 24px;
+}
+
+.panel {
+  padding: 14px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+}
+
+.panel h2 {
+  margin: 0 0 12px;
+  font-size: 16px;
+  line-height: 1.2;
+  letter-spacing: 0;
+}
+
+.random-controls {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.random-controls button {
+  grid-column: 1 / -1;
+}
+
+.random-actions {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 8px;
+}
+
+.random-actions button {
+  grid-column: auto;
+}
+
+.random-result {
+  margin-top: 12px;
+}
+
+.calendar-controls {
+  display: grid;
+  grid-template-columns: 1fr 1fr auto auto;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.calendar {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 4px;
+}
+
+.weekday {
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 700;
+  text-align: center;
+}
+
+.day {
+  position: relative;
+  min-height: 48px;
+  padding: 6px;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--muted);
+  text-align: left;
+}
+
+.day.has-posts {
+  background: var(--hover);
+  color: var(--text);
+}
+
+.day.selected {
+  outline: 2px solid var(--blue);
+  outline-offset: 1px;
+}
+
+.day strong {
+  display: block;
+  font-size: 15px;
+}
+
+.day span {
+  display: block;
+  margin-top: 4px;
+  color: var(--blue);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.day.empty {
+  visibility: hidden;
+}
+
+.archive-grid {
+  display: grid;
+  grid-template-columns: 320px minmax(0, 630px);
+  gap: 24px;
+  margin-top: 24px;
+}
+
+.search-row {
+  display: grid;
+  grid-template-columns: minmax(180px, 1fr) 150px 150px;
+  gap: 8px;
+  margin: 24px 0 12px;
+  padding: 12px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+}
+
+.empty-state {
+  padding: 32px;
+  border: 1px dashed var(--line);
+  border-radius: 8px;
+  color: var(--muted);
+  background: var(--surface);
+  text-align: center;
+}
+
+.loading {
+  padding: 44px 0;
+  color: var(--muted);
+  font-size: 18px;
+}
+
+@media (max-width: 920px) {
+  .app {
+    width: 100%;
+    display: block;
+    padding: 0 12px 56px;
+  }
+
+  .topbar,
+  .dashboard,
+  .archive-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+
+  .topbar {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    min-height: auto;
+    margin: 0 -12px;
+    padding: 12px 12px 10px;
+    border-right: 0;
+    border-bottom: 1px solid var(--line);
+    gap: 12px;
+  }
+
+  .brand {
+    padding: 0;
+  }
+
+  .brand h1 {
+    font-size: 23px;
+  }
+
+  .tabs {
+    width: 100%;
+    overflow-x: auto;
+    display: flex;
+    gap: 8px;
+  }
+
+  .tab {
+    min-height: 40px;
+    padding: 0 10px;
+    white-space: nowrap;
+    font-size: 14px;
+  }
+
+  .tab::before {
+    width: 18px;
+    height: 18px;
+    margin-right: 7px;
+  }
+
+  .stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    margin-top: 12px;
+  }
+
+  .toolbar,
+  .search-row {
+    grid-template-columns: 1fr;
+  }
+
+  .rail {
+    position: static;
+  }
+}
+
+@media (max-width: 640px) {
+  .app {
+    width: 100%;
+  }
+
+  .brand {
+    display: grid;
+    gap: 5px;
+  }
+
+  .brand span {
+    white-space: normal;
+  }
+
+  .post-card,
+  .post-card.compact {
+    grid-template-columns: 86px minmax(0, 1fr);
+  }
+
+  .post-card:not(.compact) {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+
+  .post-body {
+    padding: 11px;
+  }
+
+  .caption {
+    max-height: 88px;
+    font-size: 13px;
+  }
+
+  .calendar-controls {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .day {
+    min-height: 46px;
+    padding: 5px;
+  }
+}
+</style>
+</head>
+<body>
+<main class="app">
+  <header class="topbar">
+    <div class="brand">
+      <h1>Instagram Timehop</h1>
+      <span id="rangeLabel">Загрузка архива...</span>
+    </div>
+    <nav class="tabs" aria-label="Разделы">
+      <button class="tab active" data-view="timehop">Сегодня</button>
+      <button class="tab" data-view="calendar">Календарь</button>
+      <button class="tab" data-view="search">Поиск</button>
+    </nav>
+  </header>
+
+  <div class="stats" id="stats"></div>
+
+  <section class="view active" id="view-timehop">
+    <div class="dashboard">
+      <div class="section">
+        <div class="toolbar">
+          <div class="control">
+            <label for="timehopDate">День для Timehop</label>
+            <input id="timehopDate" type="date">
+          </div>
+          <div class="control">
+            <label for="timehopSort">Порядок</label>
+            <select id="timehopSort">
+              <option value="desc">Новые сверху</option>
+              <option value="asc">Старые сверху</option>
+              <option value="likes">По лайкам</option>
+            </select>
+          </div>
+          <button id="todayButton" class="secondary">Сегодня</button>
+        </div>
+        <div id="timehopTitle" class="panel"></div>
+        <div id="timehopList" class="post-list" style="margin-top: 12px;"></div>
+      </div>
+
+      <aside class="rail">
+        <section class="panel">
+          <h2>Случайный популярный</h2>
+          <div class="random-controls">
+            <div class="control">
+              <label for="randomLikes">Лайки</label>
+              <select id="randomLikes"></select>
+            </div>
+            <div class="control">
+              <label for="randomType">Тип</label>
+              <select id="randomType">
+                <option value="all">Все</option>
+                <option value="Image">Фото</option>
+                <option value="Carousel">Карусели</option>
+                <option value="Reels">Reels</option>
+                <option value="Video">Видео</option>
+              </select>
+            </div>
+            <div class="random-actions">
+              <button id="randomButton">Вытащить пост</button>
+              <button id="randomRefreshButton" class="secondary" type="button">Обновить</button>
+            </div>
+          </div>
+          <div id="randomResult" class="random-result"></div>
+        </section>
+
+        <section class="panel">
+          <h2>Быстрый переход</h2>
+          <div class="calendar-controls">
+            <select id="quickYear"></select>
+            <select id="quickMonth"></select>
+            <button class="icon secondary" id="prevMonth" title="Предыдущий месяц" aria-label="Предыдущий месяц">&lt;</button>
+            <button class="icon secondary" id="nextMonth" title="Следующий месяц" aria-label="Следующий месяц">&gt;</button>
+          </div>
+          <div class="calendar" id="miniCalendar"></div>
+        </section>
+      </aside>
+    </div>
+  </section>
+
+  <section class="view" id="view-calendar">
+    <div class="archive-grid">
+      <section class="panel">
+        <h2>Календарь архива</h2>
+        <div class="calendar-controls">
+          <select id="calendarYear"></select>
+          <select id="calendarMonth"></select>
+          <button class="icon secondary" id="calendarPrev" title="Предыдущий месяц" aria-label="Предыдущий месяц">&lt;</button>
+          <button class="icon secondary" id="calendarNext" title="Следующий месяц" aria-label="Следующий месяц">&gt;</button>
+        </div>
+        <div class="calendar" id="calendarGrid"></div>
+      </section>
+      <section>
+        <div id="calendarTitle" class="panel"></div>
+        <div id="calendarPosts" class="post-list" style="margin-top: 12px;"></div>
+      </section>
+    </div>
+  </section>
+
+  <section class="view" id="view-search">
+    <div class="search-row">
+      <div class="control">
+        <label for="searchInput">Текст, хэштег или ссылка</label>
+        <input id="searchInput" type="search" placeholder="Например: трезвость, Бали, #sekta">
+      </div>
+      <div class="control">
+        <label for="searchType">Тип</label>
+        <select id="searchType">
+          <option value="all">Все</option>
+          <option value="Image">Фото</option>
+          <option value="Carousel">Карусели</option>
+          <option value="Reels">Reels</option>
+          <option value="Video">Видео</option>
+        </select>
+      </div>
+      <div class="control">
+        <label for="searchSort">Сортировка</label>
+        <select id="searchSort">
+          <option value="date">Новые</option>
+          <option value="likes">Лайки</option>
+          <option value="comments">Комментарии</option>
+        </select>
+      </div>
+    </div>
+    <div id="searchSummary" class="panel"></div>
+    <div id="searchResults" class="post-list" style="margin-top: 12px;"></div>
+  </section>
+
+  <div id="loading" class="loading">Загружаю посты...</div>
+</main>
+
+<script>
+const DATA_URL = "./data/instagram-timehop-posts.json";
+const MONTHS = [
+  "Январь", "Февраль", "Март", "Апрель", "Май", "Июнь",
+  "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь",
+];
+const MONTHS_GENITIVE = [
+  "января", "февраля", "марта", "апреля", "мая", "июня",
+  "июля", "августа", "сентября", "октября", "ноября", "декабря",
+];
+const WEEKDAYS = ["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"];
+
+const state = {
+  payload: null,
+  posts: [],
+  byDate: new Map(),
+  byMonthDay: new Map(),
+  years: [],
+  currentView: "timehop",
+  quickYear: null,
+  quickMonth: null,
+  calendarYear: null,
+  calendarMonth: null,
+  selectedDate: null,
+  randomPostId: null,
+};
+
+const $ = (selector) => document.querySelector(selector);
+const $$ = (selector) => Array.from(document.querySelectorAll(selector));
+
+function pad(value) {
+  return String(value).padStart(2, "0");
+}
+
+function formatNumber(value) {
+  if (value === null || value === undefined) return "неизв.";
+  return new Intl.NumberFormat("ru-RU").format(value);
+}
+
+function formatDate(date) {
+  return new Intl.DateTimeFormat("ru-RU", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  }).format(new Date(`${date}T12:00:00`));
+}
+
+function currentIsoDate() {
+  const now = new Date();
+  return `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}`;
+}
+
+function indexPosts(posts) {
+  state.byDate.clear();
+  state.byMonthDay.clear();
+
+  for (const post of posts) {
+    if (!state.byDate.has(post.date)) state.byDate.set(post.date, []);
+    state.byDate.get(post.date).push(post);
+
+    if (!state.byMonthDay.has(post.monthDay)) state.byMonthDay.set(post.monthDay, []);
+    state.byMonthDay.get(post.monthDay).push(post);
+  }
+
+  for (const list of state.byDate.values()) {
+    list.sort((a, b) => b.timestamp.localeCompare(a.timestamp));
+  }
+  for (const list of state.byMonthDay.values()) {
+    list.sort((a, b) => b.date.localeCompare(a.date));
+  }
+}
+
+function renderStats() {
+  const { payload, posts } = state;
+  const types = posts.reduce((acc, post) => {
+    acc[post.type] = (acc[post.type] || 0) + 1;
+    return acc;
+  }, {});
+
+  $("#rangeLabel").textContent = `${payload.dateRange.min} - ${payload.dateRange.max}`;
+  $("#stats").innerHTML = [
+    ["Постов", formatNumber(payload.count)],
+    ["Медиана лайков", formatNumber(payload.likes.median)],
+    ["Топ 10% от", formatNumber(payload.likes.p90)],
+    ["Каруселей / Reels", `${formatNumber(types.Carousel || 0)} / ${formatNumber(types.Reels || 0)}`],
+  ].map(([label, value]) => `
+    <div class="stat">
+      <strong>${value}</strong>
+      <span>${label}</span>
+    </div>
+  `).join("");
+}
+
+function populateSelects() {
+  const yearOptions = state.years
+    .slice()
+    .reverse()
+    .map((year) => `<option value="${year}">${year}</option>`)
+    .join("");
+  const monthOptions = MONTHS
+    .map((month, index) => `<option value="${index + 1}">${month}</option>`)
+    .join("");
+
+  ["#quickYear", "#calendarYear"].forEach((selector) => {
+    $(selector).innerHTML = yearOptions;
+  });
+  ["#quickMonth", "#calendarMonth"].forEach((selector) => {
+    $(selector).innerHTML = monthOptions;
+  });
+
+  const likes = state.payload.likes;
+  $("#randomLikes").innerHTML = [
+    ["0", "Любая популярность"],
+    [String(likes.median || 0), `От медианы (${formatNumber(likes.median)})`],
+    [String(likes.p75 || 0), `Топ 25% (${formatNumber(likes.p75)}+)`],
+    [String(likes.p90 || 0), `Топ 10% (${formatNumber(likes.p90)}+)`],
+  ].map(([value, label]) => `<option value="${value}">${label}</option>`).join("");
+  $("#randomLikes").value = String(likes.p75 || 0);
+}
+
+function setDefaultDates() {
+  const today = currentIsoDate();
+  const latest = state.payload.dateRange.max;
+  const latestDate = new Date(`${latest}T12:00:00`);
+
+  $("#timehopDate").value = today;
+  state.quickYear = latestDate.getFullYear();
+  state.quickMonth = new Date(`${today}T12:00:00`).getMonth() + 1;
+  state.calendarYear = state.quickYear;
+  state.calendarMonth = state.quickMonth;
+  state.selectedDate = `${state.calendarYear}-${pad(state.calendarMonth)}-${pad(new Date(`${today}T12:00:00`).getDate())}`;
+
+  $("#quickYear").value = state.quickYear;
+  $("#quickMonth").value = state.quickMonth;
+  $("#calendarYear").value = state.calendarYear;
+  $("#calendarMonth").value = state.calendarMonth;
+}
+
+function sortPosts(posts, mode) {
+  const sorted = posts.slice();
+  if (mode === "asc") sorted.sort((a, b) => a.date.localeCompare(b.date));
+  if (mode === "desc") sorted.sort((a, b) => b.date.localeCompare(a.date));
+  if (mode === "likes") sorted.sort((a, b) => (b.likes || -1) - (a.likes || -1));
+  if (mode === "comments") sorted.sort((a, b) => (b.comments || -1) - (a.comments || -1));
+  return sorted;
+}
+
+function postCard(post, compact = false) {
+  const likes = post.likes !== null ? `<span>${formatNumber(post.likes)} лайков</span>` : "";
+  const comments = post.comments !== null ? `<span>${formatNumber(post.comments)} комм.</span>` : "";
+  const views = post.views !== null ? `<span>${formatNumber(post.views)} просмотров</span>` : "";
+  const localPath = post.localPath ? `<a href="${post.localPath}" target="_blank" rel="noreferrer">.md</a>` : "";
+  const previewClass = post.image ? "" : " no-preview";
+  const image = post.image
+    ? `<img src="${post.image}" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.closest('.post-card')?.classList.add('no-preview'); this.remove()">`
+    : "";
+
+  if (compact) {
+    return `
+      <article class="post-card compact${previewClass}">
+        <div class="media">
+          ${image}
+        </div>
+        <div class="post-body">
+          <div class="meta">
+            <span class="pill red">${formatDate(post.date)}</span>
+            <span class="pill">${post.type}</span>
+            ${likes}
+          </div>
+          <div class="caption">${escapeHtml(post.caption || "Без подписи")}</div>
+          <div class="post-actions">
+            <a href="${post.url}" target="_blank" rel="noreferrer">Instagram</a>
+            ${localPath}
+            <button type="button" data-expand="${post.id}">Развернуть</button>
+          </div>
+        </div>
+      </article>
+    `;
+  }
+
+  return `
+    <article class="post-card${previewClass}">
+      <header class="post-header">
+        <div class="avatar" aria-hidden="true"></div>
+        <div class="post-identity">
+          <strong>@olymarkes</strong>
+          <span>${formatDate(post.date)} · ${post.type}</span>
+        </div>
+        <div class="post-metrics">${[likes, comments, views].filter(Boolean).join(" · ")}</div>
+      </header>
+      <div class="media">
+        ${image}
+      </div>
+      <div class="post-body">
+        <div class="caption">${escapeHtml(post.caption || "Без подписи")}</div>
+        <div class="post-actions">
+          <a href="${post.url}" target="_blank" rel="noreferrer">Instagram</a>
+          ${localPath}
+          <button type="button" data-expand="${post.id}">Развернуть</button>
+        </div>
+      </div>
+    </article>
+  `;
+}
+
+function escapeHtml(value) {
+  return String(value)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
+}
+
+function renderPostList(container, posts, options = {}) {
+  const limit = options.limit || posts.length;
+  const compact = Boolean(options.compact);
+  const visible = posts.slice(0, limit);
+
+  if (!visible.length) {
+    container.innerHTML = `<div class="empty-state">${options.empty || "Постов не найдено"}</div>`;
+    return;
+  }
+
+  container.innerHTML = visible.map((post) => postCard(post, compact)).join("");
+}
+
+function renderTimehop() {
+  const value = $("#timehopDate").value || currentIsoDate();
+  const monthDay = value.slice(5);
+  const posts = sortPosts(state.byMonthDay.get(monthDay) || [], $("#timehopSort").value);
+  const [month, day] = monthDay.split("-").map(Number);
+
+  $("#timehopTitle").innerHTML = `
+    <h2 style="margin:0 0 6px;">${day} ${MONTHS_GENITIVE[month - 1]} через годы</h2>
+    <div style="color: var(--muted);">${posts.length ? `${posts.length} постов в этот день` : "В этот день в архиве пока пусто"}</div>
+  `;
+  renderPostList($("#timehopList"), posts, { empty: "В этот день постов не нашлось. Попробуй соседнюю дату." });
+}
+
+function renderCalendar(container, year, month, selectedDate, onClickName) {
+  const first = new Date(year, month - 1, 1);
+  const daysInMonth = new Date(year, month, 0).getDate();
+  const firstWeekday = (first.getDay() + 6) % 7;
+  const parts = WEEKDAYS.map((day) => `<div class="weekday">${day}</div>`);
+
+  for (let i = 0; i < firstWeekday; i += 1) {
+    parts.push(`<div class="day empty"></div>`);
+  }
+
+  for (let day = 1; day <= daysInMonth; day += 1) {
+    const date = `${year}-${pad(month)}-${pad(day)}`;
+    const count = (state.byDate.get(date) || []).length;
+    const classes = ["day"];
+    if (count) classes.push("has-posts");
+    if (date === selectedDate) classes.push("selected");
+    parts.push(`
+      <button class="${classes.join(" ")}" data-${onClickName}="${date}">
+        <strong>${day}</strong>
+        ${count ? `<span>${count} пост.</span>` : ""}
+      </button>
+    `);
+  }
+
+  container.innerHTML = parts.join("");
+}
+
+function renderMiniCalendar() {
+  renderCalendar($("#miniCalendar"), state.quickYear, state.quickMonth, "", "quick-date");
+}
+
+function renderArchiveCalendar() {
+  renderCalendar($("#calendarGrid"), state.calendarYear, state.calendarMonth, state.selectedDate, "archive-date");
+  renderSelectedDate();
+}
+
+function renderSelectedDate() {
+  const posts = state.byDate.get(state.selectedDate) || [];
+  $("#calendarTitle").innerHTML = `
+    <h2 style="margin:0 0 6px;">${formatDate(state.selectedDate)}</h2>
+    <div style="color: var(--muted);">${posts.length ? `${posts.length} постов` : "На эту дату постов нет"}</div>
+  `;
+  renderPostList($("#calendarPosts"), posts, { empty: "Выбери день с отметкой в календаре." });
+}
+
+function moveMonth(scope, delta) {
+  const yearKey = scope === "quick" ? "quickYear" : "calendarYear";
+  const monthKey = scope === "quick" ? "quickMonth" : "calendarMonth";
+  const date = new Date(state[yearKey], state[monthKey] - 1 + delta, 1);
+  const minYear = state.years[0];
+  const maxYear = state.years[state.years.length - 1];
+  if (date.getFullYear() < minYear || date.getFullYear() > maxYear) return;
+
+  state[yearKey] = date.getFullYear();
+  state[monthKey] = date.getMonth() + 1;
+
+  if (scope === "quick") {
+    $("#quickYear").value = state.quickYear;
+    $("#quickMonth").value = state.quickMonth;
+    renderMiniCalendar();
+  } else {
+    $("#calendarYear").value = state.calendarYear;
+    $("#calendarMonth").value = state.calendarMonth;
+    state.selectedDate = `${state.calendarYear}-${pad(state.calendarMonth)}-01`;
+    renderArchiveCalendar();
+  }
+}
+
+function renderRandom() {
+  const minLikes = Number($("#randomLikes").value || 0);
+  const type = $("#randomType").value;
+  const pool = state.posts.filter((post) => {
+    if ((post.likes || 0) < minLikes) return false;
+    if (type !== "all" && post.type !== type) return false;
+    return true;
+  });
+
+  if (!pool.length) {
+    $("#randomResult").innerHTML = `<div class="empty-state">Нет постов под этот фильтр.</div>`;
+    return;
+  }
+
+  const candidates = pool.length > 1 ? pool.filter((post) => post.id !== state.randomPostId) : pool;
+  const post = candidates[Math.floor(Math.random() * candidates.length)];
+  state.randomPostId = post.id;
+  $("#randomResult").innerHTML = postCard(post, true);
+}
+
+let searchTimer = null;
+
+function renderSearch() {
+  clearTimeout(searchTimer);
+  searchTimer = setTimeout(() => {
+    const query = $("#searchInput").value.trim().toLowerCase();
+    const type = $("#searchType").value;
+    const sort = $("#searchSort").value;
+
+    let results = state.posts.filter((post) => {
+      if (type !== "all" && post.type !== type) return false;
+      if (!query) return true;
+      const haystack = `${post.caption} ${post.url} ${post.hashtags.join(" ")} ${post.mentions.join(" ")}`.toLowerCase();
+      return haystack.includes(query);
+    });
+
+    results = sortPosts(results, sort === "date" ? "desc" : sort);
+    $("#searchSummary").innerHTML = `
+      <h2 style="margin:0 0 6px;">${query ? `Поиск: ${escapeHtml(query)}` : "Все посты"}</h2>
+      <div style="color: var(--muted);">Найдено: ${formatNumber(results.length)}. Показаны первые ${formatNumber(Math.min(results.length, 80))}.</div>
+    `;
+    renderPostList($("#searchResults"), results, { limit: 80, empty: "Ничего не найдено." });
+  }, 120);
+}
+
+function bindEvents() {
+  $$(".tab").forEach((button) => {
+    button.addEventListener("click", () => {
+      state.currentView = button.dataset.view;
+      $$(".tab").forEach((item) => item.classList.toggle("active", item === button));
+      $$(".view").forEach((view) => view.classList.toggle("active", view.id === `view-${state.currentView}`));
+      if (state.currentView === "search") renderSearch();
+    });
+  });
+
+  $("#timehopDate").addEventListener("change", renderTimehop);
+  $("#timehopSort").addEventListener("change", renderTimehop);
+  $("#todayButton").addEventListener("click", () => {
+    $("#timehopDate").value = currentIsoDate();
+    renderTimehop();
+  });
+
+  $("#randomButton").addEventListener("click", renderRandom);
+  $("#randomRefreshButton").addEventListener("click", renderRandom);
+  $("#randomLikes").addEventListener("change", () => {
+    state.randomPostId = null;
+    renderRandom();
+  });
+  $("#randomType").addEventListener("change", () => {
+    state.randomPostId = null;
+    renderRandom();
+  });
+
+  $("#quickYear").addEventListener("change", () => {
+    state.quickYear = Number($("#quickYear").value);
+    renderMiniCalendar();
+  });
+  $("#quickMonth").addEventListener("change", () => {
+    state.quickMonth = Number($("#quickMonth").value);
+    renderMiniCalendar();
+  });
+  $("#prevMonth").addEventListener("click", () => moveMonth("quick", -1));
+  $("#nextMonth").addEventListener("click", () => moveMonth("quick", 1));
+
+  $("#calendarYear").addEventListener("change", () => {
+    state.calendarYear = Number($("#calendarYear").value);
+    state.selectedDate = `${state.calendarYear}-${pad(state.calendarMonth)}-01`;
+    renderArchiveCalendar();
+  });
+  $("#calendarMonth").addEventListener("change", () => {
+    state.calendarMonth = Number($("#calendarMonth").value);
+    state.selectedDate = `${state.calendarYear}-${pad(state.calendarMonth)}-01`;
+    renderArchiveCalendar();
+  });
+  $("#calendarPrev").addEventListener("click", () => moveMonth("calendar", -1));
+  $("#calendarNext").addEventListener("click", () => moveMonth("calendar", 1));
+
+  document.addEventListener("click", (event) => {
+    const expandId = event.target.closest("[data-expand]")?.dataset.expand;
+    if (expandId) {
+      event.target.closest(".post-card")?.classList.toggle("expanded");
+      event.target.textContent = event.target.closest(".post-card")?.classList.contains("expanded") ? "Свернуть" : "Развернуть";
+    }
+
+    const quickDate = event.target.closest("[data-quick-date]")?.dataset.quickDate;
+    if (quickDate) {
+      $("#timehopDate").value = quickDate;
+      renderTimehop();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    const archiveDate = event.target.closest("[data-archive-date]")?.dataset.archiveDate;
+    if (archiveDate) {
+      state.selectedDate = archiveDate;
+      renderArchiveCalendar();
+    }
+  });
+
+  ["#searchInput", "#searchType", "#searchSort"].forEach((selector) => {
+    $(selector).addEventListener("input", renderSearch);
+    $(selector).addEventListener("change", renderSearch);
+  });
+}
+
+async function init() {
+  try {
+    const response = await fetch(DATA_URL);
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    state.payload = await response.json();
+    state.posts = state.payload.posts;
+    state.years = Array.from(new Set(state.posts.map((post) => post.year))).sort((a, b) => a - b);
+    indexPosts(state.posts);
+    populateSelects();
+    setDefaultDates();
+    renderStats();
+    renderTimehop();
+    renderRandom();
+    renderMiniCalendar();
+    renderArchiveCalendar();
+    bindEvents();
+    $("#loading").style.display = "none";
+  } catch (error) {
+    $("#loading").innerHTML = `
+      Не удалось загрузить <code>${DATA_URL}</code>. Открой страницу через локальный сервер, например <code>python3 -m http.server 8787</code>.
+    `;
+    console.error(error);
+  }
+}
+
+init();
+</script>
+</body>
+</html>
