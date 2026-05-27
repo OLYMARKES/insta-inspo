@@ -449,6 +449,10 @@ select:focus {
   font-weight: 700;
 }
 
+.post-actions button.hide-post {
+  color: var(--danger);
+}
+
 .rail {
   display: grid;
   gap: 14px;
@@ -493,6 +497,19 @@ select:focus {
 
 .random-result {
   margin-top: 12px;
+}
+
+.hidden-summary {
+  display: grid;
+  gap: 10px;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.35;
+}
+
+.hidden-summary button:disabled {
+  cursor: default;
+  opacity: 0.45;
 }
 
 .random-result .post-card.compact {
@@ -777,6 +794,14 @@ select:focus {
         </section>
 
         <section class="panel">
+          <h2>Скрытые</h2>
+          <div class="hidden-summary">
+            <div id="hiddenSummary">Скрытых постов нет.</div>
+            <button id="resetHiddenButton" class="secondary" type="button">Показать все скрытые</button>
+          </div>
+        </section>
+
+        <section class="panel">
           <h2>Быстрый переход</h2>
           <div class="calendar-controls">
             <select id="quickYear"></select>
@@ -843,6 +868,7 @@ select:focus {
 
 <script>
 const DATA_URL = "./data/instagram-timehop-posts.json";
+const HIDDEN_POSTS_KEY = "instagram-timehop-hidden-posts-v1";
 const MONTHS = [
   "Январь", "Февраль", "Март", "Апрель", "Май", "Июнь",
   "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь",
@@ -866,6 +892,7 @@ const state = {
   calendarMonth: null,
   selectedDate: null,
   randomPostId: null,
+  hiddenPostIds: new Set(),
 };
 
 const $ = (selector) => document.querySelector(selector);
@@ -893,6 +920,23 @@ function currentIsoDate() {
   return `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}`;
 }
 
+function loadHiddenPosts() {
+  try {
+    const ids = JSON.parse(localStorage.getItem(HIDDEN_POSTS_KEY) || "[]");
+    state.hiddenPostIds = new Set(Array.isArray(ids) ? ids : []);
+  } catch {
+    state.hiddenPostIds = new Set();
+  }
+}
+
+function saveHiddenPosts() {
+  localStorage.setItem(HIDDEN_POSTS_KEY, JSON.stringify([...state.hiddenPostIds]));
+}
+
+function visiblePosts(posts) {
+  return posts.filter((post) => !state.hiddenPostIds.has(post.id));
+}
+
 function indexPosts(posts) {
   state.byDate.clear();
   state.byMonthDay.clear();
@@ -915,14 +959,15 @@ function indexPosts(posts) {
 
 function renderStats() {
   const { payload, posts } = state;
-  const types = posts.reduce((acc, post) => {
+  const visible = visiblePosts(posts);
+  const types = visible.reduce((acc, post) => {
     acc[post.type] = (acc[post.type] || 0) + 1;
     return acc;
   }, {});
 
   $("#rangeLabel").textContent = `${payload.dateRange.min} - ${payload.dateRange.max}`;
   $("#stats").innerHTML = [
-    ["Постов", formatNumber(payload.count)],
+    ["Постов", formatNumber(visible.length)],
     ["Медиана лайков", formatNumber(payload.likes.median)],
     ["Топ 10% от", formatNumber(payload.likes.p90)],
     ["Каруселей / Reels", `${formatNumber(types.Carousel || 0)} / ${formatNumber(types.Reels || 0)}`],
@@ -932,6 +977,14 @@ function renderStats() {
       <span>${label}</span>
     </div>
   `).join("");
+}
+
+function renderHiddenControls() {
+  const knownHiddenCount = state.posts.filter((post) => state.hiddenPostIds.has(post.id)).length;
+  $("#hiddenSummary").textContent = knownHiddenCount
+    ? `Скрыто: ${formatNumber(knownHiddenCount)}. Эти посты не попадают в выдачу на этом устройстве.`
+    : "Скрытых постов нет.";
+  $("#resetHiddenButton").disabled = !knownHiddenCount;
 }
 
 function populateSelects() {
@@ -1015,6 +1068,7 @@ function postCard(post, compact = false) {
             <a href="${post.url}" target="_blank" rel="noreferrer">Instagram</a>
             ${localPath}
             <button type="button" data-expand="${post.id}">Развернуть</button>
+            <button class="hide-post" type="button" data-hide-post="${escapeHtml(post.id)}">Скрыть</button>
           </div>
         </div>
       </article>
@@ -1040,6 +1094,7 @@ function postCard(post, compact = false) {
           <a href="${post.url}" target="_blank" rel="noreferrer">Instagram</a>
           ${localPath}
           <button type="button" data-expand="${post.id}">Развернуть</button>
+          <button class="hide-post" type="button" data-hide-post="${escapeHtml(post.id)}">Скрыть из таймхопа</button>
         </div>
       </div>
     </article>
@@ -1070,7 +1125,7 @@ function renderPostList(container, posts, options = {}) {
 function renderTimehop() {
   const value = $("#timehopDate").value || currentIsoDate();
   const monthDay = value.slice(5);
-  const posts = sortPosts(state.byMonthDay.get(monthDay) || [], $("#timehopSort").value);
+  const posts = sortPosts(visiblePosts(state.byMonthDay.get(monthDay) || []), $("#timehopSort").value);
   const [month, day] = monthDay.split("-").map(Number);
 
   $("#timehopTitle").innerHTML = `
@@ -1092,7 +1147,7 @@ function renderCalendar(container, year, month, selectedDate, onClickName) {
 
   for (let day = 1; day <= daysInMonth; day += 1) {
     const date = `${year}-${pad(month)}-${pad(day)}`;
-    const count = (state.byDate.get(date) || []).length;
+    const count = visiblePosts(state.byDate.get(date) || []).length;
     const classes = ["day"];
     if (count) classes.push("has-posts");
     if (date === selectedDate) classes.push("selected");
@@ -1117,7 +1172,7 @@ function renderArchiveCalendar() {
 }
 
 function renderSelectedDate() {
-  const posts = state.byDate.get(state.selectedDate) || [];
+  const posts = visiblePosts(state.byDate.get(state.selectedDate) || []);
   $("#calendarTitle").innerHTML = `
     <h2 style="margin:0 0 6px;">${formatDate(state.selectedDate)}</h2>
     <div style="color: var(--muted);">${posts.length ? `${posts.length} постов` : "На эту дату постов нет"}</div>
@@ -1151,7 +1206,7 @@ function moveMonth(scope, delta) {
 function renderRandom() {
   const minLikes = Number($("#randomLikes").value || 0);
   const type = $("#randomType").value;
-  const pool = state.posts.filter((post) => {
+  const pool = visiblePosts(state.posts).filter((post) => {
     if ((post.likes || 0) < minLikes) return false;
     if (type !== "all" && post.type !== type) return false;
     return true;
@@ -1168,6 +1223,17 @@ function renderRandom() {
   $("#randomResult").innerHTML = postCard(post, true);
 }
 
+function rerenderAfterHiddenChange() {
+  state.randomPostId = null;
+  renderStats();
+  renderTimehop();
+  renderRandom();
+  renderMiniCalendar();
+  renderArchiveCalendar();
+  renderHiddenControls();
+  if (state.currentView === "search") renderSearch();
+}
+
 let searchTimer = null;
 
 function renderSearch() {
@@ -1177,7 +1243,7 @@ function renderSearch() {
     const type = $("#searchType").value;
     const sort = $("#searchSort").value;
 
-    let results = state.posts.filter((post) => {
+    let results = visiblePosts(state.posts).filter((post) => {
       if (type !== "all" && post.type !== type) return false;
       if (!query) return true;
       const haystack = `${post.caption} ${post.url} ${post.hashtags.join(" ")} ${post.mentions.join(" ")}`.toLowerCase();
@@ -1221,6 +1287,12 @@ function bindEvents() {
     renderRandom();
   });
 
+  $("#resetHiddenButton").addEventListener("click", () => {
+    state.hiddenPostIds.clear();
+    saveHiddenPosts();
+    rerenderAfterHiddenChange();
+  });
+
   $("#quickYear").addEventListener("change", () => {
     state.quickYear = Number($("#quickYear").value);
     renderMiniCalendar();
@@ -1246,6 +1318,14 @@ function bindEvents() {
   $("#calendarNext").addEventListener("click", () => moveMonth("calendar", 1));
 
   document.addEventListener("click", (event) => {
+    const hideId = event.target.closest("[data-hide-post]")?.dataset.hidePost;
+    if (hideId) {
+      state.hiddenPostIds.add(hideId);
+      saveHiddenPosts();
+      rerenderAfterHiddenChange();
+      return;
+    }
+
     const expandId = event.target.closest("[data-expand]")?.dataset.expand;
     if (expandId) {
       event.target.closest(".post-card")?.classList.toggle("expanded");
@@ -1278,6 +1358,7 @@ async function init() {
     if (!response.ok) throw new Error(`HTTP ${response.status}`);
     state.payload = await response.json();
     state.posts = state.payload.posts;
+    loadHiddenPosts();
     state.years = Array.from(new Set(state.posts.map((post) => post.year))).sort((a, b) => a - b);
     indexPosts(state.posts);
     populateSelects();
@@ -1287,6 +1368,7 @@ async function init() {
     renderRandom();
     renderMiniCalendar();
     renderArchiveCalendar();
+    renderHiddenControls();
     bindEvents();
     $("#loading").style.display = "none";
   } catch (error) {
