@@ -762,6 +762,7 @@ select:focus {
             </select>
           </div>
           <button id="todayButton" class="secondary">Сегодня</button>
+          <button id="nextDayButton" class="secondary">Следующий день</button>
         </div>
         <div id="timehopTitle" class="panel"></div>
         <div id="timehopList" class="post-list" style="margin-top: 12px;"></div>
@@ -918,6 +919,12 @@ function formatDate(date) {
 function currentIsoDate() {
   const now = new Date();
   return `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}`;
+}
+
+function shiftIsoDate(value, deltaDays) {
+  const date = new Date(`${value || currentIsoDate()}T12:00:00`);
+  date.setDate(date.getDate() + deltaDays);
+  return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`;
 }
 
 function loadHiddenPosts() {
@@ -1273,6 +1280,10 @@ function bindEvents() {
   $("#timehopSort").addEventListener("change", renderTimehop);
   $("#todayButton").addEventListener("click", () => {
     $("#timehopDate").value = currentIsoDate();
+    renderTimehop();
+  });
+  $("#nextDayButton").addEventListener("click", () => {
+    $("#timehopDate").value = shiftIsoDate($("#timehopDate").value, 1);
     renderTimehop();
   });
 
