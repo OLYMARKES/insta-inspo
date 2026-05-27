@@ -191,7 +191,7 @@ a {
 
 .toolbar {
   display: grid;
-  grid-template-columns: 1fr auto auto;
+  grid-template-columns: minmax(0, 1fr) minmax(140px, 180px) auto auto auto;
   gap: 8px;
   align-items: end;
   margin: 24px 0 12px;
@@ -761,8 +761,9 @@ select:focus {
               <option value="likes">По лайкам</option>
             </select>
           </div>
+          <button class="icon secondary" id="prevDayButton" title="Предыдущий день" aria-label="Предыдущий день">&lt;</button>
           <button id="todayButton" class="secondary">Сегодня</button>
-          <button id="nextDayButton" class="secondary">Следующий день</button>
+          <button class="icon secondary" id="nextDayButton" title="Следующий день" aria-label="Следующий день">&gt;</button>
         </div>
         <div id="timehopTitle" class="panel"></div>
         <div id="timehopList" class="post-list" style="margin-top: 12px;"></div>
@@ -1280,6 +1281,10 @@ function bindEvents() {
   $("#timehopSort").addEventListener("change", renderTimehop);
   $("#todayButton").addEventListener("click", () => {
     $("#timehopDate").value = currentIsoDate();
+    renderTimehop();
+  });
+  $("#prevDayButton").addEventListener("click", () => {
+    $("#timehopDate").value = shiftIsoDate($("#timehopDate").value, -1);
     renderTimehop();
   });
   $("#nextDayButton").addEventListener("click", () => {
