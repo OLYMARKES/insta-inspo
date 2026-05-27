@@ -287,6 +287,11 @@ select:focus {
   background: var(--surface);
 }
 
+.post-card.target-post {
+  border-color: var(--blue);
+  box-shadow: 0 0 0 2px rgba(0, 149, 246, 0.16);
+}
+
 .post-card.compact {
   grid-template-columns: 82px minmax(0, 1fr);
   min-height: 112px;
@@ -1063,13 +1068,14 @@ function postCard(post, compact = false) {
   const views = post.views !== null ? `<span>${formatNumber(post.views)} просмотров</span>` : "";
   const localPath = post.localPath ? `<a href="${post.localPath}" target="_blank" rel="noreferrer">.md</a>` : "";
   const previewClass = post.image ? "" : " no-preview";
+  const postAttrs = `data-post-id="${escapeHtml(post.id)}" data-post-date="${escapeHtml(post.date)}"`;
   const image = post.image
     ? `<img src="${post.image}" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.closest('.post-card')?.classList.add('no-preview'); this.remove()">`
     : "";
 
   if (compact) {
     return `
-      <article class="post-card compact${previewClass}">
+      <article class="post-card compact${previewClass}" ${postAttrs}>
         <div class="media">
           ${image}
         </div>
@@ -1092,7 +1098,7 @@ function postCard(post, compact = false) {
   }
 
   return `
-    <article class="post-card${previewClass}">
+    <article class="post-card${previewClass}" ${postAttrs}>
       <header class="post-header">
         <div class="avatar" aria-hidden="true"></div>
         <div class="post-identity">
@@ -1149,6 +1155,19 @@ function renderTimehop() {
     <div style="color: var(--muted);">${posts.length ? `${posts.length} постов в этот день` : "В этот день в архиве пока пусто"}</div>
   `;
   renderPostList($("#timehopList"), posts, { empty: "В этот день постов не нашлось. Попробуй соседнюю дату." });
+}
+
+function scrollToTimehopPost(date) {
+  requestAnimationFrame(() => {
+    $$("#timehopList .post-card.target-post").forEach((card) => card.classList.remove("target-post"));
+    const card = $(`#timehopList .post-card[data-post-date="${date}"]`);
+    if (!card) {
+      $("#timehopTitle").scrollIntoView({ behavior: "smooth", block: "start" });
+      return;
+    }
+    card.classList.add("target-post");
+    card.scrollIntoView({ behavior: "smooth", block: "center" });
+  });
 }
 
 function renderCalendar(container, year, month, selectedDate, onClickName) {
@@ -1360,7 +1379,7 @@ function bindEvents() {
     if (quickDate) {
       $("#timehopDate").value = quickDate;
       renderTimehop();
-      window.scrollTo({ top: 0, behavior: "smooth" });
+      scrollToTimehopPost(quickDate);
     }
 
     const archiveDate = event.target.closest("[data-archive-date]")?.dataset.archiveDate;
