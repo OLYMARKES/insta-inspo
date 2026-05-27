@@ -455,9 +455,14 @@ select:focus {
 
 .rail {
   display: grid;
-  gap: 14px;
+  align-content: start;
+  gap: 12px;
   position: sticky;
   top: 24px;
+  max-height: calc(100vh - 48px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding-right: 4px;
 }
 
 .panel {
@@ -682,6 +687,9 @@ select:focus {
 
   .rail {
     position: static;
+    max-height: none;
+    overflow: visible;
+    padding-right: 0;
   }
 }
 
