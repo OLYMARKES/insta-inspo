@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Все выпуски | Подкасты с Олей Маркес</title>
+  <link rel="stylesheet" href="../podcast-library.css">
+</head>
+<body data-page="archive" data-base="..">
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="logo" href="../podcast/"><span class="logo-mark">OM</span><span>Olya Podcasts</span></a>
+      <nav class="nav" aria-label="Основная навигация">
+        <div class="nav-item">
+          <button class="nav-trigger" type="button">Подкаст</button>
+          <div class="dropdown">
+            <a href="../podcast/">Обзор подкаста</a>
+            <a href="../episodes/">Все выпуски</a>
+            <a href="../episodes/?format=guest">Гостевые выпуски</a>
+            <a href="../episodes/?topic=отношения">По темам</a>
+          </div>
+        </div>
+        <a class="nav-link" href="../podcast/#latest">Свежий выпуск</a>
+      </nav>
+      <div class="header-actions">
+        <a class="header-action" href="../podcast/">Главная</a>
+        <a class="header-action primary" href="#episodes">Архив</a>
+      </div>
+      <button class="menu-button" type="button" aria-label="Открыть меню" aria-expanded="false" data-menu-button>☰</button>
+    </div>
+    <div class="container mobile-menu" data-mobile-menu>
+      <a href="../podcast/">Обзор подкаста</a>
+      <a href="../episodes/">Все выпуски</a>
+      <a href="../episodes/?format=guest">Гостевые выпуски</a>
+      <a href="../podcast/#latest">Свежий выпуск</a>
+    </div>
+  </header>
+
+  <main id="episodes">
+    <section class="archive-head">
+      <div class="container">
+        <p class="eyebrow">Archive</p>
+        <h1>Все выпуски</h1>
+        <p>Сканируемый архив: фильтруй по формату, теме, гостю или ключевому слову. Описание короткое, чтобы список не превращался в тяжелую ленту.</p>
+      </div>
+    </section>
+
+    <section class="section" style="padding-top:0">
+      <div class="container">
+        <form class="archive-search" data-archive-form>
+          <label class="sr-only" for="archive-search">Поиск по выпускам</label>
+          <input id="archive-search" type="search" placeholder="Искать по гостю, теме или ключевому слову" data-archive-search>
+          <button class="button" type="submit">Искать</button>
+        </form>
+
+        <div class="toolbar">
+          <div class="filter-row" data-format-filters></div>
+          <div class="filter-row">
+            <label class="sr-only" for="topic-select">Фильтр по теме</label>
+            <select class="topic-select" id="topic-select" data-topic-select></select>
+            <label class="sr-only" for="sort-select">Сортировка</label>
+            <select class="sort-select" id="sort-select" data-sort-select>
+              <option value="newest">Дата: новые сначала</option>
+              <option value="oldest">Дата: старые сначала</option>
+              <option value="az">Название: A-Z</option>
+              <option value="za">Название: Z-A</option>
+            </select>
+          </div>
+        </div>
+
+        <p class="eyebrow"><span data-result-count>24</span> результатов</p>
+        <div class="episode-list" data-episode-list></div>
+        <nav class="pagination" aria-label="Пагинация" data-pagination></nav>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-grid">
+      <div class="footer-col">
+        <a class="logo" href="../podcast/"><span class="logo-mark">OM</span><span>Olya Podcasts</span></a>
+        <p style="margin-top:16px">Архив выпусков, рассчитанный на рост до 200+ записей.</p>
+      </div>
+      <div class="footer-col"><h3>Explore</h3><a href="../podcast/">Overview</a><a href="../episodes/">All episodes</a><a href="../episodes/?format=guest">Guest episodes</a></div>
+      <div class="footer-col"><h3>Formats</h3><a href="../episodes/?format=video">Видео</a><a href="../episodes/?format=audio">Аудио</a><a href="../episodes/?format=author">Авторские</a></div>
+      <div class="footer-col"><h3>Topics</h3><a href="../episodes/?topic=AI">AI</a><a href="../episodes/?topic=отношения">Отношения</a><a href="../episodes/?topic=тело">Тело</a></div>
+      <div class="footer-col"><h3>Contact</h3><a href="../podcast/">Podcast</a><a href="#episodes">Search</a></div>
+    </div>
+  </footer>
+
+  <script src="../podcast-library.js"></script>
+</body>
+</html>

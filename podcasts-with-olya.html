@@ -1,0 +1,1220 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Подкасты с Олей Маркес</title>
+<style>
+:root {
+  --paper: #f5f2ed;
+  --surface: #ffffff;
+  --ink: #101010;
+  --muted: #68635d;
+  --line: rgba(16, 16, 16, 0.12);
+  --line-strong: rgba(16, 16, 16, 0.2);
+  --accent: #d84d36;
+  --sage: #627463;
+  --blue: #2b5f81;
+  --gold: #b88a3d;
+  --shadow: 0 18px 60px rgba(26, 25, 23, 0.12);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+  letter-spacing: 0;
+}
+
+button,
+a {
+  -webkit-tap-highlight-color: transparent;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.page {
+  overflow: hidden;
+}
+
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 18px clamp(18px, 4vw, 58px);
+  border-bottom: 1px solid rgba(245, 242, 237, 0.62);
+  background: rgba(245, 242, 237, 0.86);
+  backdrop-filter: blur(18px);
+}
+
+.brand {
+  font-size: 18px;
+  font-weight: 900;
+}
+
+.brand span {
+  color: var(--accent);
+}
+
+.nav {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.nav a {
+  padding: 10px 12px;
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.nav a:hover {
+  color: var(--ink);
+}
+
+.hero {
+  display: grid;
+  grid-template-columns: minmax(0, 0.95fr) minmax(320px, 0.9fr);
+  gap: clamp(24px, 5vw, 72px);
+  min-height: calc(100vh - 66px);
+  padding: clamp(26px, 5vw, 70px) clamp(18px, 6vw, 78px) 120px;
+  align-items: center;
+}
+
+.hero-copy {
+  max-width: 720px;
+}
+
+.kicker {
+  display: inline-flex;
+  gap: 8px;
+  align-items: center;
+  margin-bottom: 20px;
+  color: var(--sage);
+  font-size: 13px;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.kicker::before {
+  content: "";
+  width: 34px;
+  height: 2px;
+  background: var(--sage);
+}
+
+h1 {
+  margin: 0;
+  max-width: 760px;
+  font-size: clamp(52px, 8vw, 118px);
+  line-height: 0.89;
+  font-weight: 950;
+  letter-spacing: 0;
+}
+
+.lead {
+  max-width: 590px;
+  margin: 26px 0 0;
+  color: var(--muted);
+  font-size: clamp(17px, 2vw, 22px);
+  line-height: 1.42;
+}
+
+.hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 34px;
+}
+
+.pill {
+  display: inline-flex;
+  min-height: 46px;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 0 18px;
+  border: 1px solid var(--line-strong);
+  border-radius: 999px;
+  background: var(--ink);
+  color: #fff;
+  font-size: 14px;
+  font-weight: 850;
+}
+
+.pill.secondary {
+  background: transparent;
+  color: var(--ink);
+}
+
+.hero-stage {
+  position: relative;
+  align-self: stretch;
+  min-height: 520px;
+}
+
+.feature-card {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  border-radius: 8px;
+  background: #ddd center / cover no-repeat;
+  box-shadow: var(--shadow);
+}
+
+.feature-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.02), rgba(0, 0, 0, 0.72));
+}
+
+.feature-info {
+  position: relative;
+  z-index: 1;
+  padding: 28px;
+  color: #fff;
+}
+
+.feature-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+.tag {
+  display: inline-flex;
+  align-items: center;
+  min-height: 28px;
+  padding: 0 10px;
+  border: 1px solid rgba(255, 255, 255, 0.34);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.14);
+  color: inherit;
+  font-size: 12px;
+  font-weight: 800;
+  backdrop-filter: blur(10px);
+}
+
+.feature-title {
+  max-width: 470px;
+  margin: 0 0 16px;
+  font-size: clamp(28px, 3vw, 46px);
+  line-height: 1;
+  font-weight: 950;
+}
+
+.feature-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.mini-link {
+  display: inline-flex;
+  min-height: 38px;
+  align-items: center;
+  justify-content: center;
+  padding: 0 12px;
+  border: 1px solid rgba(255, 255, 255, 0.34);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.96);
+  color: var(--ink);
+  font-size: 13px;
+  font-weight: 900;
+}
+
+.mini-link.dark {
+  background: rgba(16, 16, 16, 0.76);
+  color: #fff;
+}
+
+.feature-player {
+  position: absolute;
+  right: clamp(16px, 3vw, 46px);
+  bottom: -76px;
+  left: clamp(16px, 3vw, 46px);
+  z-index: 3;
+  display: grid;
+  grid-template-columns: 148px minmax(0, 1fr);
+  gap: 20px;
+  align-items: center;
+  padding: 16px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.94);
+  box-shadow: 0 18px 52px rgba(0, 0, 0, 0.14);
+  backdrop-filter: blur(20px);
+}
+
+.player-thumb {
+  width: 148px;
+  aspect-ratio: 16 / 9;
+  border-radius: 7px;
+  background: var(--paper) center / contain no-repeat;
+}
+
+.player-title {
+  margin: 0 0 8px;
+  font-size: 22px;
+  line-height: 1.1;
+  font-weight: 950;
+}
+
+.player-sub {
+  margin: 0 0 15px;
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.fake-controls {
+  display: grid;
+  grid-template-columns: 38px 1fr auto;
+  gap: 12px;
+  align-items: center;
+}
+
+.play {
+  display: grid;
+  width: 38px;
+  height: 38px;
+  place-items: center;
+  border: 1px solid var(--line-strong);
+  border-radius: 50%;
+  background: var(--surface);
+  color: var(--ink);
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.bar {
+  height: 3px;
+  border-radius: 99px;
+  background: linear-gradient(90deg, var(--ink) 38%, rgba(16, 16, 16, 0.16) 38%);
+}
+
+.time {
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.section {
+  padding: clamp(58px, 8vw, 104px) clamp(18px, 6vw, 78px);
+}
+
+.section.alt {
+  background: var(--surface);
+}
+
+.section-head {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 22px;
+  margin-bottom: 24px;
+}
+
+.section-title {
+  margin: 0;
+  max-width: 760px;
+  font-size: clamp(34px, 5vw, 68px);
+  line-height: 0.95;
+  font-weight: 950;
+}
+
+.section-copy {
+  max-width: 480px;
+  margin: 12px 0 0;
+  color: var(--muted);
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+.arrow-group {
+  display: flex;
+  gap: 8px;
+  flex: 0 0 auto;
+}
+
+.icon-btn {
+  display: grid;
+  width: 44px;
+  height: 44px;
+  place-items: center;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  background: var(--surface);
+  color: var(--ink);
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.icon-btn:hover {
+  border-color: rgba(16, 16, 16, 0.38);
+}
+
+.rail-wrap {
+  position: relative;
+  margin-right: calc(clamp(18px, 6vw, 78px) * -1);
+}
+
+.episode-rail {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(292px, 378px);
+  gap: 18px;
+  overflow-x: auto;
+  overscroll-behavior-inline: contain;
+  padding: 8px clamp(18px, 6vw, 78px) 22px 0;
+  scroll-snap-type: inline mandatory;
+  scrollbar-width: none;
+}
+
+.episode-rail::-webkit-scrollbar {
+  display: none;
+}
+
+.episode-card {
+  scroll-snap-align: start;
+  display: flex;
+  flex-direction: column;
+  min-height: 538px;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+  box-shadow: 0 18px 48px rgba(0, 0, 0, 0.08);
+}
+
+.card-media {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  background: #d9d4cb;
+}
+
+.card-media::before {
+  content: "";
+  position: absolute;
+  inset: -18px;
+  background: var(--cover) center / cover no-repeat;
+  filter: blur(18px);
+  opacity: 0.52;
+  transform: scale(1.08);
+}
+
+.card-media::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.03), rgba(0, 0, 0, 0.46));
+}
+
+.cover-art {
+  position: absolute;
+  inset: 12px;
+  z-index: 1;
+  border-radius: 6px;
+  background: var(--cover) center / contain no-repeat;
+}
+
+.media-badges {
+  position: absolute;
+  z-index: 2;
+  right: 12px;
+  bottom: 12px;
+  left: 12px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.badge {
+  display: inline-flex;
+  min-height: 26px;
+  align-items: center;
+  padding: 0 9px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.92);
+  color: var(--ink);
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.card-body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  padding: 20px;
+}
+
+.date {
+  color: var(--accent);
+  font-size: 12px;
+  font-weight: 950;
+  text-transform: uppercase;
+}
+
+.episode-card h3 {
+  margin: 10px 0 12px;
+  font-size: 24px;
+  line-height: 1.05;
+  font-weight: 950;
+}
+
+.episode-card p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.45;
+}
+
+.card-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: auto;
+  padding-top: 22px;
+}
+
+.card-link {
+  display: inline-flex;
+  min-height: 38px;
+  align-items: center;
+  justify-content: center;
+  padding: 0 12px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  color: var(--ink);
+  font-size: 13px;
+  font-weight: 900;
+}
+
+.card-link.primary {
+  border-color: var(--ink);
+  background: var(--ink);
+  color: #fff;
+}
+
+.audio-dock {
+  margin: 0;
+  border-top: 1px solid var(--line);
+  background: #171716;
+  color: #fff;
+}
+
+.audio-dock summary {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 18px;
+  align-items: center;
+  padding: 24px clamp(18px, 6vw, 78px);
+  cursor: pointer;
+  list-style: none;
+}
+
+.audio-dock summary::-webkit-details-marker {
+  display: none;
+}
+
+.summary-title {
+  display: block;
+  font-size: clamp(24px, 4vw, 42px);
+  line-height: 1;
+  font-weight: 950;
+}
+
+.summary-note {
+  display: block;
+  margin-top: 7px;
+  color: rgba(255, 255, 255, 0.62);
+  font-size: 14px;
+  line-height: 1.45;
+}
+
+.summary-icon {
+  display: grid;
+  width: 42px;
+  height: 42px;
+  place-items: center;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  border-radius: 50%;
+  font-size: 20px;
+  transition: transform 0.2s ease;
+}
+
+.audio-dock[open] .summary-icon {
+  transform: rotate(45deg);
+}
+
+.audio-list {
+  display: grid;
+  gap: 1px;
+  padding: 0 clamp(18px, 6vw, 78px) 42px;
+}
+
+.audio-row {
+  display: grid;
+  grid-template-columns: 118px minmax(0, 1.2fr) minmax(120px, 0.35fr) auto;
+  gap: 18px;
+  align-items: center;
+  padding: 18px 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.audio-date {
+  color: rgba(255, 255, 255, 0.54);
+  font-size: 13px;
+  font-weight: 900;
+}
+
+.audio-title {
+  font-size: 17px;
+  line-height: 1.25;
+  font-weight: 900;
+}
+
+.audio-platform {
+  color: rgba(255, 255, 255, 0.64);
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.audio-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.audio-link {
+  display: inline-flex;
+  min-height: 34px;
+  align-items: center;
+  justify-content: center;
+  padding: 0 11px;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  border-radius: 999px;
+  color: #fff;
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  overflow: hidden;
+  background: var(--line);
+}
+
+.stat {
+  min-height: 142px;
+  padding: 24px;
+  background: var(--surface);
+}
+
+.stat strong {
+  display: block;
+  font-size: clamp(32px, 5vw, 56px);
+  line-height: 0.95;
+  font-weight: 950;
+}
+
+.stat span {
+  display: block;
+  margin-top: 10px;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.35;
+  font-weight: 700;
+}
+
+@media (max-width: 960px) {
+  .hero {
+    grid-template-columns: 1fr;
+    min-height: 0;
+    padding-bottom: 140px;
+  }
+
+  .hero-stage {
+    min-height: 620px;
+  }
+
+  .section-head {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .audio-row {
+    grid-template-columns: 92px minmax(0, 1fr);
+  }
+
+  .audio-platform,
+  .audio-actions {
+    grid-column: 2;
+    justify-content: flex-start;
+  }
+}
+
+@media (max-width: 640px) {
+  .topbar {
+    position: static;
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .nav {
+    width: 100%;
+    overflow-x: auto;
+  }
+
+  .hero {
+    padding-top: 20px;
+  }
+
+  .hero-stage {
+    min-height: 500px;
+  }
+
+  .feature-player {
+    grid-template-columns: 108px minmax(0, 1fr);
+    gap: 12px;
+    bottom: -94px;
+  }
+
+  .player-thumb {
+    width: 108px;
+  }
+
+  .player-title {
+    font-size: 18px;
+  }
+
+  .fake-controls {
+    grid-template-columns: 32px 1fr;
+  }
+
+  .play {
+    width: 32px;
+    height: 32px;
+  }
+
+  .time {
+    display: none;
+  }
+
+  .episode-rail {
+    grid-auto-columns: minmax(270px, 82vw);
+  }
+
+  .episode-card {
+    min-height: 500px;
+  }
+
+  .stats {
+    grid-template-columns: 1fr;
+  }
+}
+</style>
+</head>
+<body>
+<div class="page">
+  <header class="topbar">
+    <a class="brand" href="#">Olya<span>Podcasts</span></a>
+    <nav class="nav" aria-label="Разделы">
+      <a href="#episodes">Выпуски</a>
+      <a href="#numbers">Цифры</a>
+      <a href="#audio">Аудио</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="hero-copy">
+        <div class="kicker">2021-2026</div>
+        <h1 id="hero-title">Подкасты с Олей Маркес</h1>
+        <p class="lead">Видео и аудиоразговоры: отношения, тело, тантра, зависимости, материнство, творчество, деньги и честность. Собрано от самых свежих выпусков к ранним.</p>
+        <div class="hero-actions">
+          <a class="pill" href="#episodes">Открыть выпуски</a>
+          <a class="pill secondary" href="#audio">Аудиоверсии</a>
+        </div>
+      </div>
+
+      <div class="hero-stage" aria-label="Главный выпуск">
+        <article class="feature-card" id="featureCard">
+          <div class="feature-info">
+            <div class="feature-meta" id="featureMeta"></div>
+            <h2 class="feature-title" id="featureTitle"></h2>
+            <div class="feature-links" id="featureLinks"></div>
+          </div>
+        </article>
+        <aside class="feature-player">
+          <div class="player-thumb" id="playerThumb"></div>
+          <div>
+            <h3 class="player-title" id="playerTitle"></h3>
+            <p class="player-sub" id="playerSub"></p>
+            <div class="fake-controls" aria-hidden="true">
+              <button class="play" type="button">▶</button>
+              <div class="bar"></div>
+              <span class="time">00:00 / 00:00</span>
+            </div>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <section class="section alt" id="episodes" aria-labelledby="episodes-title">
+      <div class="section-head">
+        <div>
+          <h2 class="section-title" id="episodes-title">Все выпуски</h2>
+          <p class="section-copy">Основная лента: видео и аудио, отсортировано по дате публикации от свежих к ранним.</p>
+        </div>
+        <div class="arrow-group">
+          <button class="icon-btn" type="button" data-scroll="prev" aria-label="Назад">‹</button>
+          <button class="icon-btn" type="button" data-scroll="next" aria-label="Вперед">›</button>
+        </div>
+      </div>
+      <div class="rail-wrap">
+        <div class="episode-rail" id="episodeRail"></div>
+      </div>
+    </section>
+
+    <section class="section" id="numbers" aria-labelledby="numbers-title">
+      <div class="section-head">
+        <div>
+          <h2 class="section-title" id="numbers-title">Публичные цифры</h2>
+          <p class="section-copy">Метрики берутся только там, где платформы их открывают: YouTube для видео, Mave и SoundStream для части аудио.</p>
+        </div>
+      </div>
+      <div class="stats">
+        <div class="stat"><strong>24</strong><span>выпуска в ленте за период 2021-2026</span></div>
+        <div class="stat"><strong>6</strong><span>YouTube-видео с публичным счетчиком просмотров</span></div>
+        <div class="stat"><strong>151k</strong><span>самый просматриваемый выпуск в подборке</span></div>
+        <div class="stat"><strong>15k</strong><span>самая высокая открытая аудиометрика Mave</span></div>
+      </div>
+    </section>
+  </main>
+
+  <details class="audio-dock" id="audio" open>
+    <summary>
+      <span>
+        <span class="summary-title">Аудиоверсии</span>
+        <span class="summary-note">Полная лента ссылок на аудио. Для части платформ публичных прослушиваний нет, поэтому они помечены как без открытой метрики.</span>
+      </span>
+      <span class="summary-icon">+</span>
+    </summary>
+    <div class="audio-list" id="audioList"></div>
+  </details>
+</div>
+
+<script>
+const episodes = [
+  {
+    date: "2026-05-31",
+    title: "Оля Маркес про отношения, воспитание детей и жизнь на Бали",
+    show: "Илья Рыбалко",
+    kind: "Видео",
+    theme: "отношения / дети / Бали",
+    metric: "2 340 просмотров",
+    audioMetric: null,
+    image: "https://i.ytimg.com/vi/26JF8K52_eQ/maxresdefault.jpg",
+    description: "Большой разговор с Олей Маркес про личную жизнь, отношения, воспитание детей, переезд на Бали, бизнес и путь от сложного прошлого к новой жизни.",
+    links: [{ label: "YouTube", url: "https://www.youtube.com/watch?v=26JF8K52_eQ" }]
+  },
+  {
+    date: "2026-05-08",
+    title: "Как пользоваться AI в 2026, если вы не технарь?",
+    show: "Дима Мацкевич",
+    kind: "Видео",
+    theme: "AI / повседневные инструменты",
+    metric: "26 671 просмотр",
+    audioMetric: null,
+    image: "https://img.youtube.com/vi/6WEsPzHyD9k/maxresdefault.jpg",
+    description: "Оля Маркес и Дима Мацкевич разбирают, как пользоваться AI в 2026 году, если вы не технарь: с чего начать, какие инструменты брать и как применять их в жизни и работе.",
+    links: [{ label: "YouTube", url: "https://www.youtube.com/watch?v=6WEsPzHyD9k&t=1130s" }]
+  },
+  {
+    date: "2026-04-08",
+    title: "Оля Маркес: как обернуть зависимости и психические травмы в свою пользу?",
+    show: "Коротко и по телу",
+    kind: "Аудио",
+    theme: "тело / зависимости / СДВГ",
+    metric: "2 125 прослушиваний",
+    audioMetric: 2125,
+    image: "https://cdn.mave.digital/storage/podcasts/52432c57-3d68-4752-868a-196d1535ec9f/images/c8b0d301-3468-452b-a203-893f665adb2a_600.png",
+    description: "Разговор о зависимостях, 12 шагах, Оземпике, полигамных отношениях и том, как особенности психики превращаются в ресурс.",
+    links: [{ label: "Mave", url: "https://korotkoipotelu.mave.digital/" }, { label: "Apple", url: "https://podcasts.apple.com/ru/podcast/%D0%BE%D0%BB%D1%8F-%D0%BC%D0%B0%D1%80%D0%BA%D0%B5%D1%81-%D0%BA%D0%B0%D0%BA-%D0%BE%D0%B1%D0%B5%D1%80%D0%BD%D1%83%D1%82%D1%8C-%D0%B7%D0%B0%D0%B2%D0%B8%D1%81%D0%B8%D0%BC%D0%BE%D1%81%D1%82%D0%B8-%D0%B8-%D0%BF%D1%81%D0%B8%D1%85%D0%B8%D1%87%D0%B5%D1%81%D0%BA%D0%B8%D0%B5-%D1%82%D1%80%D0%B0%D0%B2%D0%BC%D1%8B/id1693577630?i=1000760243974" }]
+  },
+  {
+    date: "2025-07-08",
+    title: "Тихий враг крепких отношений и как его победить",
+    show: "Мацкевич: brain, love, robots",
+    kind: "Видео + аудио",
+    theme: "отношения / честность",
+    metric: "24 192 просмотра",
+    audioMetric: 15745,
+    image: "https://i.ytimg.com/vi/wtSvtJOt0q8/hq720.jpg",
+    description: "Дима Мацкевич, Оля Маркес и Сатья о близости, боли, честности, ритуалах пары и зрелости в отношениях.",
+    links: [{ label: "YouTube", url: "https://www.youtube.com/watch?v=wtSvtJOt0q8" }, { label: "Mave", url: "https://matskevich.mave.digital/ep-46" }]
+  },
+  {
+    date: "2025-06-13",
+    title: "The Silent Killer of Relationships",
+    show: "Мацкевич: brain, love, robots",
+    kind: "Видео + аудио",
+    theme: "relationships / Satya",
+    metric: "10 072 просмотра",
+    audioMetric: 14271,
+    image: "https://i.ytimg.com/vi/OJ73kkbdAuI/hq720.jpg",
+    description: "Англоязычная версия разговора с Satya про любовь, смелость, боль и восстановление связи.",
+    links: [{ label: "YouTube", url: "https://www.youtube.com/watch?v=OJ73kkbdAuI" }, { label: "Mave", url: "https://matskevich.mave.digital/" }, { label: "Apple", url: "https://podcasts.apple.com/us/podcast/%D0%BC%D0%B0%D1%86%D0%BA%D0%B5%D0%B2%D0%B8%D1%87-brain-love-robots/id1686931500" }]
+  },
+  {
+    date: "2025-05-16",
+    title: "Йога и деньги: главное табу в индустрии?",
+    show: "Мацкевич: brain, love, robots",
+    kind: "Видео + аудио",
+    theme: "йога / бизнес",
+    metric: "14 220 прослушиваний",
+    audioMetric: 14220,
+    image: "https://kinescopecdn.net/b920290c-4552-4fc8-9006-c0f476262349/posters/93c7523b-9824-4178-af3c-89d43968d9e9/f1eec42e-94d9-4e51-9e1b-ce571dfa9757.jpg",
+    description: "Игорь Фреш, Дима Мацкевич и Ольга Маркес о деньгах, стыде, йоге, личном бренде и устойчивом бизнесе.",
+    links: [{ label: "Mave", url: "https://matskevich.mave.digital/ep-44" }, { label: "Видео", url: "https://kinescope.io/4CmGYrj8g8LE6ed1XMCxUn" }]
+  },
+  {
+    date: "2025-03-06",
+    title: "Тантра, отношения, проживание боли и секреты красоты",
+    show: "Дима Мацкевич",
+    kind: "Видео",
+    theme: "тантра / отношения",
+    metric: "47 088 просмотров",
+    audioMetric: null,
+    image: "https://img.youtube.com/vi/h_2SEZppzQs/maxresdefault.jpg",
+    description: "Видеоразговор Оли Маркес и Димы Мацкевича о боли, контакте, отношениях, телесности и красоте.",
+    links: [{ label: "YouTube", url: "https://www.youtube.com/watch?v=h_2SEZppzQs" }]
+  },
+  {
+    date: "2024-11-06",
+    title: "О детях без гаджетов и плюсах многодетного материнства",
+    show: "Мамочки!",
+    kind: "Аудио",
+    theme: "дети / материнство",
+    metric: "без открытой метрики",
+    audioMetric: null,
+    image: "https://is1-ssl.mzstatic.com/image/thumb/Podcasts211/v4/1b/f4/20/1bf4209d-2ddb-d8d7-b574-4d175cb18126/mza_12110451653172810570.png/600x600bb-60.jpg",
+    description: "Разговор о детях, гаджетах, семейных правилах и опыте многодетности.",
+    links: [{ label: "Apple", url: "https://podcasts.apple.com/ru/podcast/%D0%BE%D0%BB%D1%8F-%D0%BC%D0%B0%D1%80%D0%BA%D0%B5%D1%81-%D0%BE-%D0%B4%D0%B5%D1%82%D1%8F%D1%85-%D0%B1%D0%B5%D0%B7-%D0%B3%D0%B0%D0%B4%D0%B6%D0%B5%D1%82%D0%BE%D0%B2-%D0%B8-%D0%BF%D0%BB%D1%8E%D1%81%D0%B0%D1%85-%D0%BC%D0%BD%D0%BE%D0%B3%D0%BE%D0%B4%D0%B5%D1%82%D0%BD%D0%BE%D0%B3%D0%BE/id1755343202?i=1000675863837" }]
+  },
+  {
+    date: "2024-05-11",
+    title: "Whippet podcast",
+    show: "Olga Markes",
+    kind: "Авторский подкаст",
+    theme: "уиппеты / собаки / поведение",
+    metric: "10 выпусков",
+    audioMetric: null,
+    image: "https://is1-ssl.mzstatic.com/image/thumb/Podcasts221/v4/d2/b3/e0/d2b3e0d1-ea65-465d-fcc7-6de8625b54a1/mza_14961801131504210141.jpg/600x600bb.jpg",
+    description: "Отдельная авторская лента Ольги Маркес про уиппетов: выбор щенка, поведение, владельцы, кормление, туалет, спорт, ветеринария и жизнь с Чарли и Виски.",
+    links: [{ label: "Apple", url: "https://podcasts.apple.com/us/podcast/whippet-podcast/id1543961061" }, { label: "RSS", url: "https://cloud.mave.digital/55139" }, { label: "Telegram", url: "https://t.me/whippetpodcast" }]
+  },
+  {
+    date: "2024-03-30",
+    title: "Как справиться с тревожностью и полюбить свои страхи",
+    show: "Мацкевич: brain, love, robots",
+    kind: "Видео + аудио",
+    theme: "тревожность / психотерапия",
+    metric: "2 206 прослушиваний",
+    audioMetric: 2206,
+    image: "https://kinescopecdn.net/b920290c-4552-4fc8-9006-c0f476262349/posters/49665157-b1c9-4d23-8c7b-c02906def032/9c118dd5-69de-4646-8168-0ea78581be28.jpg",
+    description: "Сергей Куприянов, Оля Маркес и Дима Мацкевич о страхах, тревожности, подходах в психотерапии и детях.",
+    links: [{ label: "Mave", url: "https://matskevich.mave.digital/" }, { label: "Видео", url: "https://kinescope.io/wVkrQUqroHDP8oALQi2UF8" }]
+  },
+  {
+    date: "2024-02-13",
+    title: "Tantra is a dream destroyer",
+    show: "Мацкевич: brain, love, robots",
+    kind: "Видео + аудио",
+    theme: "tantra / Pema Gitama",
+    metric: "869 прослушиваний",
+    audioMetric: 869,
+    image: "https://kinescopecdn.net/b920290c-4552-4fc8-9006-c0f476262349/posters/1be7af6b-cfa7-4f89-8491-bf613d425109/c14c2a7a-e518-4485-a9a2-3bb1f7714dd8.jpg",
+    description: "Pema Gitama, Oly Markes and Dima Matskevich: tantric questions, wild tantra and contact practices.",
+    links: [{ label: "Mave", url: "https://matskevich.mave.digital/" }, { label: "Видео", url: "https://kinescope.io/0RGWmQ3XuAbPUv7LqYFdvg" }]
+  },
+  {
+    date: "2024-01-14",
+    title: "Секс и всякое такое",
+    show: "Мацкевич: brain, love, robots",
+    kind: "Аудио",
+    theme: "секс / отношения",
+    metric: "993 прослушивания",
+    audioMetric: 993,
+    image: "assets/cover-matskevich-seks-i-vsyakoe.jpeg",
+    description: "Ольга Маркес и Дмитрий Мацкевич о сексуальном желании, энергии, духовном пути и контакте в отношениях.",
+    links: [{ label: "Mave", url: "https://matskevich.mave.digital/ep-23" }]
+  },
+  {
+    date: "2024-01-11",
+    title: "Ревность и божественные ноги",
+    show: "Мацкевич: brain, love, robots",
+    kind: "Аудио",
+    theme: "ревность / близость",
+    metric: "731 прослушивание",
+    audioMetric: 731,
+    image: "assets/cover-matskevich-revnost.jpeg",
+    description: "Оля и Дима исследуют ревность как триггерное чувство и возможность углубляться в отношениях.",
+    links: [{ label: "Mave", url: "https://matskevich.mave.digital/ep-22" }]
+  },
+  {
+    date: "2024-01-09",
+    title: "Кто, кому, что и сколько должен?",
+    show: "Мацкевич: brain, love, robots",
+    kind: "Аудио",
+    theme: "убеждения / роли",
+    metric: "895 прослушиваний",
+    audioMetric: 895,
+    image: "assets/cover-matskevich-kto-komu-chto-dolzhen.jpeg",
+    description: "Разговор об убеждениях про мужчин, женщин, деньги, роли, созависимость и заботу о себе.",
+    links: [{ label: "Mave", url: "https://matskevich.mave.digital/ep-21" }]
+  },
+  {
+    date: "2023-10-02",
+    title: "Свободные отношения, оргазм и тантра",
+    show: "Правило 34",
+    kind: "Видео + аудио",
+    theme: "секс / тантра",
+    metric: "151 666 просмотров",
+    audioMetric: null,
+    image: "https://img.youtube.com/vi/5iFjBL-4gGE/maxresdefault.jpg",
+    description: "Большой выпуск «Правила 34» про свободные отношения, телесность, оргазм, тантру и личный опыт.",
+    links: [{ label: "YouTube", url: "https://www.youtube.com/watch?v=5iFjBL-4gGE" }, { label: "Audio", url: "https://podcast.ru/1627988781" }]
+  },
+  {
+    date: "2023-08-18",
+    title: "От этого человека я бы хотела детей...",
+    show: "Родила и поняла",
+    kind: "Аудио",
+    theme: "отношения / материнство",
+    metric: "2 154 прослушивания",
+    audioMetric: 2154,
+    image: "https://cdn.mave.digital/storage/podcasts/cefc1282-9cab-40ed-b94d-0017301e4efc/images/a7eeeb07-85a2-4a34-aada-1303c3481914_600.jpg",
+    description: "Оля Маркес про равенство в родительстве, зависимость в отношениях, расставание и выбор отца ребенку.",
+    links: [{ label: "Mave", url: "https://sektamama.mave.digital/" }, { label: "Apple", url: "https://podcasts.apple.com/us/podcast/%D1%80%D0%BE%D0%B4%D0%B8%D0%BB%D0%B0-%D0%B8-%D0%BF%D0%BE%D0%BD%D1%8F%D0%BB%D0%B0/id1672300298" }]
+  },
+  {
+    date: "2023-07-21",
+    title: "Как не сойти с ума среди родителей, которые лучше тебя",
+    show: "Родила и поняла",
+    kind: "Аудио",
+    theme: "родительство / вина",
+    metric: "2 393 прослушивания",
+    audioMetric: 2393,
+    image: "https://cdn.mave.digital/storage/podcasts/cefc1282-9cab-40ed-b94d-0017301e4efc/images/a7eeeb07-85a2-4a34-aada-1303c3481914_600.jpg",
+    description: "О решении завести ребенка, страхе, вине, радости в материнстве и сравнении себя с другими родителями.",
+    links: [{ label: "Apple", url: "https://podcasts.apple.com/dk/podcast/10-%D0%BE%D0%BB%D1%8F-%D0%BC%D0%B0%D1%80%D0%BA%D0%B5%D1%81-%D0%BE-%D1%82%D0%BE%D0%BC-%D0%BA%D0%B0%D0%BA-%D0%BD%D0%B5-%D1%81%D0%BE%D0%B9%D1%82%D0%B8-%D1%81-%D1%83%D0%BC%D0%B0-%D1%81%D1%80%D0%B5%D0%B4%D0%B8-%D1%80%D0%BE%D0%B4%D0%B8%D1%82%D0%B5%D0%BB%D0%B5%D0%B9/id1672300298?i=1000621882264" }]
+  },
+  {
+    date: "2023-03-06",
+    title: "Оля Маркес про свой путь, травму и творчество",
+    show: "Подкаст Вани Замесина",
+    kind: "Аудио",
+    theme: "травма / творчество",
+    metric: "4 869 прослушиваний",
+    audioMetric: 4869,
+    image: "https://is1-ssl.mzstatic.com/image/thumb/Podcasts211/v4/45/18/83/45188322-2bbc-0d75-bc84-db01f7ff8bd9/mza_12054557121483517142.jpg/600x600bb.jpg",
+    description: "Про травму смерти мамы, аутентичность, #SEKTA, творчество, ответственность и служение.",
+    links: [{ label: "SoundStream", url: "https://soundstream.media/clip/olya-markes-pro-svoy-put-travmu-i-tvorchestvo" }]
+  },
+  {
+    date: "2022-11-30",
+    title: "Какой год, такой подкаст: разговор с Ольгой Маркес",
+    show: "Моя история, твоя история",
+    kind: "Аудио",
+    theme: "год / личная история",
+    metric: "без открытой метрики",
+    audioMetric: null,
+    image: "https://pbcdn1.podbean.com/imglogo/image-logo/2035774/lena-degtyar-podcast.jpg",
+    description: "Мини-серия и разговор с Ольгой Маркес о прожитом годе, поворотах и личном опыте.",
+    links: [{ label: "SoundStream", url: "https://soundstream.media/clip/mini-seriya-kakoy-god-takoy-podkast-razgovor-s-ol-goy-markes" }]
+  },
+  {
+    date: "2022-10-21",
+    title: "Отношения с телом",
+    show: "re-feel podcast",
+    kind: "Аудио",
+    theme: "тело / спорт",
+    metric: "без открытой метрики",
+    audioMetric: null,
+    image: "https://cdn.mave.digital/storage/podcasts/e9711868-f25f-4052-93ef-905d6f752295/images/2f45c3eb-b25e-4bea-b40b-3974e9defdee.jpg",
+    description: "О том, как работать над собой постоянно и по любви, через контакт с телом и бережность.",
+    links: [{ label: "SoundStream", url: "https://soundstream.media/clip/otnosheniya-s-telom-kak-rabotat-nad-soboy-postoyanno-i-po-lyubvi-uznayem-u-oli-markes" }]
+  },
+  {
+    date: "2022-08-03",
+    title: "Об опыте ретрита: Оля Маркес и Дмитрий Мацкевич",
+    show: "Эмоциональная гранулярность",
+    kind: "Видео + аудио",
+    theme: "ретрит / тантра",
+    metric: "10 254 прослушивания",
+    audioMetric: 10254,
+    image: "https://img.youtube.com/vi/fS-wk8mZc9g/maxresdefault.jpg",
+    description: "О совместном тантрическом ретрите, ревности, боли, проживании эмоций и практиках контакта.",
+    links: [{ label: "Mave", url: "https://granularity.mave.digital/ep-9" }, { label: "YouTube", url: "https://www.youtube.com/watch?v=fS-wk8mZc9g" }]
+  },
+  {
+    date: "2022-06-27",
+    title: "Продуктивность, дзен, материнство и книги",
+    show: "Терминальное чтиво",
+    kind: "Видео + аудио",
+    theme: "книги / жизнь",
+    metric: "53 549 просмотров",
+    audioMetric: null,
+    image: "https://img.youtube.com/vi/rOPNHhidBxc/maxresdefault.jpg",
+    description: "Оля Маркес / Alai Oli в разговоре о книгах, продуктивности, материнстве и личной философии.",
+    links: [{ label: "YouTube", url: "https://www.youtube.com/watch?v=rOPNHhidBxc" }, { label: "Podtail", url: "https://podtail.com/ru/podcast/%D1%82%D0%B5%D1%80%D0%BC%D0%B8%D0%BD%D0%B0%D0%BB%D1%8C%D0%BD%D0%BE%D0%B5-%D1%87%D1%82%D0%B8%D0%B2%D0%BE/--alai-oli-15-03/" }]
+  },
+  {
+    date: "2022-03-08",
+    title: "Еще один выпуск из мирного времени. Про ЗОЖ",
+    show: "Сперва роди",
+    kind: "Аудио",
+    theme: "ЗОЖ / тело / родительство",
+    metric: "без открытой метрики",
+    audioMetric: null,
+    image: "https://is1-ssl.mzstatic.com/image/thumb/Podcasts211/v4/24/17/3c/24173c08-33a0-1667-7791-f932db427717/mza_12310834449313447781.jpg/600x600bb.jpg",
+    description: "Ведущие обсуждают здоровый образ жизни, удовольствие от спорта и заботу о теле; затем к разговору присоединяется Ольга Маркес как основательница Sekta.",
+    links: [{ label: "Apple", url: "https://podcasts.apple.com/lv/podcast/%D0%B5%D1%89%D0%B5-%D0%BE%D0%B4%D0%B8%D0%BD-%D0%B2%D1%8B%D0%BF%D1%83%D1%81%D0%BA-%D0%B8%D0%B7-%D0%BC%D0%B8%D1%80%D0%BD%D0%BE%D0%B3%D0%BE-%D0%B2%D1%80%D0%B5%D0%BC%D0%B5%D0%BD%D0%B8-%D0%BF%D1%80%D0%BE-%D0%B7%D0%BE%D0%B6/id1455337111?i=1000553278126" }, { label: "Bookmate", url: "https://rus.bookmate.com/audiobooks/jixLaNaj" }]
+  },
+  {
+    date: "2021-08-02",
+    title: "Оля Маркес о зависимости, «Секте» и принятии своего тела",
+    show: "От себя не убежишь",
+    kind: "Аудио",
+    theme: "зависимость / тело",
+    metric: "без открытой метрики",
+    audioMetric: null,
+    image: "https://cdn.mave.digital/storage/podcasts/8c22aa40-d61c-46ee-a49b-9651b92c55d9/images/b80744cd-e6cf-4f88-9ef1-9d33b9d4bbfb.jpg",
+    description: "О зависимости, #SEKTA, принятии тела и личной истории восстановления.",
+    links: [{ label: "SoundStream", url: "https://soundstream.media/clip/olya-markes-o-zavisimosti-sekte-i-prinyatii-svoyego-tela" }]
+  }
+].sort((a, b) => new Date(b.date) - new Date(a.date));
+
+const formatDate = new Intl.DateTimeFormat("ru-RU", {
+  day: "2-digit",
+  month: "long",
+  year: "numeric"
+});
+
+const rail = document.querySelector("#episodeRail");
+const audioList = document.querySelector("#audioList");
+const featureCard = document.querySelector("#featureCard");
+const featureMeta = document.querySelector("#featureMeta");
+const featureTitle = document.querySelector("#featureTitle");
+const featureLinks = document.querySelector("#featureLinks");
+const playerThumb = document.querySelector("#playerThumb");
+const playerTitle = document.querySelector("#playerTitle");
+const playerSub = document.querySelector("#playerSub");
+
+function prettyDate(date) {
+  return formatDate.format(new Date(`${date}T12:00:00`));
+}
+
+function linkMarkup(links, className = "card-link") {
+  return links.map((link, index) => (
+    `<a class="${className}${index === 0 ? " primary" : ""}" href="${link.url}" target="_blank" rel="noopener">${link.label}</a>`
+  )).join("");
+}
+
+function setFeature(episode) {
+  featureCard.style.backgroundImage = `url("${episode.image}")`;
+  featureMeta.innerHTML = `
+    <span class="tag">${prettyDate(episode.date)}</span>
+    <span class="tag">${episode.kind}</span>
+    <span class="tag">${episode.metric}</span>
+  `;
+  featureTitle.textContent = episode.title;
+  featureLinks.innerHTML = episode.links.map((link, index) => (
+    `<a class="mini-link${index === 0 ? "" : " dark"}" href="${link.url}" target="_blank" rel="noopener">${link.label}</a>`
+  )).join("");
+  playerThumb.style.backgroundImage = `url("${episode.image}")`;
+  playerTitle.textContent = episode.show;
+  playerSub.textContent = `${episode.theme} · ${episode.kind.toLowerCase()}`;
+}
+
+rail.innerHTML = episodes.map((episode) => `
+  <article class="episode-card" data-date="${episode.date}">
+    <div class="card-media" style="--cover:url('${episode.image}')">
+      <div class="cover-art"></div>
+      <div class="media-badges">
+        <span class="badge">${episode.kind}</span>
+        <span class="badge">${episode.metric}</span>
+      </div>
+    </div>
+    <div class="card-body">
+      <span class="date">${prettyDate(episode.date)} · ${episode.show}</span>
+      <h3>${episode.title}</h3>
+      <p>${episode.description}</p>
+      <div class="card-actions">${linkMarkup(episode.links)}</div>
+    </div>
+  </article>
+`).join("");
+
+audioList.innerHTML = episodes.map((episode) => `
+  <div class="audio-row">
+    <div class="audio-date">${prettyDate(episode.date)}</div>
+    <div class="audio-title">${episode.title}</div>
+    <div class="audio-platform">${episode.show} · ${episode.metric}</div>
+    <div class="audio-actions">
+      ${episode.links.map((link) => `<a class="audio-link" href="${link.url}" target="_blank" rel="noopener">${link.label}</a>`).join("")}
+    </div>
+  </div>
+`).join("");
+
+setFeature(episodes[0]);
+
+document.querySelectorAll(".episode-card").forEach((card, index) => {
+  card.addEventListener("mouseenter", () => setFeature(episodes[index]));
+  card.addEventListener("focusin", () => setFeature(episodes[index]));
+});
+
+document.querySelectorAll("[data-scroll]").forEach((button) => {
+  button.addEventListener("click", () => {
+    const direction = button.dataset.scroll === "next" ? 1 : -1;
+    rail.scrollBy({ left: direction * Math.min(760, window.innerWidth * 0.82), behavior: "smooth" });
+  });
+});
+</script>
+</body>
+</html>

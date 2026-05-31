@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Страница выпуска | Подкасты с Олей Маркес</title>
+  <link rel="stylesheet" href="../podcast-library.css">
+</head>
+<body data-page="episode" data-base="..">
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="logo" href="../podcast/"><span class="logo-mark">OM</span><span>Olya Podcasts</span></a>
+      <nav class="nav" aria-label="Основная навигация">
+        <a class="nav-link" href="../podcast/">Подкаст</a>
+        <a class="nav-link" href="../episodes/">Все выпуски</a>
+        <a class="nav-link" href="../episodes/?format=guest">Гостевые</a>
+      </nav>
+      <div class="header-actions">
+        <a class="header-action" href="../episodes/">Назад в архив</a>
+      </div>
+      <button class="menu-button" type="button" aria-label="Открыть меню" aria-expanded="false" data-menu-button>☰</button>
+    </div>
+    <div class="container mobile-menu" data-mobile-menu>
+      <a href="../podcast/">Подкаст</a>
+      <a href="../episodes/">Все выпуски</a>
+      <a href="../episodes/?format=guest">Гостевые</a>
+    </div>
+  </header>
+
+  <main>
+    <section class="episode-detail">
+      <div class="container" data-episode-detail></div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-grid">
+      <div class="footer-col">
+        <a class="logo" href="../podcast/"><span class="logo-mark">OM</span><span>Olya Podcasts</span></a>
+        <p style="margin-top:16px">Шаблон выпуска: player, platforms, chapters, transcript, resources, related episodes.</p>
+      </div>
+      <div class="footer-col"><h3>Explore</h3><a href="../podcast/">Overview</a><a href="../episodes/">All episodes</a></div>
+      <div class="footer-col"><h3>Content</h3><a href="#chapters">Chapters</a><a href="../episodes/">Related</a></div>
+      <div class="footer-col"><h3>Topics</h3><a href="../episodes/?topic=AI">AI</a><a href="../episodes/?topic=тело">Тело</a></div>
+      <div class="footer-col"><h3>Contact</h3><a href="../episodes/">Search</a></div>
+    </div>
+  </footer>
+
+  <script src="../podcast-library.js"></script>
+</body>
+</html>

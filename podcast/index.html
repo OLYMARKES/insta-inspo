@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Подкасты с Олей Маркес | Media Library</title>
+  <link rel="stylesheet" href="../podcast-library.css">
+</head>
+<body data-page="podcast" data-base="..">
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="logo" href="../podcast/"><span class="logo-mark">OM</span><span>Olya Podcasts</span></a>
+      <nav class="nav" aria-label="Основная навигация">
+        <div class="nav-item">
+          <button class="nav-trigger" type="button">Подкаст</button>
+          <div class="dropdown">
+            <a href="../podcast/">Обзор подкаста</a>
+            <a href="../episodes/">Все выпуски</a>
+            <a href="../episodes/?format=guest">Гостевые выпуски</a>
+            <a href="../episodes/?topic=отношения">По темам</a>
+          </div>
+        </div>
+        <div class="nav-item">
+          <button class="nav-trigger" type="button">Ресурсы</button>
+          <div class="dropdown">
+            <a href="../episodes/?topic=AI">AI</a>
+            <a href="../episodes/?topic=тело">Тело</a>
+            <a href="../episodes/?topic=материнство">Материнство</a>
+            <a href="../episodes/?topic=тантра">Тантра</a>
+          </div>
+        </div>
+      </nav>
+      <div class="header-actions">
+        <a class="header-action" href="../episodes/">Поиск</a>
+        <a class="header-action primary" href="#latest">Свежий выпуск</a>
+      </div>
+      <button class="menu-button" type="button" aria-label="Открыть меню" aria-expanded="false" data-menu-button>☰</button>
+    </div>
+    <div class="container mobile-menu" data-mobile-menu>
+      <a href="../podcast/">Обзор подкаста</a>
+      <a href="../episodes/">Все выпуски</a>
+      <a href="../episodes/?format=guest">Гостевые выпуски</a>
+      <a href="../episodes/?topic=AI">AI</a>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="container hero-grid">
+        <div class="podcast-cover">
+          <img src="../assets/olya-podcast-collage-header-selected.png" alt="Коллажная обложка подкаст-архива с Олей Маркес">
+        </div>
+        <div class="hero-copy">
+          <p class="eyebrow">Media library · <span data-episode-count>24</span> выпуска · <span data-topic-count>12</span> тем</p>
+          <h1>Подкасты с Олей Маркес</h1>
+          <p class="lead">Чистый архив аудио и видеоразговоров с Олей Маркес: отношения, тело, тревога, материнство, AI, деньги, тантра, творчество и личная практика. Страница собрана так, чтобы быстро найти выпуск, тему, гостя или платформу.</p>
+          <p class="platform-title">Быстрые разделы</p>
+          <div class="platforms" data-platforms></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <div class="search-panel">
+          <p class="eyebrow">Быстрый поиск</p>
+          <h2>Что ищем?</h2>
+          <p>Ищи по названию выпуска, шоу, гостю, теме или ключевым словам из описания.</p>
+          <form class="search-bar" data-search-form>
+            <label class="sr-only" for="podcast-search">Поиск по архиву</label>
+            <input id="podcast-search" type="search" placeholder="Например: AI, отношения, тревога, тело, Мацкевич">
+            <button class="search-submit" type="submit">Искать</button>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <div class="section-header">
+          <div>
+            <p class="eyebrow">Popular topics</p>
+            <h2>Темы архива</h2>
+          </div>
+          <a class="button" href="../episodes/">Открыть архив</a>
+        </div>
+        <div class="topic-list" data-popular-topics></div>
+      </div>
+    </section>
+
+    <section class="section large" id="latest">
+      <div class="container">
+        <div class="section-header">
+          <div>
+            <p class="eyebrow">Latest episode</p>
+            <h2>Свежий выпуск</h2>
+          </div>
+        </div>
+        <div data-latest></div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <div class="section-header">
+          <div>
+            <p class="eyebrow">Visual browse</p>
+            <h2>Больше выпусков</h2>
+            <p>Быстрый визуальный слой архива: свежие и важные разговоры, которые легче узнавать по обложке.</p>
+          </div>
+          <div class="section-actions">
+            <div class="sort-switch" aria-label="Сортировка выпусков">
+              <button class="filter-pill active" type="button" data-sort-more="popular">По просмотрам</button>
+              <button class="filter-pill" type="button" data-sort-more="newest">По свежести</button>
+            </div>
+            <a class="button" href="../episodes/">Смотреть весь архив</a>
+          </div>
+        </div>
+        <div class="card-grid dense" data-more-covers></div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <div class="section-header">
+          <div>
+            <p class="eyebrow">Start here</p>
+            <h2>Редакторская подборка</h2>
+            <p>Несколько точек входа для нового слушателя: AI, тело, отношения, тантра и творчество.</p>
+          </div>
+        </div>
+        <div class="card-grid" data-featured></div>
+      </div>
+    </section>
+
+    <section class="section whippet-section" id="whippet">
+      <div class="container">
+        <div class="whippet-panel">
+          <div class="whippet-intro">
+            <p class="eyebrow">Separate show</p>
+            <h2>Whippet podcast</h2>
+            <p>Отдельная авторская лента про уиппетов: выбор щенка, поведение, переезды, курсинг, заводчики и жизнь с Чарли и Виски.</p>
+            <div class="platforms" data-whippet-links></div>
+          </div>
+          <div class="whippet-episodes" data-whippet-episodes></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section large" id="audio">
+      <div class="container">
+        <div class="section-header">
+          <div>
+            <p class="eyebrow">Audio</p>
+            <h2>Аудио</h2>
+          </div>
+          <a class="button" href="../episodes/?format=audio">Все аудио</a>
+        </div>
+        <div class="episode-list" data-audio></div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-cta">
+      <div>
+        <p class="eyebrow">Архив выпусков · видео и аудио · отдельный Whippet podcast</p>
+        <h2>Найти нужный разговор за минуту</h2>
+        <p>Открой архив, отфильтруй по теме или начни с редакторской подборки, если слушаешь впервые.</p>
+      </div>
+      <div class="platforms">
+        <a class="button" href="../episodes/">Открыть архив</a>
+        <a class="button" href="../episodes/?format=video-audio">Видео + аудио</a>
+        <a class="button" href="../episodes/?topic=AI">AI-выпуски</a>
+      </div>
+    </div>
+    <div class="container footer-grid">
+      <div class="footer-col">
+        <a class="logo" href="../podcast/"><span class="logo-mark">OM</span><span>Olya Podcasts</span></a>
+        <p style="margin-top:16px">Спокойный, структурный архив выпусков для быстрого поиска по темам, гостям и форматам.</p>
+      </div>
+      <div class="footer-col"><h3>Explore</h3><a href="../podcast/">Overview</a><a href="../episodes/">All episodes</a><a href="../episodes/?format=guest">Guest episodes</a></div>
+      <div class="footer-col"><h3>Topics</h3><a href="../episodes/?topic=отношения">Отношения</a><a href="../episodes/?topic=тело">Тело</a><a href="../episodes/?topic=AI">AI</a></div>
+      <div class="footer-col"><h3>Resources</h3><a href="../episodes/?topic=книги">Книги</a><a href="../episodes/?topic=творчество">Творчество</a><a href="#whippet">Whippet</a></div>
+      <div class="footer-col"><h3>Navigation</h3><a href="../episodes/">Search</a><a href="#whippet">Whippet podcast</a></div>
+    </div>
+  </footer>
+
+  <script src="../podcast-library.js"></script>
+</body>
+</html>
