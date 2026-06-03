@@ -1,0 +1,991 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>350 книг — личная библиотека</title>
+<style>
+:root {
+  --bg: #ffffff;
+  --bg-hover: rgba(55, 53, 47, 0.04);
+  --bg-soft: #f7f7f5;
+  --text: rgb(55, 53, 47);
+  --text-soft: rgba(55, 53, 47, 0.65);
+  --text-soft-2: rgba(55, 53, 47, 0.4);
+  --border: rgba(55, 53, 47, 0.15);
+  --border-soft: rgba(55, 53, 47, 0.07);
+  --accent: rgb(35, 131, 226);
+  --heart: #e76e6e;
+  --star: #d4a017;
+  --green: #4d8c2a;
+  --diff-l-bg: #dceedc;
+  --diff-l-fg: #2d6431;
+  --diff-s-bg: #fbeaca;
+  --diff-s-fg: #92620d;
+  --diff-sl-bg: #f9dec9;
+  --diff-sl-fg: #8e4a1f;
+  --diff-os-bg: #ffe0dc;
+  --diff-os-fg: #a82424;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, "Helvetica Neue", Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  font-size: 14px;
+}
+header.app-header { padding: 40px 48px 24px; max-width: 1280px; margin: 0 auto; }
+header.app-header h1 { font-size: 32px; font-weight: 700; margin-bottom: 6px; letter-spacing: -0.02em; color: var(--text); }
+header.app-header .subtitle { font-size: 13px; color: var(--text-soft); }
+.toolbar { background: var(--bg); position: sticky; top: 0; z-index: 100; padding: 12px 48px; border-bottom: 1px solid var(--border-soft); }
+.toolbar-inner { max-width: 1280px; margin: 0 auto; }
+.tabs { display: flex; gap: 2px; margin-bottom: 14px; }
+.tab { padding: 6px 12px; background: transparent; border: none; border-radius: 4px; font-family: inherit; font-size: 14px; color: var(--text-soft); cursor: pointer; font-weight: 500; }
+.tab:hover { background: var(--bg-hover); color: var(--text); }
+.tab.active { background: var(--bg-soft); color: var(--text); font-weight: 600; }
+.tab .count { font-size: 12px; color: var(--text-soft-2); margin-left: 6px; font-weight: normal; }
+.filters { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-bottom: 10px; }
+.filter-group { display: flex; gap: 4px; align-items: center; }
+.filter-label { font-size: 11px; color: var(--text-soft); margin-right: 4px; font-weight: 500; }
+.search-input { padding: 6px 12px; border: 1px solid var(--border); border-radius: 6px; font-family: inherit; font-size: 13px; background: var(--bg); color: var(--text); width: 200px; outline: none; transition: border-color 0.15s; }
+.search-input:focus { border-color: var(--accent); }
+.toggle-btn { padding: 5px 10px; border: 1px solid var(--border); border-radius: 6px; background: var(--bg); font-family: inherit; font-size: 12px; cursor: pointer; color: var(--text); white-space: nowrap; font-weight: 500; transition: all 0.15s; }
+.toggle-btn:hover { background: var(--bg-hover); }
+.toggle-btn.active { background: var(--text); color: white; border-color: var(--text); }
+.toggle-btn.heart.active { background: var(--heart); border-color: var(--heart); color: white; }
+.toggle-btn[data-filter="unread"].active { background: var(--green); border-color: var(--green); color: white; }
+.toggle-btn[data-filter="wishlist"].active { background: var(--star); border-color: var(--star); color: white; }
+.toggle-btn[data-filter="reading"].active { background: var(--accent); border-color: var(--accent); color: white; }
+select { font-family: inherit; font-size: 12px; padding: 5px 8px; border: 1px solid var(--border); border-radius: 6px; background: var(--bg); color: var(--text); cursor: pointer; outline: none; }
+input[type=range] { width: 120px; accent-color: var(--accent); }
+.action-btns { display: flex; gap: 6px; margin-left: auto; }
+.action-btn { padding: 5px 10px; background: var(--bg); border: 1px solid var(--border); border-radius: 6px; font-family: inherit; font-size: 12px; cursor: pointer; color: var(--text-soft); }
+.action-btn:hover { background: var(--bg-hover); color: var(--text); }
+.stats-bar { font-size: 12px; color: var(--text-soft); display: flex; gap: 18px; flex-wrap: wrap; }
+.stats-bar strong { color: var(--text); font-weight: 600; }
+.device-note { font-size: 11px; color: var(--text-soft-2); margin-top: 6px; font-style: italic; }
+.action-btn.primary { background: var(--accent); color: white; border-color: var(--accent); }
+.action-btn.primary:hover { background: rgb(20, 110, 200); color: white; }
+.modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 200; align-items: center; justify-content: center; padding: 20px; }
+.modal-overlay.show { display: flex; }
+.modal { background: var(--bg); border-radius: 10px; padding: 24px; max-width: 480px; width: 100%; box-shadow: 0 20px 60px rgba(0,0,0,0.25); }
+.modal-title { font-size: 17px; font-weight: 600; margin-bottom: 16px; color: var(--text); }
+.modal-subtitle { font-size: 12px; font-weight: normal; color: var(--text-soft); }
+.field { margin-bottom: 12px; flex: 1; }
+.field-row { display: flex; gap: 8px; }
+.field label { display: block; font-size: 11px; color: var(--text-soft); margin-bottom: 4px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em; }
+.field input, .field select { width: 100%; padding: 8px 10px; border: 1px solid var(--border); border-radius: 6px; font-family: inherit; font-size: 13px; background: var(--bg); color: var(--text); outline: none; }
+.field input:focus, .field select:focus { border-color: var(--accent); }
+.modal-buttons { display: flex; gap: 8px; justify-content: flex-end; margin-top: 16px; }
+.modal-buttons .action-btn { padding: 8px 16px; font-weight: 500; }
+.del-inline { background: transparent; border: none; color: var(--text-soft-2); cursor: pointer; font-size: 16px; padding: 0 6px; margin-left: 8px; opacity: 0; transition: opacity 0.1s; vertical-align: middle; line-height: 1; }
+.book:hover .del-inline { opacity: 1; }
+.del-inline:hover { color: var(--diff-os-fg); }
+.book.custom .title-wrap::before { content: "✏ "; color: var(--text-soft-2); font-size: 11px; }
+main { max-width: 1280px; margin: 0 auto; padding: 28px 48px 80px; }
+.subsection { margin-bottom: 36px; }
+.subsection-title { font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; font-weight: 600; color: var(--text-soft); margin-bottom: 10px; padding: 4px 0 6px; border: none; border-bottom: 1px solid var(--border-soft); display: flex; align-items: baseline; gap: 8px; background: transparent; font-family: inherit; width: 100%; text-align: left; cursor: pointer; transition: color 0.1s; }
+.subsection-title:hover { color: var(--text); }
+.subsection-title .caret { display: inline-block; width: 12px; color: var(--text-soft-2); font-size: 9px; flex-shrink: 0; }
+.subsection-title .sub-name { flex: 0 0 auto; }
+.subsection-title .meta { color: var(--text-soft-2); font-weight: normal; text-transform: none; letter-spacing: 0; margin-left: auto; }
+.subsection.collapsed { margin-bottom: 8px; }
+.subsection.collapsed .subsection-title { margin-bottom: 0; opacity: 0.7; }
+.book { display: grid; grid-template-columns: 78px 32px 1fr 80px 65px 130px 90px; gap: 12px; align-items: center; padding: 9px 12px; border-bottom: 1px solid var(--border-soft); font-size: 14px; transition: background 0.1s; }
+.book:hover { background: var(--bg-hover); }
+.book.read { opacity: 0.45; }
+.book.read .title-wrap { text-decoration: line-through; text-decoration-color: var(--text-soft-2); text-decoration-thickness: 1px; }
+.marks { display: flex; gap: 4px; }
+.mark-btn { background: transparent; border: 1px solid var(--border); width: 22px; height: 22px; border-radius: 4px; cursor: pointer; font-size: 11px; display: flex; align-items: center; justify-content: center; color: var(--text-soft); padding: 0; line-height: 1; transition: all 0.1s; }
+.mark-btn:hover { background: var(--bg-hover); border-color: var(--text-soft-2); }
+.mark-btn.r.active { background: var(--green); border-color: var(--green); color: white; }
+.mark-btn.w.active { background: var(--star); border-color: var(--star); color: white; }
+.mark-btn.n.active { background: var(--accent); border-color: var(--accent); color: white; }
+.book .num { font-size: 11px; color: var(--text-soft-2); text-align: right; font-variant-numeric: tabular-nums; }
+.title-wrap { font-weight: 500; line-height: 1.4; color: var(--text); }
+.heart-mark { color: var(--heart); margin-left: 6px; font-size: 12px; }
+.book .stars { font-size: 10px; color: var(--star); letter-spacing: 0.5px; }
+.book .stars .empty { color: var(--border); }
+.book .pages { font-size: 12px; color: var(--text-soft); text-align: right; font-variant-numeric: tabular-nums; }
+.book .difficulty { font-size: 11px; padding: 2px 8px; border-radius: 4px; text-align: center; font-weight: 500; justify-self: start; width: max-content; }
+.difficulty.d-L { background: var(--diff-l-bg); color: var(--diff-l-fg); }
+.difficulty.d-S { background: var(--diff-s-bg); color: var(--diff-s-fg); }
+.difficulty.d-Sl { background: var(--diff-sl-bg); color: var(--diff-sl-fg); }
+.difficulty.d-OS { background: var(--diff-os-bg); color: var(--diff-os-fg); }
+.my-rating { display: flex; font-size: 11px; color: var(--border); letter-spacing: 1px; justify-content: flex-end; }
+.my-rating span { cursor: pointer; padding: 0 1px; }
+.my-rating span.filled { color: var(--star); }
+.my-rating span:hover { color: var(--accent); }
+.empty-state { text-align: center; padding: 60px; color: var(--text-soft); font-style: italic; }
+@media (max-width: 900px) {
+  .book { grid-template-columns: auto 1fr; gap: 6px 10px; padding: 12px 8px; }
+  .book .marks { grid-column: 1; grid-row: 1; }
+  .book .num { display: none; }
+  .book .title-wrap { grid-column: 2; grid-row: 1; }
+  .book .stars, .book .pages, .book .difficulty, .book .my-rating { grid-column: 2; grid-row: auto; justify-self: start; text-align: left; font-size: 11px; }
+  header.app-header, .toolbar, main { padding-left: 16px; padding-right: 16px; }
+  .search-input { width: 100%; }
+}
+</style>
+</head>
+<body>
+<header class="app-header">
+  <h1>350 книг — личная библиотека</h1>
+  <div class="subtitle">Не «обязательная программа», а то, что любят и на что ссылаются. <strong>♥</strong> — часто называют любимой. На строке: <strong>✓</strong> прочитано · <strong>☆</strong> хочу · <strong>⚡</strong> читаю · ★ ваша оценка. Прогресс сохраняется автоматически в браузере.</div>
+</header>
+
+<div class="toolbar">
+  <div class="tabs" id="tabs">
+    <button class="tab active" data-section="f">Зарубежная <span class="count">(150)</span></button>
+    <button class="tab" data-section="r">Русская <span class="count">(100)</span></button>
+    <button class="tab" data-section="p">Философия <span class="count">(100)</span></button>
+  </div>
+
+  <div class="filters">
+    <input type="text" class="search-input" placeholder="Поиск по названию..." id="search">
+
+    <div class="filter-group">
+      <button class="toggle-btn heart" data-filter="loved">♥ Любимые</button>
+      <button class="toggle-btn" data-filter="unread">Непрочит.</button>
+      <button class="toggle-btn" data-filter="wishlist">☆ Wishlist</button>
+      <button class="toggle-btn" data-filter="reading">⚡ Читаю</button>
+    </div>
+
+    <div class="filter-group">
+      <span class="filter-label">Сложн:</span>
+      <button class="toggle-btn dif active" data-diff="Л">Легко</button>
+      <button class="toggle-btn dif active" data-diff="С">Средне</button>
+      <button class="toggle-btn dif active" data-diff="Сл">Сложно</button>
+      <button class="toggle-btn dif active" data-diff="ОС">Очень сложно</button>
+    </div>
+
+    <div class="filter-group">
+      <span class="filter-label">До:</span>
+      <input type="range" id="maxPages" min="100" max="2000" value="2000" step="50">
+      <span id="maxPagesVal" style="font-size:11px; min-width:60px; color: var(--text-soft);">все стр.</span>
+    </div>
+
+    <div class="filter-group">
+      <span class="filter-label">Важн ≥:</span>
+      <select id="minImp">
+        <option value="1">1+</option>
+        <option value="2">2+</option>
+        <option value="3">3+</option>
+        <option value="4">4+</option>
+        <option value="5">5</option>
+      </select>
+    </div>
+
+    <div class="filter-group">
+      <span class="filter-label">Сорт:</span>
+      <select id="sortBy">
+        <option value="section">по разделам</option>
+        <option value="pagesAsc">страницы ↑</option>
+        <option value="pagesDesc">страницы ↓</option>
+        <option value="importance">важность ↓</option>
+        <option value="loved">любимые первыми</option>
+        <option value="alpha">алфавит</option>
+      </select>
+    </div>
+
+    <div class="action-btns">
+      <button class="action-btn primary" id="addBookBtn" title="Добавить свою книгу в Wishlist">+ Книга</button>
+      <button class="action-btn" id="reset">Сброс</button>
+      <button class="action-btn" id="exportJson" title="Скачать прогресс">⬇ JSON</button>
+      <button class="action-btn" id="exportCsv" title="Скачать текущий список как CSV">⬇ CSV</button>
+      <button class="action-btn" id="importBtn" title="Загрузить прогресс">⬆ Импорт</button>
+      <input type="file" id="importFile" style="display:none" accept=".json">
+    </div>
+  </div>
+
+  <div class="stats-bar" id="stats"></div>
+  <div class="device-note">ⓘ Прогресс хранится в этом браузере — на других устройствах/в других браузерах будет пустой. Чтобы перенести: ⬇ JSON → ⬆ Импорт.</div>
+</div>
+
+<main id="main"></main>
+
+<div class="modal-overlay" id="addModal">
+  <div class="modal">
+    <div class="modal-title">Добавить свою книгу <span class="modal-subtitle">— автоматически в Wishlist ☆</span></div>
+    <form id="addForm" autocomplete="off">
+      <div class="field">
+        <label>Название</label>
+        <input type="text" name="t" required placeholder="Автор. Название книги">
+      </div>
+      <div class="field-row">
+        <div class="field">
+          <label>Раздел</label>
+          <select name="s">
+            <option value="f">Зарубежная</option>
+            <option value="r">Русская</option>
+            <option value="p">Философия</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Сложность</label>
+          <select name="d">
+            <option value="Л">Легко</option>
+            <option value="С" selected>Средне</option>
+            <option value="Сл">Сложно</option>
+            <option value="ОС">Очень сложно</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Страницы</label>
+          <input type="number" name="p" min="1" placeholder="—">
+        </div>
+      </div>
+      <div class="modal-buttons">
+        <button type="button" class="action-btn" id="cancelAdd">Отмена</button>
+        <button type="submit" class="action-btn primary">Добавить</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+const BOOKS = [
+// === ЗАРУБЕЖНАЯ (150) ===
+{s:"f",sub:"Античность · Возрождение",n:1,t:"Гомер. Илиада",imp:5,p:700,d:"Сл",l:0},
+{s:"f",sub:"Античность · Возрождение",n:2,t:"Гомер. Одиссея",imp:5,p:500,d:"С",l:0},
+{s:"f",sub:"Античность · Возрождение",n:3,t:"Софокл. Эдип-царь / Антигона",imp:5,p:180,d:"Л",l:0},
+{s:"f",sub:"Античность · Возрождение",n:4,t:"Вергилий. Энеида",imp:5,p:500,d:"Сл",l:0},
+{s:"f",sub:"Античность · Возрождение",n:5,t:"Овидий. Метаморфозы",imp:5,p:600,d:"С",l:0},
+{s:"f",sub:"Античность · Возрождение",n:6,t:"Данте. Божественная комедия",imp:5,p:800,d:"Сл",l:0},
+{s:"f",sub:"Античность · Возрождение",n:7,t:"Боккаччо. Декамерон",imp:4,p:800,d:"С",l:0},
+{s:"f",sub:"Античность · Возрождение",n:8,t:"Сервантес. Дон Кихот",imp:5,p:1100,d:"С",l:1},
+{s:"f",sub:"Античность · Возрождение",n:9,t:"Шекспир. Гамлет / Лир / Макбет",imp:5,p:500,d:"С",l:0},
+{s:"f",sub:"Античность · Возрождение",n:10,t:"Шекспир. Ромео и Джульетта / Сон в летнюю ночь",imp:5,p:250,d:"С",l:1},
+{s:"f",sub:"XVII–XVIII",n:11,t:"Мольер. Тартюф / Мизантроп",imp:4,p:200,d:"Л",l:0},
+{s:"f",sub:"XVII–XVIII",n:12,t:"Дефо. Робинзон Крузо",imp:3,p:400,d:"Л",l:0},
+{s:"f",sub:"XVII–XVIII",n:13,t:"Свифт. Путешествия Гулливера",imp:4,p:400,d:"С",l:0},
+{s:"f",sub:"XVII–XVIII",n:14,t:"Гёте. Фауст",imp:5,p:500,d:"Сл",l:0},
+{s:"f",sub:"XVII–XVIII",n:15,t:"Гёте. Страдания юного Вертера",imp:4,p:150,d:"Л",l:1},
+{s:"f",sub:"XIX век",n:16,t:"Остен. Гордость и предубеждение",imp:5,p:400,d:"С",l:1},
+{s:"f",sub:"XIX век",n:17,t:"Остен. Эмма",imp:4,p:500,d:"С",l:0},
+{s:"f",sub:"XIX век",n:18,t:"Стендаль. Красное и чёрное",imp:5,p:700,d:"С",l:1},
+{s:"f",sub:"XIX век",n:19,t:"Стендаль. Пармская обитель",imp:4,p:600,d:"С",l:0},
+{s:"f",sub:"XIX век",n:20,t:"Бальзак. Отец Горио",imp:5,p:300,d:"С",l:1},
+{s:"f",sub:"XIX век",n:21,t:"Бальзак. Утраченные иллюзии",imp:5,p:700,d:"С",l:1},
+{s:"f",sub:"XIX век",n:22,t:"Бальзак. Шагреневая кожа",imp:4,p:250,d:"С",l:0},
+{s:"f",sub:"XIX век",n:23,t:"Гюго. Отверженные",imp:5,p:1500,d:"С",l:1},
+{s:"f",sub:"XIX век",n:24,t:"Гюго. Собор Парижской Богоматери",imp:5,p:500,d:"С",l:1},
+{s:"f",sub:"XIX век",n:25,t:"Дюма. Граф Монте-Кристо",imp:5,p:1300,d:"Л",l:1},
+{s:"f",sub:"XIX век",n:26,t:"Дюма. Три мушкетёра",imp:4,p:700,d:"Л",l:1},
+{s:"f",sub:"XIX век",n:27,t:"Флобер. Госпожа Бовари",imp:5,p:400,d:"С",l:1},
+{s:"f",sub:"XIX век",n:28,t:"Флобер. Воспитание чувств",imp:4,p:500,d:"С",l:0},
+{s:"f",sub:"XIX век",n:29,t:"Флобер. Саламбо",imp:3,p:400,d:"С",l:0},
+{s:"f",sub:"XIX век",n:30,t:"Мопассан. Милый друг",imp:4,p:350,d:"Л",l:1},
+{s:"f",sub:"XIX век",n:31,t:"Диккенс. Большие надежды",imp:5,p:500,d:"С",l:1},
+{s:"f",sub:"XIX век",n:32,t:"Диккенс. Дэвид Копперфилд",imp:5,p:900,d:"С",l:1},
+{s:"f",sub:"XIX век",n:33,t:"Диккенс. Оливер Твист",imp:4,p:500,d:"С",l:1},
+{s:"f",sub:"XIX век",n:34,t:"Диккенс. Рождественская песнь",imp:4,p:100,d:"Л",l:1},
+{s:"f",sub:"XIX век",n:35,t:"Теккерей. Ярмарка тщеславия",imp:4,p:800,d:"С",l:0},
+{s:"f",sub:"XIX век",n:36,t:"Ш. Бронте. Джейн Эйр",imp:5,p:600,d:"С",l:1},
+{s:"f",sub:"XIX век",n:37,t:"Э. Бронте. Грозовой перевал",imp:5,p:400,d:"С",l:1},
+{s:"f",sub:"XIX век",n:38,t:"Мелвилл. Моби Дик",imp:5,p:700,d:"Сл",l:0},
+{s:"f",sub:"XIX век",n:39,t:"Твен. Приключения Гекльберри Финна",imp:4,p:400,d:"Л",l:0},
+{s:"f",sub:"XIX век",n:40,t:"Уайльд. Портрет Дориана Грея",imp:5,p:300,d:"Л",l:1},
+{s:"f",sub:"XIX век",n:41,t:"Уайльд. Идеальный муж / Как важно быть серьёзным",imp:4,p:200,d:"Л",l:1},
+{s:"f",sub:"XIX век",n:42,t:"По. Рассказы",imp:4,p:400,d:"Л",l:0},
+{s:"f",sub:"XIX век",n:43,t:"Стокер. Дракула",imp:3,p:450,d:"Л",l:0},
+{s:"f",sub:"XX век до 1945",n:44,t:"Лондон. Мартин Иден",imp:5,p:400,d:"Л",l:1},
+{s:"f",sub:"XX век до 1945",n:45,t:"Лондон. Морской волк",imp:4,p:300,d:"Л",l:1},
+{s:"f",sub:"XX век до 1945",n:46,t:"Лондон. Зов предков / Белый клык",imp:4,p:300,d:"Л",l:1},
+{s:"f",sub:"XX век до 1945",n:47,t:"Драйзер. Американская трагедия",imp:4,p:900,d:"С",l:0},
+{s:"f",sub:"XX век до 1945",n:48,t:"Манн. Волшебная гора",imp:5,p:800,d:"Сл",l:0},
+{s:"f",sub:"XX век до 1945",n:49,t:"Манн. Будденброки",imp:4,p:700,d:"С",l:0},
+{s:"f",sub:"XX век до 1945",n:50,t:"Кафка. Процесс",imp:5,p:250,d:"С",l:0},
+{s:"f",sub:"XX век до 1945",n:51,t:"Кафка. Превращение и новеллы",imp:5,p:200,d:"С",l:0},
+{s:"f",sub:"XX век до 1945",n:52,t:"Джойс. Улисс",imp:5,p:900,d:"ОС",l:0},
+{s:"f",sub:"XX век до 1945",n:53,t:"Пруст. В сторону Свана",imp:5,p:500,d:"Сл",l:0},
+{s:"f",sub:"XX век до 1945",n:54,t:"Гессе. Степной волк",imp:5,p:250,d:"С",l:1},
+{s:"f",sub:"XX век до 1945",n:55,t:"Гессе. Игра в бисер",imp:4,p:600,d:"Сл",l:0},
+{s:"f",sub:"XX век до 1945",n:56,t:"Гессе. Сиддхартха",imp:5,p:150,d:"Л",l:1},
+{s:"f",sub:"XX век до 1945",n:57,t:"Хемингуэй. По ком звонит колокол",imp:5,p:550,d:"С",l:1},
+{s:"f",sub:"XX век до 1945",n:58,t:"Хемингуэй. Фиеста (И восходит солнце)",imp:5,p:250,d:"Л",l:1},
+{s:"f",sub:"XX век до 1945",n:59,t:"Хемингуэй. Старик и море",imp:5,p:100,d:"Л",l:1},
+{s:"f",sub:"XX век до 1945",n:60,t:"Хемингуэй. Праздник, который всегда с тобой",imp:5,p:200,d:"Л",l:1},
+{s:"f",sub:"XX век до 1945",n:61,t:"Фицджеральд. Великий Гэтсби",imp:5,p:200,d:"Л",l:1},
+{s:"f",sub:"XX век до 1945",n:62,t:"Фицджеральд. Ночь нежна",imp:5,p:400,d:"С",l:1},
+{s:"f",sub:"XX век до 1945",n:63,t:"Ремарк. На западном фронте без перемен",imp:5,p:300,d:"Л",l:1},
+{s:"f",sub:"XX век до 1945",n:64,t:"Ремарк. Три товарища",imp:5,p:500,d:"Л",l:1},
+{s:"f",sub:"XX век до 1945",n:65,t:"Ремарк. Триумфальная арка",imp:5,p:500,d:"Л",l:1},
+{s:"f",sub:"XX век до 1945",n:66,t:"Митчелл. Унесённые ветром",imp:5,p:1200,d:"Л",l:1},
+{s:"f",sub:"XX век до 1945",n:67,t:"Сент-Экзюпери. Маленький принц",imp:5,p:100,d:"Л",l:1},
+{s:"f",sub:"XX век после 1945",n:68,t:"Сэлинджер. Над пропастью во ржи",imp:5,p:300,d:"Л",l:1},
+{s:"f",sub:"XX век после 1945",n:69,t:"Сэлинджер. Девять рассказов / Фрэнни и Зуи",imp:4,p:350,d:"С",l:1},
+{s:"f",sub:"XX век после 1945",n:70,t:"Камю. Чума",imp:5,p:350,d:"С",l:1},
+{s:"f",sub:"XX век после 1945",n:71,t:"Камю. Посторонний",imp:5,p:150,d:"Л",l:1},
+{s:"f",sub:"XX век после 1945",n:72,t:"Маркес. Сто лет одиночества",imp:5,p:450,d:"С",l:1},
+{s:"f",sub:"XX век после 1945",n:73,t:"Маркес. Любовь во время холеры",imp:5,p:450,d:"С",l:1},
+{s:"f",sub:"XX век после 1945",n:74,t:"Маркес. Полковнику никто не пишет",imp:4,p:100,d:"Л",l:1},
+{s:"f",sub:"XX век после 1945",n:75,t:"Маркес. Осень патриарха",imp:4,p:250,d:"Сл",l:0},
+{s:"f",sub:"XX век после 1945",n:76,t:"Борхес. Вымыслы",imp:5,p:200,d:"С",l:0},
+{s:"f",sub:"XX век после 1945",n:77,t:"Эко. Имя розы",imp:5,p:600,d:"С",l:1},
+{s:"f",sub:"XX век после 1945",n:78,t:"Оруэлл. 1984",imp:5,p:350,d:"Л",l:1},
+{s:"f",sub:"XX век после 1945",n:79,t:"Оруэлл. Скотный двор",imp:5,p:150,d:"Л",l:1},
+{s:"f",sub:"XX век после 1945",n:80,t:"Хаксли. О дивный новый мир",imp:5,p:300,d:"Л",l:1},
+{s:"f",sub:"XX век после 1945",n:81,t:"Брэдбери. 451° по Фаренгейту",imp:5,p:200,d:"Л",l:1},
+{s:"f",sub:"XX век после 1945",n:82,t:"Воннегут. Бойня номер пять",imp:4,p:250,d:"Л",l:1},
+{s:"f",sub:"XX век после 1945",n:83,t:"Голдинг. Повелитель мух",imp:4,p:250,d:"Л",l:0},
+{s:"f",sub:"XX век после 1945",n:84,t:"Кизи. Над кукушкиным гнездом",imp:5,p:350,d:"Л",l:1},
+{s:"f",sub:"XX век после 1945",n:85,t:"Бёрджесс. Заводной апельсин",imp:4,p:200,d:"С",l:1},
+{s:"f",sub:"XX век после 1945",n:86,t:"Этвуд. Рассказ служанки",imp:5,p:350,d:"Л",l:1},
+{s:"f",sub:"XX век после 1945",n:87,t:"Зюскинд. Парфюмер",imp:5,p:300,d:"Л",l:1},
+{s:"f",sub:"XX век после 1945",n:88,t:"Моэм. Луна и грош",imp:5,p:300,d:"Л",l:1},
+{s:"f",sub:"XX век после 1945",n:89,t:"Моэм. Бремя страстей человеческих",imp:5,p:700,d:"Л",l:1},
+{s:"f",sub:"XX век после 1945",n:90,t:"Стейнбек. К востоку от Эдема",imp:5,p:700,d:"С",l:1},
+{s:"f",sub:"XXI век",n:91,t:"Феррант. Неаполитанский квартет",imp:5,p:1500,d:"С",l:1},
+{s:"f",sub:"XXI век",n:92,t:"Зебальд. Аустерлиц",imp:5,p:300,d:"Сл",l:0},
+{s:"f",sub:"XXI век",n:93,t:"Боланьо. 2666",imp:5,p:1100,d:"Сл",l:0},
+{s:"f",sub:"XXI век",n:94,t:"МакКарти. Дорога",imp:5,p:300,d:"С",l:0},
+{s:"f",sub:"XXI век",n:95,t:"Исигуро. Не отпускай меня",imp:5,p:350,d:"Л",l:1},
+{s:"f",sub:"XXI век",n:96,t:"Исигуро. Остаток дня",imp:5,p:250,d:"Л",l:1},
+{s:"f",sub:"XXI век",n:97,t:"Памук. Меня зовут Красный",imp:4,p:500,d:"С",l:0},
+{s:"f",sub:"XXI век",n:98,t:"Мураками. Норвежский лес",imp:5,p:400,d:"Л",l:1},
+{s:"f",sub:"XXI век",n:99,t:"Исигуро. Клара и Солнце",imp:5,p:350,d:"Л",l:1},
+{s:"f",sub:"XXI век",n:100,t:"Янагихара. Маленькая жизнь",imp:5,p:700,d:"С",l:1},
+{s:"f",sub:"XXI век",n:101,t:"Тартт. Тайная история",imp:5,p:700,d:"Л",l:2},
+{s:"f",sub:"XXI век",n:102,t:"Тартт. Щегол",imp:5,p:900,d:"Л",l:2},
+{s:"f",sub:"XXI век",n:103,t:"Дэвид Митчелл. Облачный атлас",imp:5,p:700,d:"С",l:1},
+{s:"f",sub:"XXI век",n:104,t:"Дэвид Митчелл. Костяные часы",imp:4,p:700,d:"С",l:0},
+{s:"f",sub:"XXI век",n:105,t:"Шейбон. Приключения Кавалера и Клея",imp:5,p:700,d:"С",l:0},
+{s:"f",sub:"XXI век",n:106,t:"Евгенидис. Средний пол",imp:5,p:700,d:"С",l:1},
+{s:"f",sub:"XXI век",n:107,t:"Франзен. Поправки",imp:5,p:700,d:"С",l:0},
+{s:"f",sub:"XXI век",n:108,t:"Франзен. Свобода",imp:4,p:700,d:"С",l:0},
+{s:"f",sub:"XXI век",n:109,t:"Исигуро. Когда мы были сиротами",imp:4,p:350,d:"С",l:0},
+{s:"f",sub:"XXI век",n:110,t:"Исигуро. Погребённый великан",imp:4,p:350,d:"С",l:0},
+{s:"f",sub:"XXI век",n:111,t:"Памук. Снег",imp:4,p:500,d:"С",l:0},
+{s:"f",sub:"XXI век",n:112,t:"Янагихара. До самого рая",imp:4,p:900,d:"С",l:0},
+{s:"f",sub:"XXI век",n:113,t:"Зусак. Книжный вор",imp:5,p:600,d:"Л",l:2},
+{s:"f",sub:"XXI век",n:114,t:"Мартел. Жизнь Пи",imp:5,p:400,d:"Л",l:1},
+{s:"f",sub:"XXI век",n:115,t:"Хоссейни. Бегущий за ветром",imp:5,p:400,d:"Л",l:2},
+{s:"f",sub:"XXI век",n:116,t:"Хоссейни. Тысяча сияющих солнц",imp:5,p:400,d:"Л",l:2},
+{s:"f",sub:"XXI век",n:117,t:"Дорр. Весь невидимый нам свет",imp:5,p:600,d:"Л",l:2},
+{s:"f",sub:"XXI век",n:118,t:"Аткинсон. Жизнь после жизни",imp:5,p:600,d:"С",l:1},
+{s:"f",sub:"XXI век",n:119,t:"Этвуд. Слепой убийца",imp:5,p:700,d:"С",l:0},
+{s:"f",sub:"XXI век",n:120,t:"МакКэнн. И пусть вращается прекрасный мир",imp:5,p:400,d:"С",l:0},
+{s:"f",sub:"XXI век",n:121,t:"Миллер. Песнь Ахилла",imp:5,p:400,d:"Л",l:2},
+{s:"f",sub:"XXI век",n:122,t:"Миллер. Цирцея",imp:5,p:400,d:"Л",l:1},
+{s:"f",sub:"XXI век",n:123,t:"Лю Цысинь. Задача трёх тел",imp:5,p:500,d:"С",l:1},
+{s:"f",sub:"XXI век",n:124,t:"Хан Ган. Вегетарианка",imp:5,p:250,d:"С",l:1},
+{s:"f",sub:"XXI век",n:125,t:"Юй Хуа. Жить",imp:5,p:250,d:"Л",l:1},
+{s:"f",sub:"XXI век",n:126,t:"Флинн. Исчезнувшая",imp:5,p:500,d:"Л",l:1},
+{s:"f",sub:"XXI век",n:127,t:"Михаэлидес. Безмолвный пациент",imp:4,p:350,d:"Л",l:1},
+{s:"f",sub:"XXI век",n:128,t:"Тана Френч. В лесу",imp:4,p:500,d:"Л",l:0},
+{s:"f",sub:"XXI век",n:129,t:"Стивен Кинг. 11/22/63",imp:5,p:850,d:"Л",l:1},
+{s:"f",sub:"XXI век",n:130,t:"Мориарти. Большая маленькая ложь",imp:4,p:500,d:"Л",l:1},
+{s:"f",sub:"XXI век",n:131,t:"Уайтхед. Подземная железная дорога",imp:5,p:400,d:"Л",l:1},
+{s:"f",sub:"XXI век",n:132,t:"Уайтхед. Никелевые мальчики",imp:5,p:250,d:"Л",l:0},
+{s:"f",sub:"XXI век",n:133,t:"Беннетт. Исчезающая половина",imp:5,p:400,d:"Л",l:1},
+{s:"f",sub:"XXI век",n:134,t:"Эваристо. Девушка, женщина, иная",imp:5,p:500,d:"С",l:0},
+{s:"f",sub:"XXI век",n:135,t:"Адичи. Американа",imp:5,p:600,d:"Л",l:1},
+{s:"f",sub:"XXI век",n:136,t:"Зэди Смит. Белые зубы",imp:5,p:600,d:"С",l:1},
+{s:"f",sub:"XXI век",n:137,t:"Селеста Инг. И повсюду тлеют пожары",imp:4,p:400,d:"Л",l:1},
+{s:"f",sub:"XXI век",n:138,t:"Сондерс. Линкольн в бардо",imp:5,p:350,d:"Сл",l:0},
+{s:"f",sub:"XXI век",n:139,t:"Стюарт. Шагги Бейн",imp:5,p:500,d:"С",l:1},
+{s:"f",sub:"XXI век",n:140,t:"Зевин. Завтра, и завтра, и завтра",imp:5,p:500,d:"Л",l:2},
+{s:"f",sub:"XXI век",n:141,t:"Шлинк. Чтец",imp:5,p:250,d:"Л",l:2},
+{s:"f",sub:"XXI век",n:142,t:"Бине. HHhH",imp:5,p:400,d:"С",l:0},
+{s:"f",sub:"XXI век",n:143,t:"Каррер. Лимонов",imp:5,p:450,d:"С",l:0},
+{s:"f",sub:"XXI век",n:144,t:"Уэльбек. Карта и территория",imp:4,p:400,d:"С",l:0},
+{s:"f",sub:"XXI век",n:145,t:"Уэльбек. Серотонин",imp:4,p:300,d:"С",l:0},
+{s:"f",sub:"XXI век",n:146,t:"Руни. Нормальные люди",imp:5,p:300,d:"Л",l:1},
+{s:"f",sub:"XXI век",n:147,t:"Руни. Разговоры с друзьями",imp:4,p:300,d:"Л",l:0},
+{s:"f",sub:"XXI век",n:148,t:"Кнаусгор. Моя борьба, т.1",imp:4,p:500,d:"С",l:0},
+{s:"f",sub:"XXI век",n:149,t:"Фоссе. Септология",imp:4,p:800,d:"Сл",l:0},
+{s:"f",sub:"XXI век",n:150,t:"Ричард Пауэрс. Верхний ярус",imp:4,p:600,d:"С",l:0},
+// === РУССКАЯ (100) ===
+{s:"r",sub:"Древняя · XVIII",n:1,t:"Слово о полку Игореве",imp:4,p:100,d:"С",l:0},
+{s:"r",sub:"Древняя · XVIII",n:2,t:"Карамзин. Бедная Лиза",imp:3,p:50,d:"Л",l:0},
+{s:"r",sub:"Древняя · XVIII",n:3,t:"Фонвизин. Недоросль",imp:4,p:100,d:"Л",l:0},
+{s:"r",sub:"Древняя · XVIII",n:4,t:"Крылов. Басни",imp:3,p:200,d:"Л",l:0},
+{s:"r",sub:"XIX век",n:5,t:"Грибоедов. Горе от ума",imp:5,p:150,d:"С",l:0},
+{s:"r",sub:"XIX век",n:6,t:"Пушкин. Евгений Онегин",imp:5,p:250,d:"С",l:1},
+{s:"r",sub:"XIX век",n:7,t:"Пушкин. Капитанская дочка",imp:5,p:180,d:"Л",l:1},
+{s:"r",sub:"XIX век",n:8,t:"Пушкин. Повести Белкина",imp:5,p:200,d:"Л",l:1},
+{s:"r",sub:"XIX век",n:9,t:"Пушкин. Маленькие трагедии",imp:5,p:100,d:"С",l:0},
+{s:"r",sub:"XIX век",n:10,t:"Пушкин. Медный всадник / Борис Годунов",imp:5,p:150,d:"С",l:0},
+{s:"r",sub:"XIX век",n:11,t:"Пушкин. Лирика",imp:5,p:400,d:"С",l:1},
+{s:"r",sub:"XIX век",n:12,t:"Лермонтов. Герой нашего времени",imp:5,p:200,d:"С",l:1},
+{s:"r",sub:"XIX век",n:13,t:"Лермонтов. Демон / Мцыри / Лирика",imp:5,p:300,d:"С",l:0},
+{s:"r",sub:"XIX век",n:14,t:"Гоголь. Мёртвые души",imp:5,p:400,d:"С",l:1},
+{s:"r",sub:"XIX век",n:15,t:"Гоголь. Петербургские повести (Шинель, Нос)",imp:5,p:250,d:"С",l:1},
+{s:"r",sub:"XIX век",n:16,t:"Гоголь. Ревизор",imp:5,p:150,d:"Л",l:1},
+{s:"r",sub:"XIX век",n:17,t:"Тургенев. Отцы и дети",imp:5,p:300,d:"Л",l:1},
+{s:"r",sub:"XIX век",n:18,t:"Гончаров. Обломов",imp:5,p:600,d:"С",l:1},
+{s:"r",sub:"XIX век",n:19,t:"Островский. Гроза",imp:4,p:150,d:"Л",l:0},
+{s:"r",sub:"XIX век",n:20,t:"Тютчев. Стихотворения",imp:4,p:250,d:"С",l:0},
+{s:"r",sub:"XIX век",n:21,t:"Достоевский. Преступление и наказание",imp:5,p:700,d:"С",l:1},
+{s:"r",sub:"XIX век",n:22,t:"Достоевский. Идиот",imp:5,p:700,d:"С",l:1},
+{s:"r",sub:"XIX век",n:23,t:"Достоевский. Бесы",imp:5,p:700,d:"Сл",l:0},
+{s:"r",sub:"XIX век",n:24,t:"Достоевский. Братья Карамазовы",imp:5,p:900,d:"Сл",l:2},
+{s:"r",sub:"XIX век",n:25,t:"Достоевский. Подросток",imp:4,p:600,d:"С",l:0},
+{s:"r",sub:"XIX век",n:26,t:"Достоевский. Записки из подполья",imp:5,p:150,d:"С",l:1},
+{s:"r",sub:"XIX век",n:27,t:"Достоевский. Белые ночи",imp:4,p:80,d:"Л",l:1},
+{s:"r",sub:"XIX век",n:28,t:"Толстой. Война и мир",imp:5,p:1400,d:"С",l:1},
+{s:"r",sub:"XIX век",n:29,t:"Толстой. Анна Каренина",imp:5,p:900,d:"С",l:1},
+{s:"r",sub:"XIX век",n:30,t:"Толстой. Смерть Ивана Ильича",imp:5,p:100,d:"С",l:1},
+{s:"r",sub:"XIX век",n:31,t:"Толстой. Хаджи-Мурат / Казаки",imp:4,p:250,d:"С",l:0},
+{s:"r",sub:"XIX век",n:32,t:"Чехов. Рассказы (Дама с собачкой, Палата №6, Студент, Степь)",imp:5,p:500,d:"Л",l:1},
+{s:"r",sub:"XIX век",n:33,t:"Чехов. Пьесы (Вишнёвый сад, Чайка, Три сестры, Дядя Ваня)",imp:5,p:300,d:"Л",l:1},
+{s:"r",sub:"XIX век",n:34,t:"Лесков. Очарованный странник / Леди Макбет",imp:4,p:300,d:"С",l:1},
+{s:"r",sub:"Серебряный век",n:35,t:"Бунин. Тёмные аллеи",imp:5,p:400,d:"Л",l:1},
+{s:"r",sub:"Серебряный век",n:36,t:"Бунин. Жизнь Арсеньева",imp:4,p:350,d:"С",l:0},
+{s:"r",sub:"Серебряный век",n:37,t:"Бунин. Окаянные дни",imp:4,p:200,d:"С",l:0},
+{s:"r",sub:"Серебряный век",n:38,t:"Куприн. Поединок / Гранатовый браслет / Олеся",imp:5,p:500,d:"Л",l:1},
+{s:"r",sub:"Серебряный век",n:39,t:"Блок. Двенадцать / Стихотворения",imp:5,p:400,d:"С",l:1},
+{s:"r",sub:"Серебряный век",n:40,t:"Ахматова. Реквием / Лирика",imp:5,p:300,d:"С",l:1},
+{s:"r",sub:"Серебряный век",n:41,t:"Цветаева. Стихи / Поэма конца",imp:5,p:400,d:"С",l:1},
+{s:"r",sub:"Серебряный век",n:42,t:"Мандельштам. Стихотворения",imp:5,p:400,d:"С",l:0},
+{s:"r",sub:"Серебряный век",n:43,t:"Пастернак. Стихотворения",imp:5,p:400,d:"С",l:0},
+{s:"r",sub:"Серебряный век",n:44,t:"Гумилёв. Стихотворения",imp:4,p:300,d:"С",l:1},
+{s:"r",sub:"Серебряный век",n:45,t:"Маяковский. Облако в штанах / Стихи",imp:4,p:400,d:"С",l:0},
+{s:"r",sub:"Серебряный век",n:46,t:"Есенин. Стихотворения / Чёрный человек",imp:5,p:300,d:"Л",l:1},
+{s:"r",sub:"Советская",n:47,t:"Замятин. Мы",imp:5,p:250,d:"С",l:0},
+{s:"r",sub:"Советская",n:48,t:"Булгаков. Мастер и Маргарита",imp:5,p:500,d:"С",l:2},
+{s:"r",sub:"Советская",n:49,t:"Булгаков. Белая гвардия",imp:4,p:400,d:"С",l:1},
+{s:"r",sub:"Советская",n:50,t:"Булгаков. Собачье сердце",imp:5,p:150,d:"Л",l:1},
+{s:"r",sub:"Советская",n:51,t:"Платонов. Котлован",imp:5,p:200,d:"Сл",l:0},
+{s:"r",sub:"Советская",n:52,t:"Платонов. Чевенгур",imp:5,p:500,d:"Сл",l:0},
+{s:"r",sub:"Советская",n:53,t:"Бабель. Конармия / Одесские рассказы",imp:5,p:300,d:"С",l:1},
+{s:"r",sub:"Советская",n:54,t:"Зощенко. Рассказы",imp:4,p:300,d:"Л",l:1},
+{s:"r",sub:"Советская",n:55,t:"Хармс. Случаи / Стихи",imp:4,p:300,d:"Л",l:1},
+{s:"r",sub:"Советская",n:56,t:"Ильф и Петров. 12 стульев",imp:5,p:400,d:"Л",l:1},
+{s:"r",sub:"Советская",n:57,t:"Ильф и Петров. Золотой телёнок",imp:5,p:350,d:"Л",l:1},
+{s:"r",sub:"Советская",n:58,t:"Олеша. Зависть",imp:4,p:200,d:"С",l:0},
+{s:"r",sub:"Советская",n:59,t:"Шолохов. Тихий Дон",imp:5,p:1500,d:"С",l:1},
+{s:"r",sub:"Советская",n:60,t:"Пастернак. Доктор Живаго",imp:5,p:700,d:"С",l:1},
+{s:"r",sub:"Советская",n:61,t:"Набоков. Лолита",imp:5,p:400,d:"С",l:1},
+{s:"r",sub:"Советская",n:62,t:"Набоков. Дар",imp:4,p:400,d:"Сл",l:0},
+{s:"r",sub:"Советская",n:63,t:"Набоков. Защита Лужина",imp:5,p:250,d:"С",l:1},
+{s:"r",sub:"Советская",n:64,t:"Набоков. Приглашение на казнь",imp:4,p:250,d:"С",l:0},
+{s:"r",sub:"Советская",n:65,t:"Шаламов. Колымские рассказы",imp:5,p:600,d:"С",l:0},
+{s:"r",sub:"Поздняя советская",n:66,t:"Солженицын. Один день Ивана Денисовича",imp:5,p:150,d:"Л",l:1},
+{s:"r",sub:"Поздняя советская",n:67,t:"Солженицын. Архипелаг ГУЛАГ (выб.)",imp:5,p:1500,d:"С",l:0},
+{s:"r",sub:"Поздняя советская",n:68,t:"Солженицын. В круге первом",imp:4,p:800,d:"С",l:0},
+{s:"r",sub:"Поздняя советская",n:69,t:"Гроссман. Жизнь и судьба",imp:5,p:900,d:"С",l:1},
+{s:"r",sub:"Поздняя советская",n:70,t:"Стругацкие. Пикник на обочине",imp:5,p:250,d:"Л",l:1},
+{s:"r",sub:"Поздняя советская",n:71,t:"Стругацкие. Трудно быть богом",imp:5,p:250,d:"Л",l:1},
+{s:"r",sub:"Поздняя советская",n:72,t:"Стругацкие. Понедельник начинается в субботу",imp:5,p:300,d:"Л",l:1},
+{s:"r",sub:"Поздняя советская",n:73,t:"Стругацкие. Улитка на склоне",imp:4,p:300,d:"С",l:0},
+{s:"r",sub:"Поздняя советская",n:74,t:"Стругацкие. Хищные вещи века",imp:4,p:200,d:"Л",l:0},
+{s:"r",sub:"Поздняя советская",n:75,t:"Трифонов. Дом на набережной / Старик",imp:4,p:300,d:"С",l:0},
+{s:"r",sub:"Поздняя советская",n:76,t:"Распутин. Прощание с Матёрой / Живи и помни",imp:5,p:400,d:"С",l:1},
+{s:"r",sub:"Поздняя советская",n:77,t:"Битов. Пушкинский дом",imp:4,p:400,d:"Сл",l:0},
+{s:"r",sub:"Поздняя советская",n:78,t:"Венедикт Ерофеев. Москва — Петушки",imp:5,p:150,d:"Л",l:1},
+{s:"r",sub:"Поздняя советская",n:79,t:"Довлатов. Заповедник / Чемодан / Компромисс",imp:5,p:400,d:"Л",l:1},
+{s:"r",sub:"Поздняя советская",n:80,t:"Бродский. Стихотворения",imp:5,p:600,d:"С",l:1},
+{s:"r",sub:"После 1991",n:81,t:"Сорокин. День опричника",imp:5,p:250,d:"Л",l:0},
+{s:"r",sub:"После 1991",n:82,t:"Сорокин. Голубое сало",imp:4,p:350,d:"С",l:0},
+{s:"r",sub:"После 1991",n:83,t:"Сорокин. Метель",imp:4,p:200,d:"Л",l:0},
+{s:"r",sub:"После 1991",n:84,t:"Пелевин. Чапаев и Пустота",imp:5,p:350,d:"Л",l:1},
+{s:"r",sub:"После 1991",n:85,t:"Пелевин. Generation П",imp:5,p:350,d:"Л",l:1},
+{s:"r",sub:"После 1991",n:86,t:"Пелевин. Empire V",imp:4,p:400,d:"Л",l:0},
+{s:"r",sub:"После 1991",n:87,t:"Пелевин. Омон Ра",imp:5,p:200,d:"Л",l:1},
+{s:"r",sub:"После 1991",n:88,t:"Т. Толстая. Кысь",imp:4,p:350,d:"С",l:1},
+{s:"r",sub:"После 1991",n:89,t:"Улицкая. Казус Кукоцкого",imp:4,p:450,d:"С",l:0},
+{s:"r",sub:"После 1991",n:90,t:"Улицкая. Зелёный шатёр",imp:4,p:600,d:"С",l:0},
+{s:"r",sub:"После 1991",n:91,t:"Прилепин. Санькя",imp:4,p:350,d:"С",l:0},
+{s:"r",sub:"После 1991",n:92,t:"Прилепин. Обитель",imp:5,p:750,d:"С",l:1},
+{s:"r",sub:"После 1991",n:93,t:"А. Иванов. Сердце Пармы",imp:5,p:500,d:"С",l:1},
+{s:"r",sub:"После 1991",n:94,t:"А. Иванов. Географ глобус пропил",imp:5,p:400,d:"Л",l:1},
+{s:"r",sub:"После 1991",n:95,t:"А. Иванов. Тобол",imp:4,p:700,d:"С",l:0},
+{s:"r",sub:"После 1991",n:96,t:"Шишкин. Венерин волос",imp:4,p:500,d:"Сл",l:0},
+{s:"r",sub:"После 1991",n:97,t:"Водолазкин. Лавр",imp:5,p:450,d:"С",l:1},
+{s:"r",sub:"После 1991",n:98,t:"Сальников. Петровы в гриппе",imp:5,p:400,d:"С",l:1},
+{s:"r",sub:"После 1991",n:99,t:"Степнова. Женщины Лазаря",imp:4,p:450,d:"С",l:0},
+{s:"r",sub:"После 1991",n:100,t:"Юзефович. Зимняя дорога",imp:4,p:450,d:"С",l:0},
+// === ФИЛОСОФИЯ (100) ===
+{s:"p",sub:"Античность",n:1,t:"Платон. Государство",imp:5,p:500,d:"Сл",l:0},
+{s:"p",sub:"Античность",n:2,t:"Платон. Пир",imp:5,p:100,d:"С",l:1},
+{s:"p",sub:"Античность",n:3,t:"Платон. Апология Сократа",imp:5,p:50,d:"Л",l:1},
+{s:"p",sub:"Античность",n:4,t:"Платон. Федон",imp:4,p:120,d:"С",l:0},
+{s:"p",sub:"Античность",n:5,t:"Аристотель. Никомахова этика",imp:5,p:400,d:"Сл",l:1},
+{s:"p",sub:"Античность",n:6,t:"Аристотель. Поэтика",imp:5,p:100,d:"С",l:0},
+{s:"p",sub:"Античность",n:7,t:"Аристотель. Политика",imp:4,p:400,d:"Сл",l:0},
+{s:"p",sub:"Античность",n:8,t:"Эпиктет. Энхиридион",imp:4,p:100,d:"Л",l:1},
+{s:"p",sub:"Античность",n:9,t:"Марк Аврелий. Размышления",imp:5,p:200,d:"Л",l:2},
+{s:"p",sub:"Античность",n:10,t:"Сенека. Письма к Луцилию",imp:5,p:700,d:"С",l:2},
+{s:"p",sub:"Античность",n:11,t:"Лукреций. О природе вещей",imp:4,p:500,d:"С",l:0},
+{s:"p",sub:"Античность",n:12,t:"Цицерон. Об обязанностях / О природе богов",imp:4,p:300,d:"С",l:0},
+{s:"p",sub:"Средневековье · Восток",n:13,t:"Августин. Исповедь",imp:5,p:400,d:"С",l:1},
+{s:"p",sub:"Средневековье · Восток",n:14,t:"Боэций. Утешение философией",imp:4,p:200,d:"С",l:0},
+{s:"p",sub:"Средневековье · Восток",n:15,t:"Лао-цзы. Дао дэ цзин",imp:5,p:100,d:"С",l:1},
+{s:"p",sub:"Средневековье · Восток",n:16,t:"Конфуций. Лунь юй",imp:4,p:200,d:"Л",l:0},
+{s:"p",sub:"Средневековье · Восток",n:17,t:"Бхагавадгита",imp:5,p:200,d:"С",l:0},
+{s:"p",sub:"Возрождение · Новое время",n:18,t:"Макиавелли. Государь",imp:5,p:150,d:"Л",l:1},
+{s:"p",sub:"Возрождение · Новое время",n:19,t:"Эразм. Похвала глупости",imp:4,p:200,d:"Л",l:0},
+{s:"p",sub:"Возрождение · Новое время",n:20,t:"Монтень. Опыты (выб.)",imp:5,p:800,d:"С",l:1},
+{s:"p",sub:"Возрождение · Новое время",n:21,t:"Декарт. Рассуждение о методе",imp:5,p:100,d:"С",l:0},
+{s:"p",sub:"Возрождение · Новое время",n:22,t:"Декарт. Размышления о первой философии",imp:5,p:150,d:"С",l:0},
+{s:"p",sub:"Возрождение · Новое время",n:23,t:"Паскаль. Мысли",imp:5,p:300,d:"С",l:1},
+{s:"p",sub:"Возрождение · Новое время",n:24,t:"Спиноза. Этика",imp:5,p:400,d:"ОС",l:0},
+{s:"p",sub:"Возрождение · Новое время",n:25,t:"Гоббс. Левиафан (выб.)",imp:5,p:700,d:"Сл",l:0},
+{s:"p",sub:"Возрождение · Новое время",n:26,t:"Локк. Два трактата о правлении",imp:4,p:500,d:"С",l:0},
+{s:"p",sub:"Возрождение · Новое время",n:27,t:"Юм. Исследование о человеческом познании",imp:4,p:250,d:"С",l:0},
+{s:"p",sub:"Возрождение · Новое время",n:28,t:"Руссо. Об общественном договоре",imp:5,p:200,d:"С",l:0},
+{s:"p",sub:"Возрождение · Новое время",n:29,t:"Руссо. Эмиль (выб.)",imp:4,p:600,d:"С",l:0},
+{s:"p",sub:"XIX век",n:30,t:"Кант. Критика чистого разума",imp:5,p:700,d:"ОС",l:0},
+{s:"p",sub:"XIX век",n:31,t:"Кант. Критика практического разума",imp:5,p:200,d:"Сл",l:0},
+{s:"p",sub:"XIX век",n:32,t:"Гегель. Феноменология духа",imp:5,p:600,d:"ОС",l:0},
+{s:"p",sub:"XIX век",n:33,t:"Шопенгауэр. Мир как воля и представление",imp:5,p:700,d:"Сл",l:1},
+{s:"p",sub:"XIX век",n:34,t:"Шопенгауэр. Афоризмы житейской мудрости",imp:5,p:200,d:"Л",l:2},
+{s:"p",sub:"XIX век",n:35,t:"Маркс. Капитал, т.1 (выб.)",imp:5,p:800,d:"Сл",l:0},
+{s:"p",sub:"XIX век",n:36,t:"Маркс/Энгельс. Манифест Коммунистической партии",imp:5,p:80,d:"Л",l:0},
+{s:"p",sub:"XIX век",n:37,t:"Милль. О свободе",imp:5,p:150,d:"Л",l:0},
+{s:"p",sub:"XIX век",n:38,t:"Токвиль. Демократия в Америке",imp:4,p:800,d:"С",l:0},
+{s:"p",sub:"XIX век",n:39,t:"Дарвин. Происхождение видов",imp:4,p:500,d:"С",l:0},
+{s:"p",sub:"XIX век",n:40,t:"Ницше. Так говорил Заратустра",imp:5,p:350,d:"С",l:2},
+{s:"p",sub:"XIX век",n:41,t:"Ницше. По ту сторону добра и зла",imp:5,p:250,d:"С",l:1},
+{s:"p",sub:"XIX век",n:42,t:"Ницше. Генеалогия морали",imp:5,p:200,d:"С",l:0},
+{s:"p",sub:"XIX век",n:43,t:"Ницше. Весёлая наука",imp:5,p:350,d:"С",l:1},
+{s:"p",sub:"XIX век",n:44,t:"Ницше. Антихрист / Сумерки идолов",imp:5,p:250,d:"С",l:0},
+{s:"p",sub:"Экзистенциализм",n:45,t:"Кьеркегор. Страх и трепет",imp:5,p:200,d:"С",l:1},
+{s:"p",sub:"Экзистенциализм",n:46,t:"Кьеркегор. Или-или",imp:4,p:500,d:"Сл",l:0},
+{s:"p",sub:"Экзистенциализм",n:47,t:"Кьеркегор. Болезнь к смерти",imp:4,p:200,d:"Сл",l:0},
+{s:"p",sub:"Экзистенциализм",n:48,t:"Хайдеггер. Бытие и время",imp:5,p:500,d:"ОС",l:0},
+{s:"p",sub:"Экзистенциализм",n:49,t:"Хайдеггер. Письмо о гуманизме",imp:4,p:100,d:"Сл",l:0},
+{s:"p",sub:"Экзистенциализм",n:50,t:"Хайдеггер. Что такое метафизика?",imp:4,p:80,d:"Сл",l:0},
+{s:"p",sub:"Экзистенциализм",n:51,t:"Ясперс. Введение в философию",imp:4,p:250,d:"С",l:0},
+{s:"p",sub:"Экзистенциализм",n:52,t:"Ясперс. Смысл и назначение истории",imp:4,p:500,d:"С",l:0},
+{s:"p",sub:"Экзистенциализм",n:53,t:"Сартр. Бытие и ничто (выб.)",imp:5,p:700,d:"ОС",l:0},
+{s:"p",sub:"Экзистенциализм",n:54,t:"Сартр. Экзистенциализм — это гуманизм",imp:5,p:80,d:"Л",l:2},
+{s:"p",sub:"Экзистенциализм",n:55,t:"Камю. Миф о Сизифе",imp:5,p:150,d:"С",l:2},
+{s:"p",sub:"Экзистенциализм",n:56,t:"Камю. Бунтующий человек",imp:5,p:300,d:"С",l:1},
+{s:"p",sub:"Экзистенциализм",n:57,t:"С. де Бовуар. Второй пол",imp:5,p:800,d:"С",l:1},
+{s:"p",sub:"Экзистенциализм",n:58,t:"Г. Марсель. Быть и иметь",imp:3,p:250,d:"Сл",l:0},
+{s:"p",sub:"Экзистенциализм",n:59,t:"М. Бубер. Я и Ты",imp:5,p:150,d:"С",l:1},
+{s:"p",sub:"Экзистенциализм",n:60,t:"В. Франкл. Сказать жизни «Да»",imp:5,p:200,d:"Л",l:2},
+{s:"p",sub:"Экзистенциализм",n:61,t:"П. Тиллих. Мужество быть",imp:5,p:200,d:"С",l:1},
+{s:"p",sub:"Экзистенциализм",n:62,t:"Э. Фромм. Бегство от свободы",imp:5,p:250,d:"С",l:2},
+{s:"p",sub:"Экзистенциализм",n:63,t:"Э. Фромм. Иметь или быть?",imp:5,p:250,d:"С",l:2},
+{s:"p",sub:"Экзистенциализм",n:64,t:"Э. Фромм. Искусство любить",imp:5,p:150,d:"Л",l:2},
+{s:"p",sub:"XX век",n:65,t:"Фрейд. Толкование сновидений",imp:5,p:600,d:"Сл",l:0},
+{s:"p",sub:"XX век",n:66,t:"Фрейд. Недовольство культурой",imp:5,p:150,d:"С",l:0},
+{s:"p",sub:"XX век",n:67,t:"Юнг. Архетипы / Воспоминания, сновидения, размышления",imp:5,p:400,d:"С",l:0},
+{s:"p",sub:"XX век",n:68,t:"Витгенштейн. Логико-философский трактат",imp:5,p:100,d:"ОС",l:0},
+{s:"p",sub:"XX век",n:69,t:"Витгенштейн. Философские исследования",imp:5,p:400,d:"Сл",l:0},
+{s:"p",sub:"XX век",n:70,t:"Рассел. История западной философии",imp:5,p:900,d:"С",l:1},
+{s:"p",sub:"XX век",n:71,t:"Поппер. Открытое общество и его враги",imp:5,p:700,d:"С",l:0},
+{s:"p",sub:"XX век",n:72,t:"Кун. Структура научных революций",imp:5,p:250,d:"С",l:1},
+{s:"p",sub:"XX век",n:73,t:"Адорно, Хоркхаймер. Диалектика просвещения",imp:5,p:300,d:"ОС",l:0},
+{s:"p",sub:"XX век",n:74,t:"Беньямин. Озарения",imp:5,p:300,d:"Сл",l:0},
+{s:"p",sub:"XX век",n:75,t:"Барт. Мифологии",imp:5,p:250,d:"С",l:0},
+{s:"p",sub:"XX век",n:76,t:"Барт. Camera Lucida",imp:4,p:150,d:"С",l:0},
+{s:"p",sub:"XX век",n:77,t:"Леви-Стросс. Печальные тропики",imp:5,p:500,d:"С",l:1},
+{s:"p",sub:"XX век",n:78,t:"Фуко. Слова и вещи",imp:5,p:400,d:"ОС",l:0},
+{s:"p",sub:"XX век",n:79,t:"Фуко. Надзирать и наказывать",imp:5,p:350,d:"Сл",l:0},
+{s:"p",sub:"XX век",n:80,t:"Бодрийяр. Симулякры и симуляция",imp:5,p:250,d:"Сл",l:0},
+{s:"p",sub:"Современные XX–XXI",n:81,t:"Маркузе. Одномерный человек",imp:4,p:350,d:"Сл",l:0},
+{s:"p",sub:"Современные XX–XXI",n:82,t:"Арендт. Истоки тоталитаризма",imp:5,p:700,d:"Сл",l:1},
+{s:"p",sub:"Современные XX–XXI",n:83,t:"Арендт. Vita Activa",imp:5,p:400,d:"Сл",l:0},
+{s:"p",sub:"Современные XX–XXI",n:84,t:"Арендт. Эйхман в Иерусалиме (Банальность зла)",imp:5,p:350,d:"С",l:2},
+{s:"p",sub:"Современные XX–XXI",n:85,t:"И. Берлин. Четыре эссе о свободе",imp:5,p:300,d:"С",l:1},
+{s:"p",sub:"Современные XX–XXI",n:86,t:"Ролз. Теория справедливости",imp:5,p:600,d:"Сл",l:0},
+{s:"p",sub:"Современные XX–XXI",n:87,t:"М. Сэндел. Справедливость",imp:5,p:300,d:"С",l:1},
+{s:"p",sub:"Современные XX–XXI",n:88,t:"М. Нуссбаум. Не ради прибыли",imp:4,p:200,d:"Л",l:0},
+{s:"p",sub:"Современные XX–XXI",n:89,t:"МакИнтайр. После добродетели",imp:4,p:350,d:"Сл",l:0},
+{s:"p",sub:"Современные XX–XXI",n:90,t:"Ч. Тейлор. Источники Я",imp:4,p:700,d:"ОС",l:0},
+{s:"p",sub:"Современные XX–XXI",n:91,t:"Жижек. Возвышенный объект идеологии",imp:5,p:350,d:"Сл",l:0},
+{s:"p",sub:"Современные XX–XXI",n:92,t:"Агамбен. Homo sacer",imp:4,p:250,d:"Сл",l:0},
+{s:"p",sub:"Современные XX–XXI",n:93,t:"Делёз, Гваттари. Анти-Эдип",imp:4,p:400,d:"ОС",l:0},
+{s:"p",sub:"Современные XX–XXI",n:94,t:"Деррида. О грамматологии",imp:4,p:450,d:"ОС",l:0},
+{s:"p",sub:"Современные XX–XXI",n:95,t:"Канеман. Думай медленно… решай быстро",imp:5,p:600,d:"С",l:2},
+{s:"p",sub:"Современные XX–XXI",n:96,t:"Харари. Sapiens",imp:5,p:500,d:"Л",l:1},
+{s:"p",sub:"Современные XX–XXI",n:97,t:"Грэбер. Долг: первые 5000 лет",imp:4,p:600,d:"С",l:0},
+{s:"p",sub:"Современные XX–XXI",n:98,t:"Снайдер. Кровавые земли",imp:4,p:500,d:"С",l:0},
+{s:"p",sub:"Современные XX–XXI",n:99,t:"Деннет. Сознание объяснённое",imp:4,p:500,d:"Сл",l:0},
+{s:"p",sub:"Современные XX–XXI",n:100,t:"Бостром. Сверхинтеллект",imp:4,p:500,d:"С",l:0}
+];
+
+const SECTION_NAMES = {f: 'Зарубежная', r: 'Русская', p: 'Философия'};
+const DIFF_CLASS = {'Л':'L', 'С':'S', 'Сл':'Sl', 'ОС':'OS'};
+const DIFF_LABELS = {'Л':'Легко', 'С':'Средне', 'Сл':'Сложно', 'ОС':'Очень сложно'};
+// Порядок подразделов — древнее сверху, современное снизу
+const SUBSECTIONS = {
+  f: ['Античность · Возрождение', 'XVII–XVIII', 'XIX век', 'XX век до 1945', 'XX век после 1945', 'XXI век'],
+  r: ['Древняя · XVIII', 'XIX век', 'Серебряный век', 'Советская', 'Поздняя советская', 'После 1991'],
+  p: ['Античность', 'Средневековье · Восток', 'Возрождение · Новое время', 'XIX век', 'Экзистенциализм', 'XX век', 'Современные XX–XXI']
+};
+
+let state = {
+  activeSection: 'f',
+  search: '',
+  filters: { loved: false, unread: false, wishlist: false, reading: false },
+  diffs: new Set(['Л', 'С', 'Сл', 'ОС']),
+  maxPages: 2000,
+  minImp: 1,
+  sortBy: 'section'
+};
+
+let progress = {};
+let collapsed = {};
+let customBooks = [];
+
+function loadCustom() {
+  try {
+    const s = localStorage.getItem('library-custom-v1');
+    if (s) customBooks = JSON.parse(s);
+  } catch(e) {}
+}
+function saveCustom() {
+  try { localStorage.setItem('library-custom-v1', JSON.stringify(customBooks)); } catch(e) {}
+}
+function addCustomBook(data) {
+  const n = Date.now();
+  const book = {
+    s: data.s, sub: 'Мои книги', n, t: data.t,
+    imp: 0, p: parseInt(data.p) || 0, d: data.d || 'С', l: 0, custom: true
+  };
+  customBooks.push(book);
+  saveCustom();
+  progress[data.s + n] = {r:false, w:true, n:false, rt:0};
+  saveProgress();
+  state.activeSection = data.s;
+  syncUiFromState();
+  render();
+}
+function deleteCustomBook(s, n) {
+  customBooks = customBooks.filter(b => !(b.s === s && String(b.n) === String(n)));
+  delete progress[s + n];
+  saveCustom();
+  saveProgress();
+  render();
+}
+function allBooks() { return BOOKS.concat(customBooks); }
+
+function loadCollapsed() {
+  try {
+    const s = localStorage.getItem('library-collapsed-v1');
+    if (s) { collapsed = JSON.parse(s); return; }
+  } catch(e) {}
+  // По умолчанию свёрнут только самый древний подраздел в каждой вкладке
+  Object.keys(SUBSECTIONS).forEach(sec => {
+    collapsed[sec + '|' + SUBSECTIONS[sec][0]] = true;
+  });
+  saveCollapsed();
+}
+function saveCollapsed() {
+  try { localStorage.setItem('library-collapsed-v1', JSON.stringify(collapsed)); } catch(e) {}
+}
+function isCollapsed(sec, sub) { return !!collapsed[sec + '|' + sub]; }
+function toggleCollapse(sec, sub) {
+  const key = sec + '|' + sub;
+  collapsed[key] = !collapsed[key];
+  saveCollapsed();
+}
+
+function loadProgress() {
+  try { const s = localStorage.getItem('library-progress-v1'); if (s) progress = JSON.parse(s); } catch(e) {}
+}
+function saveProgress() {
+  try { localStorage.setItem('library-progress-v1', JSON.stringify(progress)); } catch(e) {}
+}
+function loadFilters() {
+  try {
+    const s = localStorage.getItem('library-filters-v1');
+    if (s) {
+      const f = JSON.parse(s);
+      state.activeSection = f.activeSection || 'f';
+      state.search = f.search || '';
+      state.filters = f.filters || state.filters;
+      state.diffs = new Set(f.diffs || ['Л', 'С', 'Сл', 'ОС']);
+      state.maxPages = f.maxPages || 2000;
+      state.minImp = f.minImp || 1;
+      state.sortBy = f.sortBy || 'section';
+    }
+  } catch(e) {}
+}
+function saveFilters() {
+  try {
+    localStorage.setItem('library-filters-v1', JSON.stringify({
+      activeSection: state.activeSection, search: state.search, filters: state.filters,
+      diffs: [...state.diffs], maxPages: state.maxPages, minImp: state.minImp, sortBy: state.sortBy
+    }));
+  } catch(e) {}
+}
+
+function getP(id) { return progress[id] || {r:false, w:false, n:false, rt:0}; }
+
+function toggleMark(id, type) {
+  const p = {...getP(id)};
+  p[type] = !p[type];
+  if (type === 'r' && p.r) p.w = false;
+  if (type === 'w' && p.w) p.r = false;
+  progress[id] = p;
+  saveProgress();
+  render();
+}
+function setRating(id, rt) {
+  const p = {...getP(id)};
+  p.rt = (p.rt === rt) ? 0 : rt;
+  progress[id] = p;
+  saveProgress();
+  render();
+}
+
+function applyFilters(books) {
+  const q = state.search.toLowerCase();
+  return books.filter(b => {
+    if (b.s !== state.activeSection) return false;
+    const p = getP(b.s + b.n);
+    if (q && !b.t.toLowerCase().includes(q)) return false;
+    if (state.filters.loved && b.l === 0) return false;
+    if (state.filters.unread && p.r) return false;
+    if (state.filters.wishlist && !p.w) return false;
+    if (state.filters.reading && !p.n) return false;
+    if (!state.diffs.has(b.d)) return false;
+    if (b.p > state.maxPages) return false;
+    if (b.imp < state.minImp) return false;
+    return true;
+  });
+}
+
+function sortBooks(books) {
+  const sorted = [...books];
+  switch(state.sortBy) {
+    case 'pagesAsc': sorted.sort((a,b) => a.p - b.p); break;
+    case 'pagesDesc': sorted.sort((a,b) => b.p - a.p); break;
+    case 'importance': sorted.sort((a,b) => b.imp - a.imp || a.n - b.n); break;
+    case 'loved': sorted.sort((a,b) => b.l - a.l || b.imp - a.imp); break;
+    case 'alpha': sorted.sort((a,b) => a.t.localeCompare(b.t, 'ru')); break;
+    default: sorted.sort((a,b) => a.n - b.n);
+  }
+  return sorted;
+}
+
+function escapeHtml(s) {
+  return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
+
+function renderBook(b) {
+  const id = b.s + b.n;
+  const p = getP(id);
+  const heart = b.l === 2 ? '<span class="heart-mark">♥♥</span>' :
+                b.l === 1 ? '<span class="heart-mark">♥</span>' : '';
+  let stars = '';
+  for (let i = 0; i < 5; i++) stars += i < b.imp ? '★' : '<span class="empty">★</span>';
+  let rating = '';
+  for (let i = 1; i <= 5; i++) rating += `<span class="${i<=p.rt?'filled':''}" data-rt="${i}">★</span>`;
+  const customClass = b.custom ? ' custom' : '';
+  const delBtn = b.custom ? `<button class="del-inline" data-del-s="${b.s}" data-del-n="${b.n}" title="Удалить">×</button>` : '';
+  const numDisplay = b.custom ? '+' : b.n;
+  const pagesDisplay = b.p > 0 ? `${b.p} стр` : '—';
+  return `<div class="book ${p.r?'read':''}${customClass}" data-id="${id}">
+    <div class="marks">
+      <button class="mark-btn r ${p.r?'active':''}" data-mark="r" title="Прочитано">✓</button>
+      <button class="mark-btn w ${p.w?'active':''}" data-mark="w" title="Хочу прочитать">☆</button>
+      <button class="mark-btn n ${p.n?'active':''}" data-mark="n" title="Читаю сейчас">⚡</button>
+    </div>
+    <div class="num">${numDisplay}</div>
+    <div class="title-wrap">${escapeHtml(b.t)}${heart}${delBtn}</div>
+    <div class="stars">${stars}</div>
+    <div class="pages">${pagesDisplay}</div>
+    <div class="difficulty d-${DIFF_CLASS[b.d]}">${DIFF_LABELS[b.d]}</div>
+    <div class="my-rating" data-id="${id}">${rating}</div>
+  </div>`;
+}
+
+function render() {
+  saveFilters();
+  const all = allBooks();
+  const filtered = sortBooks(applyFilters(all));
+  const main = document.getElementById('main');
+  const sectionBooks = all.filter(b => b.s === state.activeSection);
+  const readInSection = sectionBooks.filter(b => getP(b.s+b.n).r).length;
+  const lovedInSection = sectionBooks.filter(b => b.l > 0).length;
+  const totalRead = all.filter(b => getP(b.s+b.n).r).length;
+  const customInSection = customBooks.filter(b => b.s === state.activeSection).length;
+  document.getElementById('stats').innerHTML =
+    `Показано: <strong>${filtered.length}</strong> · ` +
+    `Прочитано в разделе: <strong>${readInSection}/${sectionBooks.length}</strong> (${Math.round(readInSection/sectionBooks.length*100)}%) · ` +
+    `Всего прочитано: <strong>${totalRead}/${all.length}</strong> · ` +
+    `Любимых в разделе: <strong>${lovedInSection}</strong>` +
+    (customInSection > 0 ? ` · Своих: <strong>${customInSection}</strong>` : '');
+
+  if (filtered.length === 0) {
+    main.innerHTML = '<div class="empty-state">Ничего не найдено. Попробуй сбросить фильтры.</div>';
+    return;
+  }
+
+  if (state.sortBy === 'section') {
+    const groups = {};
+    filtered.forEach(b => {
+      if (!groups[b.sub]) groups[b.sub] = [];
+      groups[b.sub].push(b);
+    });
+    const order = (['Мои книги'].concat(SUBSECTIONS[state.activeSection] || [])).filter(s => groups[s]);
+    main.innerHTML = order.map(sub => {
+      const total = sectionBooks.filter(b => b.sub === sub).length;
+      const isC = isCollapsed(state.activeSection, sub);
+      const arrow = isC ? '▸' : '▾';
+      const booksHtml = isC ? '' : groups[sub].map(renderBook).join('');
+      return `<div class="subsection ${isC?'collapsed':''}">
+        <button class="subsection-title" data-sub="${escapeHtml(sub)}">
+          <span class="caret">${arrow}</span>
+          <span class="sub-name">${escapeHtml(sub)}</span>
+          <span class="meta">${groups[sub].length}/${total}</span>
+        </button>
+        ${booksHtml}
+      </div>`;
+    }).join('');
+  } else {
+    main.innerHTML = `<div class="subsection">${filtered.map(renderBook).join('')}</div>`;
+  }
+}
+
+function downloadBlob(blob, filename) {
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = filename; a.click();
+  URL.revokeObjectURL(url);
+}
+
+function syncUiFromState() {
+  document.querySelectorAll('.tab').forEach(t => t.classList.toggle('active', t.dataset.section === state.activeSection));
+  document.getElementById('search').value = state.search;
+  document.querySelectorAll('.toggle-btn[data-filter]').forEach(btn => btn.classList.toggle('active', !!state.filters[btn.dataset.filter]));
+  document.querySelectorAll('.toggle-btn.dif').forEach(btn => btn.classList.toggle('active', state.diffs.has(btn.dataset.diff)));
+  document.getElementById('maxPages').value = state.maxPages;
+  document.getElementById('maxPagesVal').textContent = state.maxPages >= 2000 ? 'все стр.' : `≤ ${state.maxPages}`;
+  document.getElementById('minImp').value = state.minImp;
+  document.getElementById('sortBy').value = state.sortBy;
+}
+
+function initEvents() {
+  document.querySelectorAll('.tab').forEach(t => {
+    t.addEventListener('click', () => {
+      document.querySelectorAll('.tab').forEach(x => x.classList.remove('active'));
+      t.classList.add('active');
+      state.activeSection = t.dataset.section;
+      render();
+    });
+  });
+
+  document.getElementById('search').addEventListener('input', e => { state.search = e.target.value; render(); });
+
+  document.querySelectorAll('.toggle-btn[data-filter]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const f = btn.dataset.filter;
+      state.filters[f] = !state.filters[f];
+      btn.classList.toggle('active');
+      render();
+    });
+  });
+
+  document.querySelectorAll('.toggle-btn.dif').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const d = btn.dataset.diff;
+      if (state.diffs.has(d)) { state.diffs.delete(d); btn.classList.remove('active'); }
+      else { state.diffs.add(d); btn.classList.add('active'); }
+      render();
+    });
+  });
+
+  document.getElementById('maxPages').addEventListener('input', e => {
+    state.maxPages = +e.target.value;
+    document.getElementById('maxPagesVal').textContent = state.maxPages >= 2000 ? 'все стр.' : `≤ ${state.maxPages}`;
+    render();
+  });
+
+  document.getElementById('minImp').addEventListener('change', e => { state.minImp = +e.target.value; render(); });
+  document.getElementById('sortBy').addEventListener('change', e => { state.sortBy = e.target.value; render(); });
+
+  document.getElementById('reset').addEventListener('click', () => {
+    state.search = '';
+    state.filters = { loved: false, unread: false, wishlist: false, reading: false };
+    state.diffs = new Set(['Л', 'С', 'Сл', 'ОС']);
+    state.maxPages = 2000;
+    state.minImp = 1;
+    state.sortBy = 'section';
+    syncUiFromState();
+    render();
+  });
+
+  document.getElementById('main').addEventListener('click', e => {
+    const delBtn = e.target.closest('.del-inline');
+    if (delBtn) {
+      if (confirm('Удалить эту книгу из списка?')) deleteCustomBook(delBtn.dataset.delS, delBtn.dataset.delN);
+      e.stopPropagation();
+      return;
+    }
+    const markBtn = e.target.closest('.mark-btn');
+    if (markBtn) { toggleMark(markBtn.closest('.book').dataset.id, markBtn.dataset.mark); e.stopPropagation(); return; }
+    const star = e.target.closest('.my-rating span');
+    if (star) { setRating(star.parentElement.dataset.id, +star.dataset.rt); e.stopPropagation(); return; }
+    const title = e.target.closest('.subsection-title');
+    if (title) { toggleCollapse(state.activeSection, title.dataset.sub); render(); return; }
+  });
+
+  // Add book modal
+  const addBookBtn = document.getElementById('addBookBtn');
+  const addModal = document.getElementById('addModal');
+  const addForm = document.getElementById('addForm');
+  const cancelAdd = document.getElementById('cancelAdd');
+  addBookBtn.addEventListener('click', () => {
+    addForm.querySelector('[name="s"]').value = state.activeSection;
+    addModal.classList.add('show');
+    setTimeout(() => addForm.querySelector('[name="t"]').focus(), 50);
+  });
+  cancelAdd.addEventListener('click', () => addModal.classList.remove('show'));
+  addModal.addEventListener('click', e => { if (e.target === addModal) addModal.classList.remove('show'); });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') addModal.classList.remove('show'); });
+  addForm.addEventListener('submit', e => {
+    e.preventDefault();
+    const fd = new FormData(addForm);
+    const title = fd.get('t').trim();
+    if (!title) return;
+    addCustomBook({ t: title, s: fd.get('s'), p: fd.get('p'), d: fd.get('d') });
+    addForm.reset();
+    addModal.classList.remove('show');
+  });
+
+  document.getElementById('exportJson').addEventListener('click', () => {
+    const blob = new Blob([JSON.stringify(progress, null, 2)], {type: 'application/json'});
+    downloadBlob(blob, 'library-progress.json');
+  });
+
+  document.getElementById('exportCsv').addEventListener('click', () => {
+    const filtered = sortBooks(applyFilters(BOOKS));
+    const rows = [['№','Раздел','Подраздел','Книга','Важность','Страницы','Сложность','Любимая','Прочитано','Хочу','Читаю','Оценка']];
+    filtered.forEach(b => {
+      const p = getP(b.s+b.n);
+      rows.push([b.n, SECTION_NAMES[b.s], b.sub, b.t, b.imp, b.p, b.d,
+        b.l===2?'♥♥':b.l===1?'♥':'', p.r?'да':'', p.w?'да':'', p.n?'да':'', p.rt||'']);
+    });
+    const csv = rows.map(r => r.map(c => `"${String(c).replace(/"/g,'""')}"`).join(',')).join('\n');
+    const blob = new Blob(['﻿' + csv], {type: 'text/csv;charset=utf-8'});
+    downloadBlob(blob, 'library-books.csv');
+  });
+
+  document.getElementById('importBtn').addEventListener('click', () => document.getElementById('importFile').click());
+  document.getElementById('importFile').addEventListener('change', e => {
+    const file = e.target.files[0]; if (!file) return;
+    const reader = new FileReader();
+    reader.onload = ev => {
+      try {
+        const imported = JSON.parse(ev.target.result);
+        if (confirm('Заменить текущий прогресс импортированными отметками?')) {
+          progress = imported; saveProgress(); render();
+        }
+      } catch(err) { alert('Ошибка чтения файла'); }
+    };
+    reader.readAsText(file);
+    e.target.value = '';
+  });
+}
+
+loadProgress();
+loadFilters();
+loadCollapsed();
+loadCustom();
+syncUiFromState();
+initEvents();
+render();
+</script>
+</body>
+</html>
