@@ -1,0 +1,1305 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <title>Reels TODO — встреча с Лёшей</title>
+  <style>
+    :root {
+      --bg: #f5f5f2;
+      --paper: #ffffff;
+      --paper-soft: #fafaf8;
+      --text: #20211f;
+      --muted: #696b66;
+      --faint: #8e908a;
+      --line: #e4e5df;
+      --accent: #32684d;
+      --accent-soft: #edf5f0;
+      --accent-line: #cfe2d6;
+      --warm: #9a5a2f;
+      --warm-soft: #fbf2eb;
+      --focus: #1f6feb;
+      --radius-sm: 10px;
+      --radius-md: 16px;
+      --radius-lg: 22px;
+      --shadow: 0 18px 60px rgba(38, 41, 35, 0.07);
+      --sidebar: 230px;
+      --reading: 790px;
+    }
+
+    * { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      color: var(--text);
+      background: var(--bg);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, Arial, sans-serif;
+      font-size: 16px;
+      line-height: 1.62;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    button, input { font: inherit; }
+
+    a { color: inherit; }
+
+    :focus-visible {
+      outline: 3px solid color-mix(in srgb, var(--focus) 35%, transparent);
+      outline-offset: 3px;
+      border-radius: 6px;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      border-bottom: 1px solid rgba(228, 229, 223, 0.9);
+      background: rgba(245, 245, 242, 0.9);
+      backdrop-filter: blur(14px);
+    }
+
+    .topbar-inner {
+      max-width: calc(var(--sidebar) + var(--reading) + 64px);
+      min-height: 56px;
+      margin: 0 auto;
+      padding: 8px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 14px;
+      font-weight: 680;
+      letter-spacing: -0.01em;
+    }
+
+    .brand-mark {
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+      background: var(--accent);
+      box-shadow: 0 0 0 5px var(--accent-soft);
+    }
+
+    .progress-wrap {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 190px;
+    }
+
+    .progress-track {
+      width: 112px;
+      height: 6px;
+      overflow: hidden;
+      border-radius: 999px;
+      background: #dedfd9;
+    }
+
+    .progress-bar {
+      width: 0;
+      height: 100%;
+      border-radius: inherit;
+      background: var(--accent);
+      transition: width 180ms ease;
+    }
+
+    .progress-label {
+      min-width: 60px;
+      color: var(--muted);
+      font-size: 12px;
+      font-variant-numeric: tabular-nums;
+      text-align: right;
+    }
+
+    .layout {
+      width: min(calc(var(--sidebar) + var(--reading) + 64px), calc(100% - 32px));
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: var(--sidebar) minmax(0, var(--reading));
+      gap: 64px;
+      align-items: start;
+    }
+
+    .side {
+      position: sticky;
+      top: 80px;
+      padding: 36px 0 48px;
+      max-height: calc(100vh - 80px);
+      overflow: auto;
+      scrollbar-width: thin;
+    }
+
+    .side-label {
+      margin: 0 0 12px;
+      color: var(--faint);
+      font-size: 11px;
+      font-weight: 720;
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
+    }
+
+    .toc {
+      display: grid;
+      gap: 2px;
+    }
+
+    .toc a {
+      display: block;
+      padding: 7px 10px;
+      border-radius: 8px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.35;
+      text-decoration: none;
+    }
+
+    .toc a:hover,
+    .toc a[aria-current="true"] {
+      color: var(--text);
+      background: var(--paper);
+    }
+
+    .filter-control {
+      width: 100%;
+      margin-top: 22px;
+      padding: 9px 12px;
+      border: 1px solid var(--line);
+      border-radius: 9px;
+      color: var(--muted);
+      background: transparent;
+      cursor: pointer;
+      text-align: left;
+    }
+
+    .filter-control:hover { background: var(--paper); color: var(--text); }
+
+    main {
+      min-width: 0;
+      padding: 58px 0 96px;
+    }
+
+    .eyebrow {
+      margin: 0 0 14px;
+      color: var(--accent);
+      font-size: 12px;
+      font-weight: 720;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    h1, h2, h3 {
+      margin-top: 0;
+      letter-spacing: -0.035em;
+      text-wrap: balance;
+    }
+
+    h1 {
+      max-width: 680px;
+      margin-bottom: 18px;
+      font-size: clamp(34px, 5vw, 54px);
+      line-height: 1.06;
+      font-weight: 740;
+    }
+
+    h2 {
+      margin-bottom: 22px;
+      font-size: clamp(25px, 3.5vw, 34px);
+      line-height: 1.18;
+      font-weight: 710;
+    }
+
+    h3 {
+      margin: 30px 0 14px;
+      font-size: 19px;
+      line-height: 1.28;
+      font-weight: 690;
+    }
+
+    .lead {
+      max-width: 680px;
+      margin: 0;
+      color: var(--muted);
+      font-size: 18px;
+      line-height: 1.55;
+    }
+
+    .source {
+      margin: 20px 0 0;
+      color: var(--faint);
+      font-size: 13px;
+    }
+
+    .summary {
+      margin-top: 38px;
+      padding: 22px 24px;
+      border: 1px solid var(--accent-line);
+      border-radius: var(--radius-md);
+      background: var(--accent-soft);
+    }
+
+    .summary-kicker {
+      margin: 0 0 7px;
+      color: var(--accent);
+      font-size: 12px;
+      font-weight: 720;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+    }
+
+    .summary strong {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 20px;
+      line-height: 1.35;
+      letter-spacing: -0.02em;
+    }
+
+    .summary p { margin: 0; color: #4d6155; }
+
+    section {
+      padding: 56px 0;
+      border-top: 1px solid var(--line);
+      scroll-margin-top: 72px;
+    }
+
+    section:first-of-type {
+      margin-top: 58px;
+    }
+
+    .section-intro {
+      max-width: 690px;
+      margin: -10px 0 26px;
+      color: var(--muted);
+    }
+
+    .decision-list,
+    .task-list,
+    .plain-list {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .decision-list {
+      display: grid;
+      gap: 14px;
+    }
+
+    .decision-list li {
+      position: relative;
+      padding-left: 25px;
+    }
+
+    .decision-list li::before {
+      content: "";
+      position: absolute;
+      left: 2px;
+      top: 0.72em;
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--accent);
+    }
+
+    .task-list {
+      display: grid;
+      gap: 2px;
+    }
+
+    .task {
+      display: grid;
+      grid-template-columns: 26px minmax(0, 1fr);
+      gap: 10px;
+      align-items: start;
+      padding: 10px 6px;
+      border-bottom: 1px solid #efefe9;
+    }
+
+    .task:last-child { border-bottom: 0; }
+
+    .task input {
+      appearance: none;
+      width: 19px;
+      height: 19px;
+      margin: 3px 0 0;
+      border: 1.5px solid #b8bbb3;
+      border-radius: 6px;
+      background: var(--paper);
+      cursor: pointer;
+      display: grid;
+      place-content: center;
+    }
+
+    .task input::before {
+      content: "";
+      width: 9px;
+      height: 5px;
+      border-left: 2px solid white;
+      border-bottom: 2px solid white;
+      transform: rotate(-45deg) scale(0);
+      transition: transform 120ms ease;
+    }
+
+    .task input:checked {
+      border-color: var(--accent);
+      background: var(--accent);
+    }
+
+    .task input:checked::before { transform: rotate(-45deg) scale(1); }
+
+    .task label { cursor: pointer; }
+
+    .task.is-done label {
+      color: var(--faint);
+      text-decoration: line-through;
+      text-decoration-thickness: 1px;
+    }
+
+    .task.is-hidden { display: none; }
+
+    .subtasks {
+      grid-column: 2;
+      margin: 6px 0 2px;
+      padding-left: 18px;
+      color: var(--muted);
+    }
+
+    .subtasks li { margin: 4px 0; }
+
+    .note {
+      margin: 22px 0;
+      padding: 16px 18px;
+      border-left: 3px solid var(--warm);
+      border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+      background: var(--warm-soft);
+      color: #654631;
+    }
+
+    .note strong { color: #55351f; }
+
+    .quote {
+      margin: 26px 0;
+      padding: 0 0 0 24px;
+      border-left: 2px solid var(--accent-line);
+      font-size: 22px;
+      line-height: 1.45;
+      letter-spacing: -0.02em;
+    }
+
+    .group {
+      margin: 20px 0 0;
+      padding: 22px 24px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-md);
+      background: var(--paper);
+      box-shadow: 0 1px 0 rgba(0, 0, 0, 0.02);
+    }
+
+    .group h3:first-child { margin-top: 0; }
+
+    .group-heading {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+
+    .group-heading h3 { margin: 0; }
+
+    .text-button {
+      flex: 0 0 auto;
+      padding: 7px 10px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      color: var(--muted);
+      background: var(--paper-soft);
+      font-size: 12px;
+      font-weight: 650;
+      cursor: pointer;
+    }
+
+    .text-button:hover { color: var(--text); border-color: #cfd1c9; }
+
+    .idea-expanders {
+      display: grid;
+      gap: 10px;
+    }
+
+    .idea-detail {
+      margin: 0;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 13px;
+      background: var(--paper-soft);
+    }
+
+    .idea-detail[open] {
+      border-color: var(--accent-line);
+      background: var(--paper);
+    }
+
+    .idea-detail summary {
+      position: relative;
+      display: grid;
+      grid-template-columns: 42px minmax(0, 1fr) 24px;
+      gap: 12px;
+      align-items: start;
+      padding: 17px 18px;
+      color: var(--text);
+      list-style: none;
+    }
+
+    .idea-detail summary::-webkit-details-marker { display: none; }
+
+    .idea-detail summary::after {
+      content: "+";
+      grid-column: 3;
+      grid-row: 1;
+      color: var(--accent);
+      font-size: 22px;
+      font-weight: 450;
+      line-height: 1;
+      text-align: center;
+    }
+
+    .idea-detail[open] summary::after { content: "−"; }
+
+    .idea-number {
+      grid-column: 1;
+      grid-row: 1 / span 2;
+      width: 38px;
+      padding: 4px 0;
+      border-radius: 7px;
+      color: var(--accent);
+      background: var(--accent-soft);
+      font-size: 11px;
+      font-weight: 760;
+      letter-spacing: 0.04em;
+      text-align: center;
+    }
+
+    .idea-summary-title {
+      grid-column: 2;
+      font-size: 15px;
+      font-weight: 710;
+      line-height: 1.35;
+      letter-spacing: -0.01em;
+    }
+
+    .idea-summary-copy {
+      grid-column: 2 / 4;
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 430;
+      line-height: 1.45;
+    }
+
+    .idea-detail-body {
+      padding: 0 18px 20px 72px;
+      border-top: 1px solid #ecece6;
+    }
+
+    .detail-label {
+      margin: 18px 0 7px;
+      color: var(--faint);
+      font-size: 10px;
+      font-weight: 760;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .idea-full-text {
+      margin: 0;
+      padding: 0;
+      border: 0;
+      color: var(--text);
+      font-size: 18px;
+      line-height: 1.55;
+      letter-spacing: -0.015em;
+    }
+
+    .idea-full-text p { margin: 0 0 0.9em; }
+    .idea-full-text p:last-child { margin-bottom: 0; }
+
+    .idea-angle {
+      margin: 0;
+      color: var(--text);
+    }
+
+    .idea-source {
+      margin: 16px 0 0;
+      color: var(--faint);
+      font-size: 12px;
+      line-height: 1.45;
+    }
+
+    details {
+      margin-top: 14px;
+      border-top: 1px solid var(--line);
+    }
+
+    summary {
+      padding: 16px 0;
+      color: var(--accent);
+      font-weight: 660;
+      cursor: pointer;
+    }
+
+    .owner {
+      display: inline-flex;
+      align-items: center;
+      margin-right: 7px;
+      padding: 2px 7px;
+      border-radius: 999px;
+      color: var(--accent);
+      background: var(--accent-soft);
+      font-size: 11px;
+      font-weight: 720;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+      vertical-align: 0.1em;
+    }
+
+    .idea-list {
+      display: grid;
+      gap: 0;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .idea-list .task { padding-block: 13px; }
+
+    .idea-title {
+      display: block;
+      font-weight: 680;
+      letter-spacing: -0.01em;
+    }
+
+    .idea-copy {
+      display: block;
+      margin-top: 2px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .attribution-list {
+      margin: 16px 0 0;
+      padding-left: 22px;
+      color: var(--muted);
+    }
+
+    .attribution-list li { margin: 8px 0; }
+
+    .rule {
+      padding: 25px;
+      border-radius: var(--radius-md);
+      background: #232522;
+      color: #f4f5f1;
+    }
+
+    .rule h2 { color: white; }
+    .rule p { color: #c9ccc4; }
+    .rule ol { margin-bottom: 0; padding-left: 22px; }
+    .rule li { margin: 7px 0; }
+
+    .footer {
+      padding: 30px 0 0;
+      color: var(--faint);
+      font-size: 13px;
+    }
+
+    @media (max-width: 860px) {
+      .layout {
+        width: min(100% - 30px, var(--reading));
+        display: block;
+      }
+
+      .side {
+        position: static;
+        max-height: none;
+        padding: 18px 0 0;
+      }
+
+      .side-label { display: none; }
+
+      .toc {
+        display: flex;
+        gap: 7px;
+        overflow-x: auto;
+        padding-bottom: 8px;
+        scrollbar-width: none;
+      }
+
+      .toc::-webkit-scrollbar { display: none; }
+
+      .toc a {
+        flex: 0 0 auto;
+        border: 1px solid var(--line);
+        background: var(--paper);
+        white-space: nowrap;
+      }
+
+      .filter-control { display: none; }
+      main { padding-top: 34px; }
+      section:first-of-type { margin-top: 42px; }
+    }
+
+    @media (max-width: 560px) {
+      body { font-size: 15px; }
+      .topbar-inner { padding-inline: 16px; }
+      .brand span:last-child { display: none; }
+      .progress-wrap { min-width: auto; }
+      .progress-track { width: 84px; }
+      main { padding-bottom: 64px; }
+      h1 { font-size: 38px; }
+      h2 { font-size: 27px; }
+      .lead { font-size: 17px; }
+      .summary, .group { padding: 19px 18px; }
+      section { padding: 44px 0; }
+      .quote { font-size: 19px; padding-left: 18px; }
+      .group-heading { align-items: flex-start; }
+      .idea-detail summary { grid-template-columns: 38px minmax(0, 1fr) 20px; padding: 15px 13px; gap: 10px; }
+      .idea-number { width: 35px; }
+      .idea-detail-body { padding: 0 14px 18px 61px; }
+      .idea-full-text { font-size: 17px; }
+    }
+
+    @media print {
+      body { background: white; }
+      .topbar, .side { display: none; }
+      .layout { display: block; width: 100%; }
+      main { max-width: 760px; margin: 0 auto; padding: 0; }
+      section { break-inside: avoid; }
+      .group { box-shadow: none; }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="brand"><span class="brand-mark" aria-hidden="true"></span><span>OLYMARKES · Reels TODO</span></div>
+      <div class="progress-wrap" aria-label="Прогресс выполнения">
+        <div class="progress-track"><div class="progress-bar" id="progressBar"></div></div>
+        <span class="progress-label" id="progressLabel">0 из 0</span>
+      </div>
+    </div>
+  </header>
+
+  <div class="layout">
+    <aside class="side" aria-label="Оглавление">
+      <p class="side-label">Оглавление</p>
+      <nav class="toc" id="toc">
+        <a href="#decisions">Что решили</a>
+        <a href="#first-reel">Первый ролик</a>
+        <a href="#system">Система</a>
+        <a href="#ideas">Банк идей</a>
+        <a href="#analytics">Аналитика</a>
+        <a href="#roles">Роли</a>
+        <a href="#authorship">Авторство</a>
+      </nav>
+      <button class="filter-control" id="filterCompleted" type="button" aria-pressed="false">Скрыть выполненное</button>
+    </aside>
+
+    <main>
+      <header>
+        <p class="eyebrow">Рабочий документ по встрече с Лёшей</p>
+        <h1>Reels: все решения, идеи и следующие действия</h1>
+        <p class="lead">Не ещё один конспект, а понятный маршрут: какой ролик сделать первым, как его снять без перегруза и какую систему выстроить дальше.</p>
+        <p class="source">Источник: автоматическая расшифровка «Mission Flow Studio». Спикеры в исходнике не размечены.</p>
+
+        <div class="summary">
+          <p class="summary-kicker">Первое действие</p>
+          <strong>Собрать короткий ролик «Мне чертовски тесно в одном человеке»</strong>
+          <p>Около 30 секунд · голос за кадром · 2–4 бытовых кадра · минимум монтажа</p>
+        </div>
+      </header>
+
+      <section id="decisions">
+        <h2>Что решили</h2>
+        <ul class="decision-list">
+          <li>Начать не с большого манифеста и не с «всех выводов к 39 годам», а с <strong>одной короткой законченной мысли</strong>.</li>
+          <li>Первый ролик нужен не ради гарантированного залёта, а ради освоения процесса без перегруза и с удовольствием.</li>
+          <li>Ориентир первого ролика — около <strong>30 секунд</strong>: простой кинорилс, минимум монтажа, голос за кадром, музыка и несколько бытовых кадров.</li>
+          <li>Первый выбранный смысл — <strong>«Мне чертовски тесно в одном человеке…»</strong>, про невозможность уместить сложную реальность и полутона в Instagram.</li>
+          <li>Сначала зафиксировать идею и написать короткий текст. Не подменять её другой идеей в процессе. Затем вместе перевести текст в живую разговорную речь.</li>
+          <li>Сила Оли — глубокие авторские мысли. Узнаваемый формат стоит строить вокруг них, экспериментируя прежде всего с кадром и подачей.</li>
+          <li>Долгосрочная цель — воспроизводимый навык: заметить фразу → сохранить → выбрать одну → написать → снять → разобрать результат.</li>
+        </ul>
+      </section>
+
+      <section id="first-reel">
+        <p class="eyebrow">Приоритет P0</p>
+        <h2>Первый короткий ролик</h2>
+        <p class="section-intro">Не «великий сценарий», а первый полный цикл, который можно повторить.</p>
+
+        <blockquote class="quote">«Мне чертовски тесно в одном человеке. Мне в Instagram не хватает места, чтобы описать реальность в полутонах».</blockquote>
+
+        <ul class="task-list">
+          <li class="task"><input type="checkbox" id="t01"><label for="t01">Зафиксировать финальную смысловую версию, не раздувая её в «выводы про жизнь».</label><ul class="subtasks"><li>«Мне чертовски тесно в одном человеке».</li><li>«Мне в Instagram не хватает места, чтобы описать реальность в полутонах».</li><li>«Но нюансы никому не нужны. Всем нужна суть…»</li></ul></li>
+          <li class="task"><input type="checkbox" id="t02"><label for="t02">Уточнить последнюю фразу: в расшифровке она звучит как «но суть без нюансов лучше» и, вероятно, распознана неточно.</label></li>
+          <li class="task"><input type="checkbox" id="t03"><label for="t03"><span class="owner">Лёша</span>Написать компактный черновик примерно на 30 секунд, сохранив одну исходную идею.</label></li>
+          <li class="task"><input type="checkbox" id="t04"><label for="t04"><span class="owner">Вместе</span>Одним проходом сделать текст естественным для устной речи, не меняя тему полностью.</label></li>
+          <li class="task"><input type="checkbox" id="t05"><label for="t05">Определить состояние, которое ролик должен передать, и кому именно он адресован.</label></li>
+          <li class="task"><input type="checkbox" id="t06"><label for="t06"><span class="owner">Оля</span>Записать чистую озвучку.</label></li>
+          <li class="task"><input type="checkbox" id="t07"><label for="t07">Составить простой домашний шот-лист.</label><ul class="subtasks"><li>Оля одна, без массовки.</li><li>Медленные бытовые действия: пройти по дому, налить кофе, читать или писать, стоять у окна.</li><li>2–4 типа планов: общий, средний, крупный, деталь.</li><li>В каждом кадре — небольшое действие или движение.</li><li>Один живой непостановочный кадр, если он поддерживает настроение.</li></ul></li>
+          <li class="task"><input type="checkbox" id="t08"><label for="t08">Провести короткую съёмку дома — начать там, где нет социального напряжения улицы.</label></li>
+          <li class="task"><input type="checkbox" id="t09"><label for="t09"><span class="owner">Лёша</span>При совместной встрече показать постановку камеры и помочь снять первый набор кадров.</label></li>
+          <li class="task"><input type="checkbox" id="t10"><label for="t10">Смонтировать без усложнений: несколько кадров + озвучка + спокойная музыка, возможно фортепиано.</label></li>
+          <li class="task"><input type="checkbox" id="t11"><label for="t11"><span class="owner">Лёша</span>Помочь наложить аккуратные субтитры.</label></li>
+          <li class="task"><input type="checkbox" id="t12"><label for="t12">Опубликовать первый ролик как учебный эксперимент, даже если он не выглядит «великим».</label></li>
+          <li class="task"><input type="checkbox" id="t13"><label for="t13">После публикации разобрать первый кадр, удержание, лайки, репосты, комментарии, подписки и собственное ощущение от процесса.</label></li>
+        </ul>
+
+        <aside class="note"><strong>Срок из разговора:</strong> сделать первый ролик в течение четырёх дней после встречи. Дата встречи в расшифровке не указана, поэтому сейчас нужно назначить новую календарную дату.</aside>
+
+        <div class="group">
+          <div class="group-heading">
+            <h3>Чем закончилась встреча</h3>
+            <button class="text-button" id="toggleJIdeas" type="button" aria-expanded="false">Развернуть все</button>
+          </div>
+          <p>В самом конце бот распознал фразу как «можно, не знаю, там 25:30». Это не длительность и не день. В отдельном Google Doc по ЖЖ прямо написано: <strong>«ЖЖ Ольги Маркес (СНИМАЕМ 25–30)»</strong>. Из этого пакета в текущей работе оставлены две выбранные идеи — J25 и J30.</p>
+          <p><a href="https://docs.google.com/document/d/1HdsfbNYhhB8lxMI1OAP6mhx7CyTX-7NDVBJg9UBV8jE/edit" target="_blank" rel="noopener">Открыть документ с идеями ЖЖ ↗</a></p>
+          <div class="idea-expanders" id="jIdeas">
+            <details class="idea-detail">
+              <summary><span class="idea-number">J25</span><span class="idea-summary-title">Суть без нюансов лжива</span><span class="idea-summary-copy">Живой человек не помещается в одну убедительную роль.</span></summary>
+              <div class="idea-detail-body">
+                <p class="detail-label">Полный авторский фрагмент</p>
+                <blockquote class="idea-full-text">
+                  <p>«Меня так много, мне тесно в любой комнате». Как журналист, я могу чувствовать любое медиа-пространство и адаптировать под него контент. Но я не могу вписаться целиком ни в одно из них. Мне чертовски тесно в инстаграмме, но зато он помогает мне встречать «моих» людей в реальности. В инста мне не хватает места, чтобы описать реальность в полутонах, и поэтому мне самой бывает противно от своего образа там. Но нюансы никому не нужны. Всем нужна суть. Но суть без нюансов лжива.</p>
+                  <p>Аудитория ВК не располагает к разговору. В Фэйсбуке меня никто не читает кроме друзей, и это хорошо. В твиттере я могу пошутить и поговорить про рэпчик. Перископ это вообще площадка для онлайн-лекций, но мои знания и компетенции — это не я. Мое окружение, страны, в которых я бываю, мой бизнес — это не я.</p>
+                  <p>Мне чертовски тесно в одном человеке, и я не знаю, сталкиваются ли с этим другие люди. Я вижу мир, как мама, как женщина, как атлет, как бизнесмен, влюбленный в свое дело, как работодатель и ответственный гражданин, как творческий человек, как любитель рэпчика, в конце концов. Как журналист, который хочет описывать мир из каждой из этих точек самоосознания. Как человек, который всегда видит свое несовершенство во всех этих проявлениях и жаждет уже не совершенства, а осознанности. Осознанности, как четкого ощущения своих рук и ног и всех проявлений своей личности — а не как абстрактного понятия о том, чтобы казаться лучше, чем ты есть на самом деле.</p>
+                </blockquote>
+                <p class="detail-label">Краткая идея Reels</p>
+                <p class="idea-angle">Короткий формат требует ясности, но опасен тем, что превращает живого человека в одну убедительную роль.</p>
+                <p class="idea-source">Источник: ЖЖ, запись 80114 — «записки графоманские». <a href="https://olymarkes.livejournal.com/80114.html" target="_blank" rel="noopener">Открыть оригинал ↗</a></p>
+              </div>
+            </details>
+
+            <details class="idea-detail">
+              <summary><span class="idea-number">J30</span><span class="idea-summary-title">Не превращать каждую космическую любовь в обладание</span><span class="idea-summary-copy">Не всякое сильное чувство обязано стать отношениями, чтобы быть настоящим.</span></summary>
+              <div class="idea-detail-body">
+                <p class="detail-label">Полный авторский фрагмент</p>
+                <blockquote class="idea-full-text">
+                  <p>Ну и в конце этой истории надо отдать дань и космической любви тоже. Love is not a crime. Преступление — это каждой своей космической любви стараться придать земную форму, пытаясь убить сразу двух зайцев. Помнишь фильм, который мы смотрели сегодня? Так вот, я думаю что эта брюнетка была права: «You totally fucked up, Margo» — потому что все границы только в нашей голове, и они лишают нас счастья чувствовать сразу все: мы разрешаем себе только одну форму любви — вытекающую в обладание.</p>
+                  <p>Хотя есть и другие способы. Стоять, и ничего не трогать… В моей жизни были такие встречи, такие люди — и самым чистым образом, через абсолютную, божественную любовь они дотрагивались до моего сердца. И знаешь, я потом уже поняла — люди разные, а космос — он один. И когда мне что-то попадает в сердце, я преклоняю колено перед Богом, а не перед человеком, через которого он мне является.</p>
+                  <p>Потому что если опуститься на колени через человеком, вряд ли он будет вести себя корректно — скорее всего, он офигеет от такой чести — и будет прав. Нечего путать понятия, моросить и все такое. Любить космос и любить человека — это все таки разные понятия. И вот когда ты встретишь человека и полюбишь в нем человеческое — ты поймешь, о чем я говорила. И, кстати, ему не обязательно быть бандитом. Это я вообще пошутила, если что.</p>
+                </blockquote>
+                <p class="detail-label">Краткая идея Reels</p>
+                <p class="idea-angle">Не всякое сильное чувство обязано стать отношениями, чтобы быть настоящим.</p>
+                <p class="idea-source">Источник: ЖЖ, запись 84723 — «почему надо выходить замуж за бандитов, а не за свою космическую любовь». <a href="https://olymarkes.livejournal.com/84723.html" target="_blank" rel="noopener">Открыть оригинал ↗</a></p>
+              </div>
+            </details>
+          </div>
+          <ul class="task-list">
+            <li class="task"><input type="checkbox" id="t66"><label for="t66">Назначить конкретный день съёмки.</label></li>
+            <li class="task"><input type="checkbox" id="t67"><label for="t67"><span class="owner">Оля</span>Сначала записать озвучку.</label></li>
+            <li class="task"><input type="checkbox" id="t68"><label for="t68">Затем снять под неё простые бытовые кадры.</label></li>
+            <li class="task"><input type="checkbox" id="t69"><label for="t69"><span class="owner">Лёша</span>Помочь с постановкой камеры и субтитрами.</label></li>
+            <li class="task"><input type="checkbox" id="t70"><label for="t70">Если у Оли уже есть пробная озвучка — отправить Лёше и посмотреть, что из неё можно собрать.</label></li>
+            <li class="task"><input type="checkbox" id="t71"><label for="t71">Экспериментировать прежде всего с кадрами и ракурсами; сложный монтаж пока не нужен.</label></li>
+          </ul>
+        </div>
+      </section>
+
+      <section id="system">
+        <p class="eyebrow">Приоритет P1</p>
+        <h2>Система производства</h2>
+
+        <div class="group">
+          <h3>Банк сильных фраз</h3>
+          <ul class="task-list">
+            <li class="task"><input type="checkbox" id="t14"><label for="t14">Завести единый inbox для коротких колких фраз, от которых возникает реакция «бах».</label></li>
+            <li class="task"><input type="checkbox" id="t15"><label for="t15">Не писать сценарий в момент находки: сначала сохранять только фразу и минимальный контекст.</label></li>
+            <li class="task"><input type="checkbox" id="t16"><label for="t16">Замечать формулировки из разговоров, книг, подкастов, заметок, мемов и случайных наблюдений.</label></li>
+            <li class="task"><input type="checkbox" id="t17"><label for="t17">После каждого содержательного разговора сохранять хотя бы одну сильную фразу.</label></li>
+            <li class="task"><input type="checkbox" id="t18"><label for="t18"><span class="owner">Оля</span>Пересмотреть доступный материал и выписать топ‑5–10 фраз, которые сильнее всего зацепили.</label></li>
+            <li class="task"><input type="checkbox" id="t19"><label for="t19">Для каждой находки фиксировать дословную формулировку, автора, источник, контекст, тему, угол Reels и статус.</label></li>
+            <li class="task"><input type="checkbox" id="t20"><label for="t20">Создать рубрику «банк мемов» как источник механик, парадоксов и формулировок.</label></li>
+            <li class="task"><input type="checkbox" id="t21"><label for="t21">Рассмотреть «мемолога» как потенциальную роль для сбора референсов для проектов и клиентов.</label></li>
+            <li class="task"><input type="checkbox" id="t22"><label for="t22">Сохранить идею для продажи курса: люди уже потребляют контент — можно научить превращать это в профессиональный сбор идей.</label></li>
+          </ul>
+        </div>
+
+        <div class="group">
+          <h3>Библиотека кадров / «киносторис»</h3>
+          <ul class="task-list">
+            <li class="task"><input type="checkbox" id="t23"><label for="t23">Снимать 4–5 коротких кинематографичных бытовых заготовок в неделю, не обязательно под конкретный Reels.</label></li>
+            <li class="task"><input type="checkbox" id="t24"><label for="t24">Делать одну тренировочную съёмочную сессию примерно на 7 минут со штативом и несколькими ракурсами.</label></li>
+            <li class="task"><input type="checkbox" id="t25"><label for="t25">Сохранять уже смонтированные сторис без музыки в библиотеку для повторного использования.</label></li>
+            <li class="task"><input type="checkbox" id="t26"><label for="t26">Смешивать одни и те же заготовки по‑новому для разных озвучек.</label></li>
+            <li class="task"><input type="checkbox" id="t27"><label for="t27">Чередовать планы без механической последовательности: общий, средний, крупный, деталь.</label></li>
+            <li class="task"><input type="checkbox" id="t28"><label for="t28">Снимать через зеркало как один из повторяемых приёмов.</label></li>
+            <li class="task"><input type="checkbox" id="t29"><label for="t29">Использовать домашние ритуалы: кофе, одежда, чтение, письмо, диван, окно, движение по дому.</label></li>
+            <li class="task"><input type="checkbox" id="t30"><label for="t30">Добавлять существующие кадры с сёрфинга, прогулок и поездок.</label></li>
+            <li class="task"><input type="checkbox" id="t31"><label for="t31">Если смысл требует конкретной сцены — найти архивный кадр, снять его отдельно или взять лицензированный материал.</label></li>
+            <li class="task"><input type="checkbox" id="t32"><label for="t32">Выбрать один стабильный простой цветовой пресет; не тратить время на «вылизывание» каждого кадра.</label></li>
+            <li class="task"><input type="checkbox" id="t33"><label for="t33">Освоить комфортные ракурсы лица и тела, но не ждать идеального света и постановки.</label></li>
+            <li class="task"><input type="checkbox" id="t34"><label for="t34">Переходить к уличным съёмкам после нескольких домашних тренировок.</label></li>
+          </ul>
+        </div>
+
+        <div class="group">
+          <h3>Конструкция сильного Reels</h3>
+          <ul class="task-list">
+            <li class="task"><input type="checkbox" id="t35"><label for="t35">До сценария определить одну тему и одно состояние, которое должен получить зритель.</label></li>
+            <li class="task"><input type="checkbox" id="t36"><label for="t36">Сформулировать понятный заголовок.</label></li>
+            <li class="task"><input type="checkbox" id="t37"><label for="t37">Сделать два первых сильных тейка: первый останавливает, второй усиливает.</label></li>
+            <li class="task"><input type="checkbox" id="t38"><label for="t38">Дать короткое раскрытие, показывающее глубину и логику автора.</label></li>
+            <li class="task"><input type="checkbox" id="t39"><label for="t39">При необходимости снова поднять напряжение провокационной мыслью.</label></li>
+            <li class="task"><input type="checkbox" id="t40"><label for="t40">Закончить добивающей формулировкой, поворотом или шуткой.</label></li>
+            <li class="task"><input type="checkbox" id="t41"><label for="t41">Для абсурдного ролика наращивать жёсткость утверждений, а затем явно разрушить абсурд.</label></li>
+            <li class="task"><input type="checkbox" id="t42"><label for="t42">Переписывать книжный или письменный язык в короткую разговорную речь.</label></li>
+            <li class="task"><input type="checkbox" id="t43"><label for="t43">Проверять пересылаемость: есть ли фраза, которую зритель захочет отправить конкретному человеку.</label></li>
+            <li class="task"><input type="checkbox" id="t44"><label for="t44">Отдельно проверять первый кадр: действие, чистота звука и визуала, мгновенная понятность.</label></li>
+          </ul>
+        </div>
+      </section>
+
+      <section id="ideas">
+        <h2>Банк идей из встречи</h2>
+        <p class="section-intro">Это не сценарии. Здесь сохранены направления, которые можно позже выбрать и развернуть.</p>
+
+        <div class="group">
+          <h3>Выбрано для первого теста</h3>
+          <ul class="idea-list">
+            <li class="task"><input type="checkbox" id="i01"><label for="i01"><span class="idea-title">«Мне чертовски тесно в одном человеке»</span><span class="idea-copy">Кинорилс о полутонах, сложности личности и тесноте Instagram. Финальный текст ещё не собран.</span></label></li>
+          </ul>
+        </div>
+
+        <div class="group">
+          <h3>Сильные авторские направления</h3>
+          <ul class="idea-list">
+            <li class="task"><input type="checkbox" id="i02"><label for="i02"><span class="idea-title">«Хорошие люди тоже ранят»</span><span class="idea-copy">Любовь и отношения без чёрно-белой морали.</span></label></li>
+            <li class="task"><input type="checkbox" id="i03"><label for="i03"><span class="idea-title">«Сколько правды можно о себе сказать? А что, если всю?»</span><span class="idea-copy">Возможный хук для представления автора.</span></label></li>
+            <li class="task"><input type="checkbox" id="i04"><label for="i04"><span class="idea-title">«Пиздец в этом возрасте уже не считается чем-то уникальным»</span><span class="idea-copy">Взросление как прожитые циклы кризисов; возможна версия «В моём возрасте…».</span></label></li>
+            <li class="task"><input type="checkbox" id="i05"><label for="i05"><span class="idea-title">Путешествие / поиск / процесс важнее результата</span><span class="idea-copy">Выбрать одну точную антитезу, не оставлять три общих тезиса подряд.</span></label></li>
+            <li class="task"><input type="checkbox" id="i06"><label for="i06"><span class="idea-title">Снять броню ради творчества</span><span class="idea-copy">Настоящее творчество требует не контроля, а готовности быть изменённой переживанием.</span></label></li>
+            <li class="task"><input type="checkbox" id="i07"><label for="i07"><span class="idea-title">«Жизнь слишком короткая, чтобы не говорить правду / быть кем-то другим»</span><span class="idea-copy">Выбрать одну финальную формулу.</span></label></li>
+            <li class="task"><input type="checkbox" id="i08"><label for="i08"><span class="idea-title">Успех как уязвимость</span><span class="idea-copy">Если состояние разрешено только после победы, результат получает власть над человеком.</span></label></li>
+            <li class="task"><input type="checkbox" id="i09"><label for="i09"><span class="idea-title">«Признай перед Богом, собой и другим человеком, что ты говно»</span><span class="idea-copy">Сильный заголовок из авторского текста; подобрать содержание и тон.</span></label></li>
+            <li class="task"><input type="checkbox" id="i10"><label for="i10"><span class="idea-title">Человек сомневается в таланте, пока жизнь уже реализует этот талант через него</span></label></li>
+            <li class="task"><input type="checkbox" id="i11"><label for="i11"><span class="idea-title">Место рождения объясняет старт, но не обязано становиться приговором</span></label></li>
+            <li class="task"><input type="checkbox" id="i12"><label for="i12"><span class="idea-title">«Этот Reels заканчивается словом “мудак”»</span><span class="idea-copy">Найти честную тему и финальную формулу, оправдывающие обещание.</span></label></li>
+            <li class="task"><input type="checkbox" id="i13"><label for="i13"><span class="idea-title">Работа над собой не заканчивается идеальной личностью</span><span class="idea-copy">Исправление одного качества открывает следующий, более сложный уровень реальности.</span></label></li>
+            <li class="task"><input type="checkbox" id="i14"><label for="i14"><span class="idea-title">Недостаток привилегий заставляет строить отдельную траекторию силы</span><span class="idea-copy">Тезис спорный; нужен честный контекст без романтизации лишений.</span></label></li>
+            <li class="task"><input type="checkbox" id="i15"><label for="i15"><span class="idea-title">«Я всегда поступаю так, как чувствую, даже если знаю, что будет больно»</span><span class="idea-copy">Проверить исходную формулировку; потенциальный «лечащий» Reels.</span></label></li>
+            <li class="task"><input type="checkbox" id="i21"><label for="i21"><span class="idea-title">J30. Не превращать каждую космическую любовь в обладание</span><span class="idea-copy">Не всякое сильное чувство обязано стать отношениями, чтобы быть настоящим.</span></label></li>
+          </ul>
+        </div>
+
+        <div class="group">
+          <h3>Форматы и серии</h3>
+          <ul class="idea-list">
+            <li class="task"><input type="checkbox" id="i22"><label for="i22"><span class="idea-title">Абсурдные правила «это не любовь»</span><span class="idea-copy">Начать с узнаваемых категоричных суждений, наращивать нелепость и закончить мыслью: при таком списке шансы найти любовь равны нулю.</span></label></li>
+            <li class="task"><input type="checkbox" id="i23"><label for="i23"><span class="idea-title">Эскалация абсурда</span><span class="idea-copy">«Если он тебя не обеспечивает», «если не делает предложение», «если не готов к детям прямо сейчас». Не подавать это как реальные советы.</span></label></li>
+            <li class="task"><input type="checkbox" id="i24"><label for="i24"><span class="idea-title">«Вся правда про семью / построение семьи»</span><span class="idea-copy">Более нежный, возможно ироничный ролик с неочевидными наблюдениями.</span></label></li>
+            <li class="task"><input type="checkbox" id="i25"><label for="i25"><span class="idea-title">«Отношения с человеком, у которого нет будущего, выглядят так…»</span><span class="idea-copy">Найти точный тезис и не скатываться в чужой мем без авторского поворота.</span></label></li>
+            <li class="task"><input type="checkbox" id="i26"><label for="i26"><span class="idea-title">Серия коротких роликов‑мыслей</span><span class="idea-copy">1–3 бытовых кадра, голос за кадром и спокойная музыка — потенциальный узнаваемый стиль Оли.</span></label></li>
+            <li class="task"><input type="checkbox" id="i27"><label for="i27"><span class="idea-title">Короткие «лечащие» ролики</span><span class="idea-copy">Называют состояние зрителя одной точной фразой.</span></label></li>
+            <li class="task"><input type="checkbox" id="i28"><label for="i28"><span class="idea-title">Ролик, где Оля кривляется и играет</span><span class="idea-copy">Протестировать не только серьёзную подачу.</span></label></li>
+          </ul>
+        </div>
+
+        <details>
+          <summary>Примеры Лёши — не считать автоматически идеями или словами Оли</summary>
+          <ul class="attribution-list">
+            <li>«Не кури, не пей, вставай в 5 утра — и это никак не повлияет на твой заработок».</li>
+            <li>«Мой тайп девушек выглядит примерно так».</li>
+            <li>«Самое главное в жизни — деньги… но на них не купишь искренние чувства».</li>
+            <li>«Что нужно знать про отношения: версия для мужчин / версия для женщин».</li>
+            <li>«Хаслер — не бабник, а спасатель… и исчез дальше спасать других девушек».</li>
+            <li>«Секс переоценён».</li>
+            <li>«Закон Матрицы» про одну или пять девушек.</li>
+            <li>«Бали — дофаминовый рай» и «Москва — не Россия, Бали — не Индонезия» — примеры добычи хуков из разговоров.</li>
+            <li>«Друг — это тот…» — пример слишком длинного и слабого первого тейка.</li>
+            <li>Кейс «с этого Reels подписалось 4 000 мужчин» относится к Лёше и требует корректной атрибуции.</li>
+          </ul>
+        </details>
+
+        <div class="group">
+          <div class="group-heading">
+            <div>
+              <p class="eyebrow">Новый проход по авторскому корпусу</p>
+              <h3>Хуки и панчлайны по механике Лёши</h3>
+            </div>
+            <button class="text-button" id="toggleLeshaHooks" type="button" aria-expanded="false">Развернуть все</button>
+          </div>
+          <p>Здесь перенесена не речь Лёши, а его драматургическая механика: короткий спорный вход → один понятный разворот → отдельная добивающая фраза. Все новые формулировки помечены как <strong>редакторские адаптации</strong>; рядом сохранена дословная авторская основа Оли.</p>
+
+          <div class="idea-expanders" id="leshaHooks">
+            <details class="idea-detail">
+              <summary><span class="idea-number">L01</span><span class="idea-summary-title">Баг, который построил жизнь</span><span class="idea-summary-copy">Резкое признание → переворот оценки.</span></summary>
+              <div class="idea-detail-body">
+                <p class="detail-label">Хук · редакторская адаптация</p>
+                <p class="idea-full-text">«Моя ебанутость не испортила мне жизнь».</p>
+                <p class="detail-label">Панчлайн · редакторская адаптация</p>
+                <p class="idea-full-text">«Она сделала возможным всё остальное».</p>
+                <p class="detail-label">Дословная авторская основа Оли</p>
+                <blockquote class="idea-angle">«Далеким людям кажется, что некая ебанутость — это баг, который омрачает всё нормальное. Но это как раз та фича, которая сделала возможным всё остальное».</blockquote>
+                <p class="idea-source">Источник: olydaily, 19.11.2024.</p>
+              </div>
+            </details>
+
+            <details class="idea-detail">
+              <summary><span class="idea-number">L02</span><span class="idea-summary-title">Детство детей не лечит детство родителя</span><span class="idea-summary-copy">Красивая победа → неудобная личная правда.</span></summary>
+              <div class="idea-detail-body">
+                <p class="detail-label">Хук · редакторская адаптация</p>
+                <p class="idea-full-text">«Я дала детям детство своей мечты. Оно не вылечило моё».</p>
+                <p class="detail-label">Панчлайн · редакторская адаптация</p>
+                <p class="idea-full-text">«Не передать рану дальше — не то же самое, что вылечить её в себе».</p>
+                <p class="detail-label">Дословная авторская основа Оли</p>
+                <blockquote class="idea-angle">«Но мои дети — это не я. Я всё ещё ношу в себе рану».</blockquote>
+                <p class="idea-source">Источник: vi vse nepr, 28.12.2023.</p>
+              </div>
+            </details>
+
+            <details class="idea-detail">
+              <summary><span class="idea-number">L03</span><span class="idea-summary-title">Любовь без обладания</span><span class="idea-summary-copy">Отмена привычного правила → тихая добивающая формула.</span></summary>
+              <div class="idea-detail-body">
+                <p class="detail-label">Хук · редакторская адаптация</p>
+                <p class="idea-full-text">«Любовь — не всегда повод быть вместе».</p>
+                <p class="detail-label">Панчлайн · редакторская адаптация</p>
+                <p class="idea-full-text">«Иногда самая честная форма любви — стоять и ничего не трогать».</p>
+                <p class="detail-label">Дословная авторская основа Оли</p>
+                <blockquote class="idea-angle">«Мы разрешаем себе только одну форму любви — вытекающую в обладание. Хотя есть и другие способы. Стоять, и ничего не трогать…»</blockquote>
+                <p class="idea-source">Источник: ЖЖ, запись 84723. <a href="https://olymarkes.livejournal.com/84723.html" target="_blank" rel="noopener">Открыть оригинал ↗</a></p>
+              </div>
+            </details>
+
+            <details class="idea-detail">
+              <summary><span class="idea-number">L04</span><span class="idea-summary-title">Мечты умирают в первые пять минут</span><span class="idea-summary-copy">Большое заявление → очень маленькое конкретное действие.</span></summary>
+              <div class="idea-detail-body">
+                <p class="detail-label">Хук · редакторская адаптация</p>
+                <p class="idea-full-text">«Большинство мечт умирают в первые пять минут».</p>
+                <p class="detail-label">Панчлайн · редакторская адаптация</p>
+                <p class="idea-full-text">«Я не стала ждать мотивации. Я сделала чат».</p>
+                <p class="detail-label">Дословная авторская основа Оли</p>
+                <blockquote class="idea-angle">«Я знаю, что идеи подобного рода быстро оседают в разряде мечт. Поэтому в ту же секунду я сделала чат».</blockquote>
+                <p class="idea-source">Источник: olydaily, 17.07.2024.</p>
+              </div>
+            </details>
+
+            <details class="idea-detail">
+              <summary><span class="idea-number">L05</span><span class="idea-summary-title">Жажда может не пройти</span><span class="idea-summary-copy">Неприятная правда → субъектность без обещания чуда.</span></summary>
+              <div class="idea-detail-body">
+                <p class="detail-label">Хук · редакторская адаптация</p>
+                <p class="idea-full-text">«После зависимости есть плохая новость: жажда может не пройти».</p>
+                <p class="detail-label">Панчлайн · редакторская адаптация</p>
+                <p class="idea-full-text">«Свобода — не когда голос исчез. А когда ему больше не дают руль».</p>
+                <p class="detail-label">Дословная авторская основа Оли</p>
+                <blockquote class="idea-angle">«Жажда не проходит — ты просто учишься с ней жить. Как с частью себя».</blockquote>
+                <p class="idea-source">Источник: vi vse nepr, 05.08.2024.</p>
+              </div>
+            </details>
+
+            <details class="idea-detail">
+              <summary><span class="idea-number">L06</span><span class="idea-summary-title">Чувствительность</span><span class="idea-summary-copy">Отказ от очевидного облегчения → возвращение ценности качеству.</span></summary>
+              <div class="idea-detail-body">
+                <p class="detail-label">Хук · редакторская адаптация</p>
+                <p class="idea-full-text">«Я не хочу быть менее чувствительной. Даже если так было бы менее больно».</p>
+                <p class="detail-label">Панчлайн · редакторская адаптация</p>
+                <p class="idea-full-text">«Та же дверь, через которую входит боль, ведёт к бесценности момента».</p>
+                <p class="detail-label">Дословная авторская основа Оли</p>
+                <blockquote class="idea-angle">«Чувствительность на то и дана — через боль ты ощущаешь ценность. Даже бесценность каждого момента».</blockquote>
+                <p class="idea-source">Источник: vi vse nepr, 21.12.2022.</p>
+              </div>
+            </details>
+
+            <details class="idea-detail">
+              <summary><span class="idea-number">L07</span><span class="idea-summary-title">Честные разговоры начинаются слишком поздно</span><span class="idea-summary-copy">Узнаваемая боль → точное объяснение причины.</span></summary>
+              <div class="idea-detail-body">
+                <p class="detail-label">Хук · редакторская адаптация</p>
+                <p class="idea-full-text">«Самые честные разговоры в отношениях начинаются слишком поздно».</p>
+                <p class="detail-label">Панчлайн · редакторская адаптация</p>
+                <p class="idea-full-text">«Кризис не создаёт правду. Он снимает защиту, которая мешала её сказать».</p>
+                <p class="detail-label">Дословная авторская основа Оли</p>
+                <blockquote class="idea-angle">«Почему-то кризис в отношениях помогает сбросить все защиты и наконец-то поговорить о том, что давно висело в воздухе».</blockquote>
+                <p class="idea-source">Источник: daily2025, ноябрь 2024.</p>
+              </div>
+            </details>
+
+            <details class="idea-detail">
+              <summary><span class="idea-number">L08</span><span class="idea-summary-title">Свобода уйти помогает остаться</span><span class="idea-summary-copy">Парадокс → короткая категоричная развязка.</span></summary>
+              <div class="idea-detail-body">
+                <p class="detail-label">Хук · редакторская адаптация</p>
+                <p class="idea-full-text">«Иногда человек остаётся только после того, как понимает: можно уйти».</p>
+                <p class="detail-label">Панчлайн · редакторская адаптация</p>
+                <p class="idea-full-text">«Без выхода это не выбор. Это тюрьма».</p>
+                <p class="detail-label">Дословная авторская основа Оли</p>
+                <blockquote class="idea-angle">«Он успокоился, когда понял, что школа, в которую он ходит, — это не тюрьма и не единственный вариант».</blockquote>
+                <p class="idea-source">Источник: vi vse nepr, 10.05.2023.</p>
+              </div>
+            </details>
+
+            <details class="idea-detail">
+              <summary><span class="idea-number">L09</span><span class="idea-summary-title">Конечная память</span><span class="idea-summary-copy">Прямое называние утраты → формула, которую хочется сохранить.</span></summary>
+              <div class="idea-detail-body">
+                <p class="detail-label">Хук · редакторская адаптация</p>
+                <p class="idea-full-text">«После смерти человека дорожает даже самая обычная память».</p>
+                <p class="detail-label">Панчлайн · редакторская адаптация</p>
+                <p class="idea-full-text">«Когда новых воспоминаний больше не будет, каждое старое поднимается в цене».</p>
+                <p class="detail-label">Дословная авторская основа Оли</p>
+                <blockquote class="idea-angle">«Теперь, когда знаешь, что воспоминаний было конечное количество, — каждое поднялось в цене».</blockquote>
+                <p class="idea-source">Источник: vi vse nepr, 06.02.2023.</p>
+              </div>
+            </details>
+
+            <details class="idea-detail">
+              <summary><span class="idea-number">L10</span><span class="idea-summary-title">Коалиционное правительство внутри</span><span class="idea-summary-copy">Серьёзная тема → смешное точное переименование.</span></summary>
+              <div class="idea-detail-body">
+                <p class="detail-label">Хук · редакторская адаптация</p>
+                <p class="idea-full-text">«Моя продуктивность — это не дисциплина. Это коалиционное правительство».</p>
+                <p class="detail-label">Панчлайн · редакторская адаптация</p>
+                <p class="idea-full-text">«Кто-то хочет работать, кто-то — быть мамой, кто-то — на Бали. Я просто веду переговоры».</p>
+                <p class="detail-label">Дословная авторская основа Оли</p>
+                <blockquote class="idea-angle">«По сути вся моя движуха — это попытка удовлетворить потребности всех внутренних голосов».</blockquote>
+                <p class="idea-source">Источник: olydaily, 17.07.2024.</p>
+              </div>
+            </details>
+
+            <details class="idea-detail">
+              <summary><span class="idea-number">L11</span><span class="idea-summary-title">Суть без нюансов</span><span class="idea-summary-copy">Самообвинение автора → дословный афористический ответ.</span></summary>
+              <div class="idea-detail-body">
+                <p class="detail-label">Хук · редакторская адаптация</p>
+                <p class="idea-full-text">«В коротком формате я всегда немного вру».</p>
+                <p class="detail-label">Панчлайн · дословно Оля</p>
+                <p class="idea-full-text">«Всем нужна суть. Но суть без нюансов лжива».</p>
+                <p class="detail-label">Авторская основа</p>
+                <p class="idea-angle">Полный фрагмент J25 о разных медиа и невозможности вместить живого человека в одну роль находится выше, в блоке «Чем закончилась встреча».</p>
+                <p class="idea-source">Источник: ЖЖ, запись 80114. <a href="https://olymarkes.livejournal.com/80114.html" target="_blank" rel="noopener">Открыть оригинал ↗</a></p>
+              </div>
+            </details>
+
+            <details class="idea-detail">
+              <summary><span class="idea-number">L12</span><span class="idea-summary-title">Желание, которое опоздало</span><span class="idea-summary-copy">Болезненная конкретика → универсальная формула.</span></summary>
+              <div class="idea-detail-body">
+                <p class="detail-label">Хук · редакторская адаптация</p>
+                <p class="idea-full-text">«Желание, которое вы озвучили при расставании, уже опоздало».</p>
+                <p class="detail-label">Панчлайн · редакторская адаптация</p>
+                <p class="idea-full-text">«Несказанное желание не становится общим будущим».</p>
+                <p class="detail-label">Дословная авторская основа Оли</p>
+                <blockquote class="idea-angle">«Если ты чего-то хочешь, говори об этом сразу смело и честно».</blockquote>
+                <p class="idea-source">Источник: olydaily, 18.11.2024.</p>
+              </div>
+            </details>
+
+            <details class="idea-detail">
+              <summary><span class="idea-number">L13</span><span class="idea-summary-title">Не каждый текст должен стать Reels</span><span class="idea-summary-copy">Отрицание контент-правила → авторское переопределение.</span></summary>
+              <div class="idea-detail-body">
+                <p class="detail-label">Хук · редакторская адаптация</p>
+                <p class="idea-full-text">«Не каждый хороший текст должен стать Reels».</p>
+                <p class="detail-label">Панчлайн · редакторская адаптация</p>
+                <p class="idea-full-text">«Иногда текст точнее автора знает, где ему жить и кто его прочитает».</p>
+                <p class="detail-label">Дословная авторская основа Оли</p>
+                <blockquote class="idea-angle">«Текст выбирает сам, и выбирает для себя место, и выбирает читателя».</blockquote>
+                <p class="idea-source">Источник: vi vse nepr, 05.08.2024.</p>
+              </div>
+            </details>
+
+            <details class="idea-detail">
+              <summary><span class="idea-number">L14</span><span class="idea-summary-title">Тело всё ещё меняется — боль больше не командует</span><span class="idea-summary-copy">Честное признание без идеальной победы → новая версия принятия.</span></summary>
+              <div class="idea-detail-body">
+                <p class="detail-label">Хук · дословно Оля</p>
+                <p class="idea-full-text">«Я всё ещё иногда поправляюсь, но мне больше не больно».</p>
+                <p class="detail-label">Панчлайн · дословно Оля</p>
+                <p class="idea-full-text">«Иногда любовь к себе — это оставить себя в покое».</p>
+                <p class="idea-source">Источник: Instagram, 28.02.2018. <a href="https://www.instagram.com/p/BfvcLN2lTKG/" target="_blank" rel="noopener">Открыть оригинал ↗</a></p>
+              </div>
+            </details>
+
+            <details class="idea-detail">
+              <summary><span class="idea-number">L15</span><span class="idea-summary-title">Это тоже не лень</span><span class="idea-summary-copy">Знакомая самооценка → короткая отмена приговора.</span></summary>
+              <div class="idea-detail-body">
+                <p class="detail-label">Хук · дословно Оля</p>
+                <p class="idea-full-text">«Иногда ресурс есть, но нет душевных сил».</p>
+                <p class="detail-label">Панчлайн · дословно Оля</p>
+                <p class="idea-full-text">«И это тоже не лень».</p>
+                <p class="idea-source">Источник: Instagram, 29.12.2016. <a href="https://www.instagram.com/p/BOmGB0EDiAY/" target="_blank" rel="noopener">Открыть оригинал ↗</a></p>
+              </div>
+            </details>
+
+            <details class="idea-detail">
+              <summary><span class="idea-number">L16</span><span class="idea-summary-title">Не богатые, а стОящие</span><span class="idea-summary-copy">Ожидаемая ценность → короткая игра смысла и слова.</span></summary>
+              <div class="idea-detail-body">
+                <p class="detail-label">Хук · дословно Оля</p>
+                <p class="idea-full-text">«Я никогда не стремилась окружать себя богатыми людьми».</p>
+                <p class="detail-label">Панчлайн · дословно Оля</p>
+                <p class="idea-full-text">«Я всегда была сосредоточена на стОящих».</p>
+                <p class="idea-source">Источник: Instagram, 27.01.2017. <a href="https://www.instagram.com/p/BPwxAWOjIxD/" target="_blank" rel="noopener">Открыть оригинал ↗</a></p>
+              </div>
+            </details>
+
+            <details class="idea-detail">
+              <summary><span class="idea-number">L17</span><span class="idea-summary-title">Доверие после ошибки</span><span class="idea-summary-copy">Признание цены → отказ считать ценность ошибкой.</span></summary>
+              <div class="idea-detail-body">
+                <p class="detail-label">Хук · редакторская адаптация</p>
+                <p class="idea-full-text">«В бизнесе я много раз ошибалась, потому что доверяла людям».</p>
+                <p class="detail-label">Панчлайн · дословно Оля</p>
+                <p class="idea-full-text">«Но доверие никогда не будет ошибкой, даже если тебя обманули».</p>
+                <p class="detail-label">Дословная авторская основа Оли</p>
+                <blockquote class="idea-angle">«Ты совершаешь ошибки, но доверие никогда не будет ошибкой, даже если тебя обманули».</blockquote>
+                <p class="idea-source">Источник: Instagram, 14.06.2018. <a href="https://www.instagram.com/p/BkAYgAgFkrh/" target="_blank" rel="noopener">Открыть оригинал ↗</a></p>
+              </div>
+            </details>
+          </div>
+
+          <aside class="note"><strong>Следующий шаг после выбора одной пары:</strong> хук → сцена → внутренний конфликт → поворот → панчлайн. Полные сценарии до отдельной команды не писать.</aside>
+          <p class="source"><a href="REELS_LESHA_HOOKS_PASS_V1.md">Открыть текстовый handoff этого прохода ↗</a></p>
+        </div>
+      </section>
+
+      <section id="analytics">
+        <h2>Аналитика и итерации</h2>
+        <ul class="task-list">
+          <li class="task"><input type="checkbox" id="t45"><label for="t45">Для каждого ролика записывать гипотезу: тема, аудитория, состояние, хук, финальная фраза и тип первого кадра.</label></li>
+          <li class="task"><input type="checkbox" id="t46"><label for="t46">Смотреть не только охват, но и пересылки, сохранения, комментарии, подписки и продажи.</label></li>
+          <li class="task"><input type="checkbox" id="t47"><label for="t47">Отмечать, в какой момент приходят лайки и где вероятнее всего возникает желание переслать.</label></li>
+          <li class="task"><input type="checkbox" id="t48"><label for="t48">Сравнивать первый кадр: статичный или шумный против чистого кадра с действием.</label></li>
+          <li class="task"><input type="checkbox" id="t49"><label for="t49">Продолжать серию достаточно долго, чтобы понять, что сработало: текст, кадр, настроение или сочетание факторов.</label></li>
+          <li class="task"><input type="checkbox" id="t50"><label for="t50">Не оценивать первый тест только по просмотрам; отдельно оценивать рост навыка и желание повторить процесс.</label></li>
+        </ul>
+      </section>
+
+      <section id="roles">
+        <h2>Роли и открытые вопросы</h2>
+
+        <div class="group">
+          <h3>Оля</h3>
+          <ul class="task-list">
+            <li class="task"><input type="checkbox" id="t51"><label for="t51">Выбрать и подтвердить точную мысль.</label></li>
+            <li class="task"><input type="checkbox" id="t52"><label for="t52">Собрать топ‑5–10 фраз и дальше вести inbox идей.</label></li>
+            <li class="task"><input type="checkbox" id="t53"><label for="t53">Записать озвучку.</label></li>
+            <li class="task"><input type="checkbox" id="t54"><label for="t54">Регулярно снимать бытовые кинозаготовки.</label></li>
+            <li class="task"><input type="checkbox" id="t55"><label for="t55">Самостоятельно пройти первый простой цикл, чтобы понять процесс до передачи монтажёру.</label></li>
+          </ul>
+        </div>
+
+        <div class="group">
+          <h3>Лёша</h3>
+          <ul class="task-list">
+            <li class="task"><input type="checkbox" id="t56"><label for="t56">Подготовить короткий сценарный черновик, не меняя выбранную тему.</label></li>
+            <li class="task"><input type="checkbox" id="t57"><label for="t57">Дать конкретный шот-лист и ракурсы для первой съёмки.</label></li>
+            <li class="task"><input type="checkbox" id="t58"><label for="t58">При встрече помочь поставить камеру и снять материал.</label></li>
+            <li class="task"><input type="checkbox" id="t59"><label for="t59">Помочь с аккуратными субтитрами.</label></li>
+            <li class="task"><input type="checkbox" id="t60"><label for="t60">Дополнить банк идеями из своих источников, чётко помечая авторство.</label></li>
+          </ul>
+        </div>
+
+        <div class="group">
+          <h3>Нужно уточнить</h3>
+          <ul class="task-list">
+            <li class="task"><input type="checkbox" id="t61"><label for="t61">Когда была встреча и какая новая дата дедлайна вместо «через четыре дня».</label></li>
+            <li class="task"><input type="checkbox" id="t62"><label for="t62">Когда Лёша приезжает на совместную съёмку.</label></li>
+            <li class="task"><input type="checkbox" id="t63"><label for="t63">Где хранится общий банк фраз и кто отвечает за его еженедельный разбор.</label></li>
+            <li class="task"><input type="checkbox" id="t64"><label for="t64">Финальная формулировка первого текста и точное желаемое состояние зрителя.</label></li>
+            <li class="task"><input type="checkbox" id="t65"><label for="t65">Нужен ли для первой версии один длинный кадр или монтаж из 2–4 кадров.</label></li>
+          </ul>
+        </div>
+      </section>
+
+      <section id="authorship">
+        <div class="rule">
+          <h2>Правило авторства</h2>
+          <p>В расшифровке смешаны речь двух людей, прежние тексты Оли, пересказанные мемы и примеры Лёши. Перед сценарием и публикацией каждую формулировку нужно пометить как:</p>
+          <ol>
+            <li>дословно Оля;</li>
+            <li>авторский текст Оли, адаптированный для устной речи;</li>
+            <li>формулировка или пример Лёши;</li>
+            <li>чужая цитата или мем;</li>
+            <li>редакторская адаптация.</li>
+          </ol>
+          <p><strong>Не выдавать примеры Лёши, мемы, чужие цитаты или редакторские версии за дословные слова Оли.</strong></p>
+        </div>
+        <p class="footer">Чекбоксы сохраняются только в этом браузере. Документ собран 20 августа 2026 года.</p>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    (() => {
+      const storageKey = 'olymarkes-mission-flow-reels-todo-v1';
+      const checkboxes = [...document.querySelectorAll('input[type="checkbox"]')];
+      const progressBar = document.getElementById('progressBar');
+      const progressLabel = document.getElementById('progressLabel');
+      const filterButton = document.getElementById('filterCompleted');
+      let hideCompleted = false;
+
+      const readState = () => {
+        try { return JSON.parse(localStorage.getItem(storageKey) || '{}'); }
+        catch { return {}; }
+      };
+
+      const saveState = () => {
+        const state = {};
+        checkboxes.forEach(box => { state[box.id] = box.checked; });
+        localStorage.setItem(storageKey, JSON.stringify(state));
+      };
+
+      const render = () => {
+        const done = checkboxes.filter(box => box.checked).length;
+        const total = checkboxes.length;
+        progressBar.style.width = `${total ? (done / total) * 100 : 0}%`;
+        progressLabel.textContent = `${done} из ${total}`;
+        checkboxes.forEach(box => {
+          const row = box.closest('.task');
+          row?.classList.toggle('is-done', box.checked);
+          row?.classList.toggle('is-hidden', hideCompleted && box.checked);
+        });
+      };
+
+      const state = readState();
+      checkboxes.forEach(box => {
+        box.checked = Boolean(state[box.id]);
+        box.addEventListener('change', () => { saveState(); render(); });
+      });
+
+      filterButton.addEventListener('click', () => {
+        hideCompleted = !hideCompleted;
+        filterButton.setAttribute('aria-pressed', String(hideCompleted));
+        filterButton.textContent = hideCompleted ? 'Показать выполненное' : 'Скрыть выполненное';
+        render();
+      });
+
+      const ideaDetails = [...document.querySelectorAll('#jIdeas .idea-detail')];
+      const toggleIdeasButton = document.getElementById('toggleJIdeas');
+      toggleIdeasButton?.addEventListener('click', () => {
+        const shouldOpen = ideaDetails.some(item => !item.open);
+        ideaDetails.forEach(item => { item.open = shouldOpen; });
+        toggleIdeasButton.setAttribute('aria-expanded', String(shouldOpen));
+        toggleIdeasButton.textContent = shouldOpen ? 'Свернуть все' : 'Развернуть все';
+      });
+
+      const leshaDetails = [...document.querySelectorAll('#leshaHooks .idea-detail')];
+      const toggleLeshaButton = document.getElementById('toggleLeshaHooks');
+      toggleLeshaButton?.addEventListener('click', () => {
+        const shouldOpen = leshaDetails.some(item => !item.open);
+        leshaDetails.forEach(item => { item.open = shouldOpen; });
+        toggleLeshaButton.setAttribute('aria-expanded', String(shouldOpen));
+        toggleLeshaButton.textContent = shouldOpen ? 'Свернуть все' : 'Развернуть все';
+      });
+
+      const tocLinks = [...document.querySelectorAll('.toc a')];
+      const sections = tocLinks.map(link => document.querySelector(link.getAttribute('href'))).filter(Boolean);
+      const observer = new IntersectionObserver(entries => {
+        const visible = entries.filter(entry => entry.isIntersecting).sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+        if (!visible) return;
+        tocLinks.forEach(link => link.setAttribute('aria-current', String(link.getAttribute('href') === `#${visible.target.id}`)));
+      }, { rootMargin: '-20% 0px -65% 0px', threshold: [0, 0.25, 0.75] });
+      sections.forEach(section => observer.observe(section));
+
+      render();
+    })();
+  </script>
+</body>
+</html>
