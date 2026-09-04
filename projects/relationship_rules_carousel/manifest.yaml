@@ -12,5 +12,5 @@ export_mode: "HQ originals via shared resolver"
 handoff:
   branch: "codex/relationship-rules-handoff"
   self_contained_preview: true
-  bundled_photo_previews: 9
+  bundled_photo_previews: 10
   full_private_media_library: false

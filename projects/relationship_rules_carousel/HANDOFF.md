@@ -9,7 +9,7 @@ git clone --branch codex/relationship-rules-handoff https://github.com/OLYMARKES
 open "insta-inspo/projects/relationship_rules_carousel/build/carousel_fitting_room_v1.html"
 ```
 
-The editor opens from `file://` and includes the approved typefaces plus the nine selected photo previews. Text, typography, colors, layout, crop, local autosave, JSON export, and JSON import remain available.
+The editor opens from `file://` and includes the approved typefaces plus the ten selected photo previews. Text, typography, colors, layout, crop, local autosave, JSON export, and JSON import remain available.
 
 ## Current decisions
 
