@@ -11,6 +11,14 @@ open "insta-inspo/projects/relationship_rules_carousel/build/carousel_fitting_ro
 
 The editor opens from `file://` and includes the approved typefaces plus the ten selected photo previews. Text, typography, colors, layout, crop, local autosave, JSON export, and JSON import remain available.
 
+## Latest final export
+
+- Saved state: `source/state/relationship-rules-user-2026-09-04T111017Z-v1.json`
+- PNG slides: `output/png/final-user-2026-09-04-1910/`
+- ZIP: `output/zip/relationship-rules-final-user-2026-09-04-1910.zip`
+- Export manifest: `output/png/final-user-2026-09-04-1910/export-manifest.json`
+- QA: 9 of 9 slides checked at 1080×1350; HQ originals used.
+
 ## Current decisions
 
 - 9 slides: cover + 8 relationship rules.
@@ -28,4 +36,4 @@ The editor opens from `file://` and includes the approved typefaces plus the ten
 
 ## Media limitation
 
-The GitHub handoff bundles the nine selected previews so the current carousel stays intact. The full private SMM media library and HQ originals are intentionally not committed. Reconnect the shared library before replacing photos from the full archive or producing a publication-quality HQ export.
+The GitHub handoff bundles the selected previews so the current carousel stays intact. The exported PNGs and ZIP above are publication-quality and were rendered from HQ originals. The full private SMM media library and the original source photos are intentionally not committed; reconnect the shared library before replacing photos or reproducing the HQ export on another computer.

@@ -1,14 +1,23 @@
-status: fitting-room-ready-v2-cover
+status: exported-final
 content: approved-draft
 layout: assembled
 photos: preselected
-visual_qa: pending-user-selection
-latest_state: null
-final_export: null
+visual_qa: complete
+latest_state: "source/state/relationship-rules-user-2026-09-04T111017Z-v1.json"
+final_export:
+  png_dir: "output/png/final-user-2026-09-04-1910"
+  zip: "output/zip/relationship-rules-final-user-2026-09-04-1910.zip"
+  manifest: "output/png/final-user-2026-09-04-1910/export-manifest.json"
+  media_source_mode: "hq-originals"
+  slide_count: 9
+  dimensions: "1080x1350"
 notes:
   - "Чередование фото и текстовых сцен"
   - "Текст сохранён без психологизирующих добавлений"
   - "Обложка повторяет финальную «7 привычек»: Onest 680, кегль 74, интерлиньяж 91%, трекинг −4%, белый текст, точная ширина и позиция блока"
   - "На обложке установлен красный зеркальный автопортрет IMG_9146, ID 50331af2e86615"
+  - "Локальная примерочная снова подключает полную SMM-медиатеку; компактные 10 превью остаются fallback для GitHub-handoff"
+  - "В «Макете SMM» добавлен пресет «Фото без текста», выключающий рубрику, заголовок, основной текст и плашки"
   - "Unbounded удалён с финального слайда; финал использует Geologica"
-  - "Перед финальным PNG/ZIP сохранить JSON из примерочной"
+  - "Финальный экспорт выполнен из пользовательского JSON от 2026-09-04 19:10 (Asia/Makassar)"
+  - "Все 9 слайдов визуально проверены после экспорта: переполнений, обрезки и служебных элементов нет"

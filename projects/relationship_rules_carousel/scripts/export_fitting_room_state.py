@@ -16,6 +16,9 @@ from playwright.sync_api import Page, sync_playwright
 
 STORAGE_KEY = "relationship_rules_carousel-production-fitter-v1"
 CONTENT_REVISION = "relationship-rules-carousel-v2-cover"
+FINAL_TYPOGRAPHY_REVISION = "no-unbounded-v1"
+COVER_TYPOGRAPHY_REVISION = "august-seven-habits-onest-v1"
+COVER_PHOTO_REVISION = "red-self-portrait-50331-v1"
 EXPECTED_SIZE = (1080, 1350)
 CHROME = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
 
@@ -144,6 +147,9 @@ def main() -> None:
         "current": 0,
         "filter": "relevant",
         "contentRevision": CONTENT_REVISION,
+        "finalTypographyRevision": FINAL_TYPOGRAPHY_REVISION,
+        "coverTypographyRevision": COVER_TYPOGRAPHY_REVISION,
+        "coverPhotoRevision": COVER_PHOTO_REVISION,
         "choices": choices,
     }
     state_text = json.dumps(state, ensure_ascii=False, separators=(",", ":"))

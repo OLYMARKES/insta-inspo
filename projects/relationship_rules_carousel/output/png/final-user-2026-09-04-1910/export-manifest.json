@@ -1,0 +1,100 @@
+{
+  "project": "relationship_rules_carousel",
+  "source_json": "/Users/olymarkes/Desktop/insta & inspo/projects/relationship_rules_carousel/source/state/relationship-rules-user-2026-09-04T111017Z-v1.json",
+  "source_created_at": "2026-09-04T11:10:17.581Z",
+  "source_html": "/Users/olymarkes/Desktop/insta & inspo/projects/relationship_rules_carousel/build/carousel_fitting_room_v1.html",
+  "exported_at": "2026-09-04T11:15:54.821829+00:00",
+  "slide_count": 9,
+  "dimensions": {
+    "width": 1080,
+    "height": 1350
+  },
+  "render_css_size": {
+    "width": 486,
+    "height": 607.5
+  },
+  "device_scale_factor": 2,
+  "post_scale": 1.1111111111111112,
+  "media_source_mode": "hq-originals",
+  "hq_resolver": "/Users/olymarkes/Desktop/insta & inspo/bridge/media-library-original-resolver.json",
+  "hq_overrides": 9,
+  "converted_hq_sources": {},
+  "rendered_photo_sources": [
+    {
+      "slide": 1,
+      "photo": "smm:50331af2e86615",
+      "src": "file:///Users/olymarkes/Desktop/%D0%B2%D1%81%D0%B5%20%D0%B4%D0%BB%D1%8F%20%D0%BA%D0%B0%D1%80%D1%83%D1%81%D0%B5%D0%BB%D0%B5%D0%B8%CC%86%20/_%D0%94%D0%9E%D0%91%D0%90%D0%92%D0%98%D0%A2%D0%AC_%D0%9D%D0%9E%D0%92%D0%AB%D0%95_%D0%A4%D0%9E%D0%A2%D0%9E_%D0%A1%D0%AE%D0%94%D0%90/10_%D1%84%D0%BE%D1%82%D0%BE%D1%81%D0%B5%D1%81%D1%81%D0%B8%D0%B8_%D1%81%D0%B5%D1%80%D0%B8%D1%8F%D0%BC%D0%B8/2026-08-20_%D0%BB%D0%B8%D1%87%D0%BD%D0%B0%D1%8F_%D1%81%D0%B5%D1%80%D0%B8%D1%8F/IMG_9146.jpg",
+      "width": 2268,
+      "height": 4032
+    },
+    {
+      "slide": 2,
+      "photo": "smm:27e85c973c2e40",
+      "src": "file:///Users/olymarkes/Desktop/insta%20%26%20inspo/ARCHIVE/photoshoots/smm-selected/olya-family-2025/0003__03.JPG",
+      "width": 3333,
+      "height": 5000
+    },
+    {
+      "slide": 3,
+      "photo": "smm:94eb05821f6682",
+      "src": "file:///Users/olymarkes/Desktop/insta%20%26%20inspo/ARCHIVE/photoshoots/smm-selected/olya-family-2024/0002__02.JPG",
+      "width": 3333,
+      "height": 5000
+    },
+    {
+      "slide": 4,
+      "photo": "smm:209fc6b000af24",
+      "src": "file:///Users/olymarkes/Desktop/insta%20%26%20inspo/ARCHIVE/photoshoots/smm-selected/olya-family-2025/0007__07.JPG",
+      "width": 3333,
+      "height": 5000
+    },
+    {
+      "slide": 5,
+      "photo": "smm:442b2983c2d26e",
+      "src": "file:///Users/olymarkes/Desktop/insta%20%26%20inspo/ARCHIVE/photoshoots/smm-selected/olya-family-2025/0012__012.JPG",
+      "width": 3333,
+      "height": 5000
+    },
+    {
+      "slide": 6,
+      "photo": "smm:b8ea6af3a71f41",
+      "src": "file:///Users/olymarkes/Desktop/insta%20%26%20inspo/ARCHIVE/photoshoots/smm-selected/olya-family-2025/0014__014.JPG",
+      "width": 3333,
+      "height": 5000
+    },
+    {
+      "slide": 7,
+      "photo": "smm:afbc3e5ea429ea",
+      "src": "file:///Users/olymarkes/Desktop/insta%20%26%20inspo/ARCHIVE/photoshoots/smm-selected/olya-family-2025/0009__09.JPG",
+      "width": 3333,
+      "height": 5000
+    },
+    {
+      "slide": 8,
+      "photo": "smm:27e85c973c2e40",
+      "src": "file:///Users/olymarkes/Desktop/insta%20%26%20inspo/ARCHIVE/photoshoots/smm-selected/olya-family-2025/0003__03.JPG",
+      "width": 3333,
+      "height": 5000
+    },
+    {
+      "slide": 9,
+      "photo": "smm:abc7d1c3f79ab3",
+      "src": "file:///Users/olymarkes/Desktop/insta%20%26%20inspo/ARCHIVE/photoshoots/smm-selected/olya-family-2025/0016__016.JPG",
+      "width": 3333,
+      "height": 5000
+    }
+  ],
+  "no_frame_slides": [],
+  "files": [
+    "slide-01.png",
+    "slide-02.png",
+    "slide-03.png",
+    "slide-04.png",
+    "slide-05.png",
+    "slide-06.png",
+    "slide-07.png",
+    "slide-08.png",
+    "slide-09.png"
+  ],
+  "zip": "/Users/olymarkes/Desktop/insta & inspo/projects/relationship_rules_carousel/output/zip/relationship-rules-final-user-2026-09-04-1910.zip"
+}
