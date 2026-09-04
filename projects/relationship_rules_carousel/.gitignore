@@ -1,0 +1,10 @@
+source/assets/type_pack
+source/assets/smm_media_library
+source/assets/media_library_full
+source/assets/media_library_heic_preview
+source/assets/media_library_original_resolver.json
+source/state/reference-state.json
+output/png/*
+output/zip/*
+!output/png/.gitkeep
+!output/zip/.gitkeep

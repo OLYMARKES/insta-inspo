@@ -1,0 +1,16 @@
+slug: relationship_rules_carousel
+title: "Мои правила жизни в отношениях, которые никому не нравятся"
+rubric: "Отношения с людьми и миром"
+version: 1
+slide_count: 9
+format: "1080x1350"
+editor: "build/carousel_fitting_room_v1.html"
+script: "source/script_v1.md"
+state_revision: "relationship-rules-carousel-v2-cover"
+media_source: "shared SMM media library"
+export_mode: "HQ originals via shared resolver"
+handoff:
+  branch: "codex/relationship-rules-handoff"
+  self_contained_preview: true
+  bundled_photo_previews: 9
+  full_private_media_library: false

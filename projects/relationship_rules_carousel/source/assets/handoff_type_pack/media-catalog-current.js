@@ -1,0 +1,1 @@
+window.CRISIS_MEDIA_CATALOG=[];

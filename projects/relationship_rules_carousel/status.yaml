@@ -1,0 +1,13 @@
+status: fitting-room-ready-v2-cover
+content: approved-draft
+layout: assembled
+photos: preselected
+visual_qa: pending-user-selection
+latest_state: null
+final_export: null
+notes:
+  - "Чередование фото и текстовых сцен"
+  - "Текст сохранён без психологизирующих добавлений"
+  - "Обложка пересобрана по референсу «7 привычек»: крупный белый системный заголовок на синей палитре"
+  - "Unbounded удалён с финального слайда; финал использует Geologica"
+  - "Перед финальным PNG/ZIP сохранить JSON из примерочной"
